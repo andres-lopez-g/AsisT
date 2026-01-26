@@ -3,6 +3,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Fix for SELF_SIGNED_CERT_IN_CHAIN on Vercel/Supabase
+if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
+
 const { Pool } = pg;
 
 const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
