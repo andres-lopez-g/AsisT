@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* NOTION-STYLE LIGHT THEME (RGB Channels) */
+
+    /* Main Background: #ffffff */
+    --background: 255 255 255;
+    /* Primary Text: #37352f (Notion Dark Gray) */
+    --foreground: 55 53 47;
+
+    /* Primary Action: #2eaadc (Notion Blue-ish) or Black. Let's go with a soft black/slate */
+    /* Slate 900: #0f172a */
+    --primary: 15 23 42;
+
+    /* Secondary/Muted Text: #9b9a97 */
+    --secondary: 155 154 151;
+
+    /* Accent: #e16259 (Notion Red-ish) or keeping a clean blue */
+    /* Blue 600: #2563eb */
+    --accent: 37 99 235;
+
+    /* Sidebar/Muted Backgrounds: #f7f7f5 */
+    --muted: 247 247 245;
+
+    /* Borders: #e9e9e8 */
+    --border: 233 233 232;
+
+    /* Card Background: #ffffff */
+    --card: 255 255 255;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary/10 selection:text-primary;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+.minimal-card {
+  @apply bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+/* Scrollbar styling for a cleaner look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full hover:bg-secondary/50;
+}
