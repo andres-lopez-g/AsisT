@@ -8,8 +8,10 @@ const { Pool } = pg;
 const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
 
 // Support both individual variables and a full connection string (common in Vercel/Neon/Supabase)
-const poolConfig = process.env.DATABASE_URL
-    ? { connectionString: process.env.DATABASE_URL }
+const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+
+const poolConfig = connectionString
+    ? { connectionString }
     : {
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
