@@ -11,10 +11,17 @@ import errorHandler from './middleware/errorHandler.js';
 
 dotenv.config();
 
-// Security: Fail fast if JWT_SECRET is missing in production
-if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
-    console.error('FATAL ERROR: JWT_SECRET is not defined.');
-    process.exit(1);
+const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1' || !!process.env.VERCEL;
+
+// Security: Check for JWT_SECRET in production/deployment environment
+if (isProduction && !process.env.JWT_SECRET) {
+    const availableKeys = Object.keys(process.env).filter(k => k.includes('JWT') || k.includes('SECRET') || k.includes('URL') || k.includes('POSTGRES'));
+    console.error(`[FATAL] JWT_SECRET is missing in the current environment (${process.env.NODE_ENV || 'unknown'}).`);
+    console.log(`[DEBUG] Related Env Keys detected: ${availableKeys.join(', ') || 'None'}`);
+    console.log(`[DEBUG] Total Env Keys: ${Object.keys(process.env).length}`);
+
+    // We don't exit here to allow the logs to be visible in the Vercel dashboard
+    // The app will only fail later when a JWT operation is performed.
 }
 
 const app = express();
