@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate, Outlet } from 'react-router-dom';
-import { LayoutDashboard, FileText, Calendar, Menu, LogOut } from 'lucide-react';
+import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard } from 'lucide-react';
 
 // Auth
 import { AuthProvider, useAuth } from './context/AuthContext';
