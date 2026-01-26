@@ -8,8 +8,8 @@ import LoginPage from './features/auth/LoginPage';
 import RegisterPage from './features/auth/RegisterPage';
 
 // Imports
+import HomeView from './features/home/HomeView';
 import FinanceDashboard from './features/finance/FinanceDashboard';
-import DocumentManager from './features/documents/DocumentManager';
 import PlannerBoard from './features/planner/PlannerBoard';
 
 const SidebarLink = ({ to, icon: Icon, label }) => {
@@ -53,8 +53,8 @@ const ProtectedLayout = () => {
         </div>
 
         <nav className="flex-1 p-2 space-y-0.5">
-          <SidebarLink to="/finance" icon={LayoutDashboard} label="Finance" />
-          <SidebarLink to="/documents" icon={FileText} label="Documents" />
+          <SidebarLink to="/home" icon={LayoutDashboard} label="Home" />
+          <SidebarLink to="/finance" icon={CreditCard} label="Finance" />
           <SidebarLink to="/planner" icon={Calendar} label="Planner" />
         </nav>
 
@@ -75,7 +75,7 @@ const ProtectedLayout = () => {
 
       {/* Mobile Header */}
       <div className="md:hidden p-4 border-b border-border flex items-center justify-between bg-background">
-        <Link to="/" className="flex items-center gap-2 font-semibold text-primary">
+        <Link to="/home" className="flex items-center gap-2 font-semibold text-primary">
           <img src="/favicon.png" alt="AsisT Logo" className="w-6 h-6 rounded" />
           <span>AsisT</span>
         </Link>
@@ -104,9 +104,9 @@ const App = () => {
           <Route path="/register" element={<RegisterPage />} />
 
           <Route element={<ProtectedLayout />}>
-            <Route path="/" element={<Navigate to="/finance" replace />} />
+            <Route path="/" element={<Navigate to="/home" replace />} />
+            <Route path="/home" element={<HomeView />} />
             <Route path="/finance" element={<FinanceDashboard />} />
-            <Route path="/documents" element={<DocumentManager />} />
             <Route path="/planner" element={<PlannerBoard />} />
           </Route>
         </Routes>

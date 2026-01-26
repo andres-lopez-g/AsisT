@@ -5,7 +5,6 @@ import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import financeRoutes from './routes/finance.js';
-import documentsRoutes from './routes/documents.js';
 import plannerRoutes from './routes/planner.js';
 import errorHandler from './middleware/errorHandler.js';
 
@@ -53,7 +52,6 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/finance', financeRoutes);
-app.use('/api/documents', documentsRoutes);
 app.use('/api/planner', plannerRoutes);
 
 app.use(errorHandler);
