@@ -27,6 +27,9 @@ if (isProduction && !process.env.JWT_SECRET) {
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust Vercel Proxy for rate limiting
+app.set('trust proxy', 1);
+
 // Rate Limiting
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
