@@ -75,7 +75,7 @@ const ProtectedLayout = () => {
 
       {/* Mobile Header */}
       <div className="md:hidden p-4 border-b border-border flex items-center justify-between bg-background">
-        <div className="font-semibold text-primary">Assistant</div>
+        <div className="font-semibold text-primary">AsisT</div>
         <div className="flex items-center gap-4">
           <button onClick={logout} className="text-secondary hover:text-red-500 transition-colors md:hidden">
             <LogOut size={18} />
