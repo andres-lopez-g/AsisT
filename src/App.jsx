@@ -46,10 +46,10 @@ const ProtectedLayout = () => {
       {/* Sidebar */}
       <div className="w-64 bg-muted border-r border-border flex flex-col hidden md:flex transition-all">
         <div className="p-4 h-14 border-b border-border flex items-center">
-          <div className="flex items-center gap-2 text-primary font-semibold">
-            <div className="w-5 h-5 bg-primary text-white rounded flex items-center justify-center text-xs">A</div>
-            <span>AsisT</span>
-          </div>
+          <Link to="/" className="flex items-center gap-2 text-primary font-semibold hover:opacity-80 transition-opacity">
+            <img src="/favicon.png" alt="AsisT Logo" className="w-8 h-8 rounded-md shadow-sm" />
+            <span className="text-lg tracking-tight">AsisT</span>
+          </Link>
         </div>
 
         <nav className="flex-1 p-2 space-y-0.5">
@@ -75,7 +75,10 @@ const ProtectedLayout = () => {
 
       {/* Mobile Header */}
       <div className="md:hidden p-4 border-b border-border flex items-center justify-between bg-background">
-        <div className="font-semibold text-primary">AsisT</div>
+        <Link to="/" className="flex items-center gap-2 font-semibold text-primary">
+          <img src="/favicon.png" alt="AsisT Logo" className="w-6 h-6 rounded" />
+          <span>AsisT</span>
+        </Link>
         <div className="flex items-center gap-4">
           <button onClick={logout} className="text-secondary hover:text-red-500 transition-colors md:hidden">
             <LogOut size={18} />

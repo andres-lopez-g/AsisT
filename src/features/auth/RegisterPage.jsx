@@ -36,8 +36,8 @@ const RegisterPage = () => {
             <div className="w-full max-w-sm relative z-10">
                 <div className="minimal-card p-8 md:p-10 bg-white/80 backdrop-blur-sm">
                     <div className="text-center mb-8">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary text-white mb-4 shadow-lg shadow-primary/20">
-                            <UserPlus size={20} />
+                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-white mb-4 shadow-xl shadow-primary/5 p-2 border border-border/50">
+                            <img src="/favicon.png" alt="Logo" className="w-full h-full object-contain" />
                         </div>
                         <h1 className="text-2xl font-bold mb-2 text-foreground">Create Account</h1>
                         <p className="text-secondary text-sm">Join the assistant platform today</p>
