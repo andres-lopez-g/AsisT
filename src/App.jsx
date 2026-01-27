@@ -44,11 +44,16 @@ const SidebarLink = ({ to, icon: Icon, label, onClick }) => {
 
 const LanguageSwitcher = () => {
   const switchLanguage = (lang) => {
-    const select = document.querySelector('.goog-te-combo');
-    if (select) {
-      select.value = lang;
-      select.dispatchEvent(new Event('change'));
-    }
+    const trySwitch = (attempts) => {
+      const select = document.querySelector('.goog-te-combo');
+      if (select) {
+        select.value = lang;
+        select.dispatchEvent(new Event('change'));
+      } else if (attempts > 0) {
+        setTimeout(() => trySwitch(attempts - 1), 500);
+      }
+    };
+    trySwitch(5);
   };
 
   return (

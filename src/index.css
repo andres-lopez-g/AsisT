@@ -61,12 +61,16 @@
   display: none !important;
 }
 
-/* Hide top frame */
+/* Hide top frame - Exhaustive list for different browsers/versions */
 .goog-te-banner-frame.skiptranslate,
 .goog-te-banner-frame,
-iframe.goog-te-banner-frame {
+iframe.goog-te-banner-frame,
+.goog-te-menu-frame,
+.goog-tooltip,
+.goog-tooltip:hover {
   display: none !important;
   visibility: hidden !important;
+  opacity: 0 !important;
 }
 
 body {
@@ -75,4 +79,20 @@ body {
 
 #google_translate_element {
   display: none !important;
+}
+
+/* Prevent Google from adding empty space at the top */
+.skiptranslate {
+  display: none !important;
+}
+
+/* Hide "original text" tooltip on hover */
+#goog-gt-tt,
+.goog-te-balloon-frame {
+  display: none !important;
+}
+
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
 }
