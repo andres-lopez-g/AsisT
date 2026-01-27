@@ -55,3 +55,27 @@
 ::-webkit-scrollbar-thumb {
   @apply bg-border rounded-full hover:bg-secondary/50;
 }
+
+/* Google Translate Widget Overrides */
+.goog-te-gadget {
+  font-family: inherit !important;
+  color: transparent !important;
+}
+
+.goog-te-gadget span {
+  display: none !important;
+}
+
+.goog-te-gadget .goog-te-combo {
+  @apply bg-white border border-border rounded px-2 py-1 text-xs outline-none focus:ring-1 focus:ring-primary w-full;
+  color: var(--foreground) !important;
+}
+
+/* Hide top frame if possible */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}

@@ -83,6 +83,7 @@ const ProtectedLayout = () => {
         </nav>
 
         <div className="p-4 border-t border-border">
+          <div id="google_translate_element" className="mb-4 min-h-[30px]"></div>
           <div className="flex items-center justify-between group">
             <div className="flex items-center gap-3 text-sm font-medium text-foreground/80">
               <div className="w-6 h-6 rounded bg-accent/10 flex items-center justify-center text-accent text-xs">

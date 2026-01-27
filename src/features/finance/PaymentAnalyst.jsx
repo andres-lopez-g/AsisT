@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Calculator, CreditCard, Calendar, TrendingUp, Info, Save, ChevronRight, Check } from 'lucide-react';
+import { Calculator, CreditCard, Calendar, TrendingUp, Info, Save, ChevronRight, Check, AlertCircle } from 'lucide-react';
 
 const PaymentAnalyst = () => {
     const { authFetch } = useAuth();
@@ -10,7 +10,9 @@ const PaymentAnalyst = () => {
     const [interestType, setInterestType] = useState('monthly'); // monthly or annual
     const [isSaving, setIsSaving] = useState(false);
     const [saved, setSaved] = useState(false);
+    const [saveError, setSaveError] = useState('');
     const [title, setTitle] = useState('');
+    const [showInterestInfo, setShowInterestInfo] = useState(false);
 
     const analysis = useMemo(() => {
         const principal = parseFloat(purchaseValue) || 0;
@@ -52,6 +54,7 @@ const PaymentAnalyst = () => {
     const handleSaveDebt = async () => {
         if (!analysis || !title) return;
         setIsSaving(true);
+        setSaveError('');
         try {
             const res = await authFetch('/api/debts', {
                 method: 'POST',
@@ -60,7 +63,7 @@ const PaymentAnalyst = () => {
                     title: title,
                     total_amount: analysis.totalCost,
                     interest_rate: interestRate,
-                    installments_total: installments,
+                    installments_total: parseInt(installments),
                     start_date: new Date().toISOString().split('T')[0]
                 })
             });
@@ -69,9 +72,13 @@ const PaymentAnalyst = () => {
                 setSaved(true);
                 setTimeout(() => setSaved(false), 3000);
                 setTitle('');
+            } else {
+                const data = await res.json();
+                setSaveError(data.error || 'Failed to save debt');
             }
         } catch (err) {
             console.error('Failed to save debt:', err);
+            setSaveError('Network error or server unavailable');
         } finally {
             setIsSaving(false);
         }
@@ -112,18 +119,26 @@ const PaymentAnalyst = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-xs font-semibold text-secondary uppercase mb-1">Installments</label>
-                                <select
+                                <input
+                                    type="number"
+                                    min="1"
                                     className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
                                     value={installments}
                                     onChange={e => setInstallments(e.target.value)}
-                                >
-                                    {[1, 3, 6, 12, 18, 24, 36].map(n => (
-                                        <option key={n} value={n}>{n} cuotas</option>
-                                    ))}
-                                </select>
+                                    placeholder="12"
+                                />
                             </div>
                             <div>
-                                <label className="block text-xs font-semibold text-secondary uppercase mb-1">Interest Rate (%)</label>
+                                <div className="flex items-center justify-between mb-1">
+                                    <label className="block text-xs font-semibold text-secondary uppercase">Interest Rate (%)</label>
+                                    <button
+                                        onClick={() => setShowInterestInfo(!showInterestInfo)}
+                                        className="text-primary hover:text-primary/80 transition-colors"
+                                        title="What is this?"
+                                    >
+                                        <Info size={14} />
+                                    </button>
+                                </div>
                                 <input
                                     type="number"
                                     step="0.01"
@@ -134,6 +149,20 @@ const PaymentAnalyst = () => {
                                 />
                             </div>
                         </div>
+
+                        {showInterestInfo && (
+                            <div className="p-4 bg-primary/5 border border-primary/10 rounded-lg animate-in slide-in-from-top-2 duration-300">
+                                <h4 className="text-xs font-bold text-primary uppercase mb-2">Monthly vs E.A. (Effective Annual)</h4>
+                                <div className="space-y-2 text-xs text-secondary leading-relaxed">
+                                    <p>
+                                        <strong className="text-foreground">Monthly:</strong> The interest charged every month. For example, 2% monthly means you pay 2% of the balance each month.
+                                    </p>
+                                    <p>
+                                        <strong className="text-foreground">E.A. (Annual):</strong> The real yearly cost. It considers compound interest. Usually, credit cards mention their "E.A." rate, which is higher than (Monthly rate × 12).
+                                    </p>
+                                </div>
+                            </div>
+                        )}
 
                         <div>
                             <label className="block text-xs font-semibold text-secondary uppercase mb-1">Rate Cycle</label>
@@ -197,6 +226,12 @@ const PaymentAnalyst = () => {
                             <div className="minimal-card p-6 space-y-4">
                                 <h2 className="text-sm font-semibold text-secondary uppercase tracking-wider">Save to My Debts</h2>
                                 <div className="flex flex-col gap-3">
+                                    {saveError && (
+                                        <div className="p-2.5 bg-red-50 border border-red-100 rounded-md text-red-600 text-[10px] flex items-center gap-2 animate-in fade-in slide-in-from-top-1">
+                                            <AlertCircle size={14} />
+                                            <span>{saveError}</span>
+                                        </div>
+                                    )}
                                     <input
                                         className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
                                         value={title}
