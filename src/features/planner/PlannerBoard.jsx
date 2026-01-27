@@ -267,9 +267,18 @@ const PlannerBoard = () => {
                 authFetch('/api/categories')
             ]);
 
-            if (tasksRes.ok) setTasks(await tasksRes.json());
-            if (debtsRes.ok) setDebts(await debtsRes.json());
-            if (catsRes.ok) setCategories(await catsRes.json());
+            if (tasksRes.ok) {
+                const tasksData = await tasksRes.json();
+                if (Array.isArray(tasksData)) setTasks(tasksData);
+            }
+            if (debtsRes.ok) {
+                const debtsData = await debtsRes.json();
+                if (Array.isArray(debtsData)) setDebts(debtsData);
+            }
+            if (catsRes.ok) {
+                const catsData = await catsRes.json();
+                if (Array.isArray(catsData)) setCategories(catsData);
+            }
         } catch (err) {
             console.error('Failed to fetch data:', err);
         } finally {

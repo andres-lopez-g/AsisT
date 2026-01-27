@@ -46,21 +46,28 @@ const SidebarLink = ({ to, icon: Icon, label, onClick }) => {
   );
 };
 
+import ErrorBoundary from './components/ErrorBoundary';
+
 const LanguageSwitcher = () => {
   const switchLanguage = (lang) => {
+    // Set cookie for Google Translate
     document.cookie = `googtrans=/en/${lang}; path=/`;
     document.cookie = `googtrans=/en/${lang}; path=/; domain=${window.location.hostname}`;
+
+    // Attempt to change via dropdown if it exists, otherwise force reload
     const trySwitch = (attempts) => {
       const select = document.querySelector('.goog-te-combo');
       if (select) {
         select.value = lang;
         select.dispatchEvent(new Event('change'));
-        if (attempts === 1) window.location.reload();
-      } else if (attempts > 0) {
-        setTimeout(() => trySwitch(attempts - 1), 500);
+      } else {
+        // If widget not found (e.g. hidden or error), reload to apply cookie
+        window.location.reload();
       }
     };
-    trySwitch(5);
+
+    // Slight delay to allow UI feedback if needed, but mostly immediate
+    setTimeout(() => trySwitch(1), 100);
   };
 
   return (
@@ -182,18 +189,20 @@ const App = () => {
     <AuthProvider>
       <Router>
         <Suspense fallback={<LoadingFallback />}>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+          <ErrorBoundary>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
 
-            <Route element={<ProtectedLayout />}>
-              <Route path="/" element={<Navigate to="/home" replace />} />
-              <Route path="/home" element={<HomeView />} />
-              <Route path="/finance" element={<FinanceDashboard />} />
-              <Route path="/payment-analyst" element={<PaymentAnalyst />} />
-              <Route path="/planner" element={<PlannerBoard />} />
-            </Route>
-          </Routes>
+              <Route element={<ProtectedLayout />}>
+                <Route path="/" element={<Navigate to="/home" replace />} />
+                <Route path="/home" element={<HomeView />} />
+                <Route path="/finance" element={<FinanceDashboard />} />
+                <Route path="/payment-analyst" element={<PaymentAnalyst />} />
+                <Route path="/planner" element={<PlannerBoard />} />
+              </Route>
+            </Routes>
+          </ErrorBoundary>
         </Suspense>
       </Router>
     </AuthProvider>
