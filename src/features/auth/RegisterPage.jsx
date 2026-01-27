@@ -33,69 +33,89 @@ const RegisterPage = () => {
         <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
             <ParticlesBackground />
 
-            <div className="w-full max-w-sm relative z-10">
-                <div className="minimal-card p-8 md:p-10 bg-white/80 backdrop-blur-sm">
-                    <div className="text-center mb-8">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-white mb-4 shadow-xl shadow-primary/5 p-2 border border-border/50">
-                            <img src="/favicon.png" alt="Logo" className="w-full h-full object-contain" />
+            {/* Overlay Grid */}
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay"></div>
+            <div className="absolute inset-0 border-[20px] border-background pointer-events-none z-20"></div>
+
+            <div className="w-full max-w-sm relative z-30">
+                {/* ID Badge / Header */}
+                <div className="mb-8 text-center space-y-2">
+                    <div className="inline-flex items-center justify-center w-12 h-12 border border-primary/20 bg-background mb-4 relative group">
+                        <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors"></div>
+                        <img src="/favicon.png" alt="Logo" className="w-6 h-6 object-contain opacity-80" />
+
+                        {/* Technical Corners */}
+                        <div className="absolute top-0 left-0 w-1 h-1 border-t border-l border-primary"></div>
+                        <div className="absolute top-0 right-0 w-1 h-1 border-t border-r border-primary"></div>
+                        <div className="absolute bottom-0 left-0 w-1 h-1 border-b border-l border-primary"></div>
+                        <div className="absolute bottom-0 right-0 w-1 h-1 border-b border-r border-primary"></div>
+                    </div>
+                    <h1 className="text-3xl font-black uppercase tracking-tighter text-primary italic">Initialization</h1>
+                    <p className="mono text-[10px] text-secondary uppercase tracking-[0.3em]">New_Operative_Registration</p>
+                </div>
+
+                <div className="tech-card p-8 bg-background/95 backdrop-blur-sm border-primary/10 shadow-[0px_0px_20px_rgba(0,0,0,0.05)]">
+                    {/* Status Display */}
+                    <div className="mb-8 flex items-center justify-between border-b border-border/40 pb-2">
+                        <span className="mono text-[9px] font-bold text-secondary uppercase tracking-widest">Protocol</span>
+                        <div className="flex items-center gap-1.5">
+                            <span className="mono text-[9px] font-bold text-accent uppercase tracking-widest">Register_Sequence_01</span>
                         </div>
-                        <h1 className="text-2xl font-bold mb-2 text-foreground">Create your AsisT account</h1>
-                        <p className="text-secondary text-sm">Join the assistant platform today</p>
                     </div>
 
                     {error && (
-                        <div className="mb-6 p-3 bg-red-50 border border-red-100 rounded-md flex items-center gap-2 text-red-600 text-xs animate-in fade-in slide-in-from-top-1">
-                            <AlertCircle size={14} />
+                        <div className="mb-6 p-3 bg-red-50/50 border border-red-200/50 flex items-center gap-2 text-red-700 mono text-[10px] uppercase tracking-wide animate-in fade-in slide-in-from-top-1">
+                            <AlertCircle size={12} />
                             <span>{error}</span>
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-semibold text-secondary uppercase tracking-wider ml-1">Full Name</label>
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="space-y-2">
+                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Operative_Designation (Name)</label>
                             <div className="relative group">
-                                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-primary transition-colors">
-                                    <User size={16} />
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-accent transition-colors">
+                                    <User size={14} />
                                 </div>
                                 <input
                                     type="text"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    className="w-full bg-muted/30 border border-border rounded-md pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-secondary/50 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all shadow-sm"
-                                    placeholder="John Doe"
+                                    className="w-full bg-muted/30 border border-border rounded-none pl-10 pr-4 py-3 text-sm text-primary placeholder:text-secondary/30 focus:border-accent outline-none mono transition-all"
+                                    placeholder="FULL NAME"
                                     required
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-semibold text-secondary uppercase tracking-wider ml-1">Email</label>
+                        <div className="space-y-2">
+                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Comm_Link (Email)</label>
                             <div className="relative group">
-                                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-primary transition-colors">
-                                    <Mail size={16} />
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-accent transition-colors">
+                                    <Mail size={14} />
                                 </div>
                                 <input
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-muted/30 border border-border rounded-md pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-secondary/50 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all shadow-sm"
-                                    placeholder="name@example.com"
+                                    className="w-full bg-muted/30 border border-border rounded-none pl-10 pr-4 py-3 text-sm text-primary placeholder:text-secondary/30 focus:border-accent outline-none mono transition-all"
+                                    placeholder="USER@DOMAIN.COM"
                                     required
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-semibold text-secondary uppercase tracking-wider ml-1">Password</label>
+                        <div className="space-y-2">
+                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Security_Key (Password)</label>
                             <div className="relative group">
-                                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-primary transition-colors">
-                                    <Lock size={16} />
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-accent transition-colors">
+                                    <Lock size={14} />
                                 </div>
                                 <input
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-muted/30 border border-border rounded-md pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-secondary/50 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all shadow-sm"
+                                    className="w-full bg-muted/30 border border-border rounded-none pl-10 pr-4 py-3 text-sm text-primary placeholder:text-secondary/30 focus:border-accent outline-none mono transition-all"
                                     placeholder="••••••••"
                                     required
                                     minLength={6}
@@ -106,27 +126,29 @@ const RegisterPage = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2.5 rounded-md transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-sm mt-6 shadow-md shadow-primary/10 active:scale-[0.98]"
+                            className="w-full bg-primary hover:bg-accent text-white font-bold py-4 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-xs uppercase tracking-[0.2em] shadow-[4px_4px_0px_rgba(0,0,0,0.1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
                         >
                             {isLoading ? (
-                                <Loader2 className="animate-spin" size={16} />
+                                <Loader2 className="animate-spin" size={14} />
                             ) : (
                                 <>
-                                    <span>Create Account</span>
-                                    <ArrowRight size={16} />
+                                    <span>Initialize</span>
+                                    <ArrowRight size={14} />
                                 </>
                             )}
                         </button>
 
-                        <div className="text-center mt-6">
-                            <p className="text-xs text-secondary">
-                                Already have an account?{' '}
-                                <Link to="/login" className="text-primary font-bold hover:underline">
-                                    Sign In
-                                </Link>
-                            </p>
+                        <div className="text-center pt-2">
+                            <Link to="/login" className="mono text-[9px] text-secondary hover:text-accent uppercase tracking-widest hover:underline decoration-1 underline-offset-4 transition-all">
+                                Return_to_Access_Control &rarr;
+                            </Link>
                         </div>
                     </form>
+                </div>
+
+                {/* Footer Code */}
+                <div className="mt-8 text-center opacity-30">
+                    <p className="mono text-[8px] uppercase tracking-[0.5em]">System_Ref_v2.0.4</p>
                 </div>
             </div>
         </div>

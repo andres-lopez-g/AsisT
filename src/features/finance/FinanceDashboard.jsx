@@ -457,13 +457,13 @@ const FinanceDashboard = () => {
                                         dataKey="name"
                                         axisLine={{ stroke: 'rgb(var(--border) / 0.6)' }}
                                         tickLine={false}
-                                        tick={{ fill: 'rgb(var(--secondary))', fontSize: 9, fontFamily: 'Space Mono' }}
+                                        tick={{ fill: 'rgb(var(--secondary))', fontSize: 9, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 500 }}
                                         dy={10}
                                     />
                                     <YAxis
                                         axisLine={{ stroke: 'rgb(var(--border) / 0.6)' }}
                                         tickLine={false}
-                                        tick={{ fill: 'rgb(var(--secondary))', fontSize: 9, fontFamily: 'Space Mono' }}
+                                        tick={{ fill: 'rgb(var(--secondary))', fontSize: 9, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 500 }}
                                         tickFormatter={(value) => `$${value}`}
                                     />
                                     <Tooltip
@@ -472,7 +472,8 @@ const FinanceDashboard = () => {
                                             border: '1px solid rgb(var(--primary))',
                                             borderRadius: '0px',
                                             boxShadow: '4px 4px 0px rgba(0,0,0,0.1)',
-                                            fontFamily: 'Space Mono',
+                                            fontFamily: "'Space Grotesk', sans-serif",
+                                            fontWeight: 500,
                                             fontSize: '10px'
                                         }}
                                         cursor={{ stroke: 'rgb(var(--accent))', strokeWidth: 1 }}

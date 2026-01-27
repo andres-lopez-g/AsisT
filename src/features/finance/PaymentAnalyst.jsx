@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Calculator, CreditCard, Calendar, TrendingUp, Info, Save, ChevronRight, Check, AlertCircle } from 'lucide-react';
+import { Calculator, CreditCard, Calendar, TrendingUp, Info, Save, ChevronRight, Check, AlertCircle, ArrowRight, AppWindow } from 'lucide-react';
 
 const PaymentAnalyst = () => {
     const { authFetch } = useAuth();
@@ -87,187 +87,191 @@ const PaymentAnalyst = () => {
     };
 
     return (
-        <div className="p-6 md:p-10 space-y-8 max-w-4xl mx-auto">
-            {/* Header */}
-            <div className="border-b border-border pb-6">
-                <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
-                    <Calculator className="text-primary" />
-                    Payment Analyst
-                </h1>
-                <p className="text-secondary mt-2">Analyze credit card purchases and installment plans.</p>
+        <div className="p-8 md:p-12 space-y-12 max-w-5xl mx-auto">
+            {/* Header Module */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b-2 border-primary/10">
+                <div className="space-y-1">
+                    <p className="mono text-xs font-bold text-accent uppercase tracking-[0.3em]">Module: Vector_Analysis</p>
+                    <h1 className="text-5xl font-black tracking-tighter uppercase italic text-primary">Analyst</h1>
+                </div>
+                <div className="flex items-center gap-2 bg-muted/30 border border-border p-1">
+                    <div className="px-4 py-2 mono text-[10px] font-bold text-secondary uppercase tracking-widest flex items-center gap-2">
+                        <Calculator size={14} className="text-accent" />
+                        <span>Credit_Vector_Probe</span>
+                    </div>
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Inputs */}
-                <div className="minimal-card p-6 space-y-6">
-                    <h2 className="text-sm font-semibold text-secondary uppercase tracking-wider flex items-center gap-2">
-                        <Info size={16} />
-                        Input Parameters
-                    </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                {/* Input Control Panel */}
+                <div className="lg:col-span-5 space-y-6">
+                    <div className="flex items-center justify-between border-b border-border/40 pb-2">
+                        <h2 className="mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Input_Parameters</h2>
+                        <Info size={14} className="text-secondary/60" />
+                    </div>
 
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-xs font-semibold text-secondary uppercase mb-1">Purchase Value ($)</label>
-                            <input
-                                type="number"
-                                step="0.01"
-                                className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
-                                value={purchaseValue}
-                                onChange={e => setPurchaseValue(e.target.value)}
-                                placeholder="0.00"
-                            />
+                    <div className="tech-card p-6 space-y-6 bg-card relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-2 opacity-10">
+                            <CreditCard size={64} />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="mono text-[10px] font-bold text-accent uppercase tracking-widest pl-1">Principal_Value</label>
+                            <div className="relative">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 mono text-secondary font-bold">$</span>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    className="w-full bg-muted/30 border border-border rounded-none p-4 pl-8 text-lg focus:border-accent outline-none mono font-bold text-primary placeholder:text-secondary/20 transition-all"
+                                    value={purchaseValue}
+                                    onChange={e => setPurchaseValue(e.target.value)}
+                                    placeholder="0.00"
+                                />
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-xs font-semibold text-secondary uppercase mb-1">Installments</label>
+                            <div className="space-y-2">
+                                <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Term_Length</label>
                                 <input
                                     type="number"
                                     min="1"
-                                    className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
+                                    className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono font-bold"
                                     value={installments}
                                     onChange={e => setInstallments(e.target.value)}
                                     placeholder="12"
                                 />
                             </div>
-                            <div>
-                                <div className="flex items-center justify-between mb-1">
-                                    <label className="block text-xs font-semibold text-secondary uppercase">Interest Rate (%)</label>
-                                    <button
-                                        onClick={() => setShowInterestInfo(!showInterestInfo)}
-                                        className="text-primary hover:text-primary/80 transition-colors"
-                                        title="What is this?"
-                                    >
-                                        <Info size={14} />
+                            <div className="space-y-2">
+                                <div className="flex justify-between items-center">
+                                    <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Interest_Idx</label>
+                                    <button onClick={() => setShowInterestInfo(!showInterestInfo)} className="text-accent hover:text-primary transition-colors">
+                                        <Info size={10} />
                                     </button>
                                 </div>
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
-                                    value={interestRate}
-                                    onChange={e => setInterestRate(e.target.value)}
-                                    placeholder="0"
-                                />
+                                <div className="relative">
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono font-bold"
+                                        value={interestRate}
+                                        onChange={e => setInterestRate(e.target.value)}
+                                        placeholder="0.00"
+                                    />
+                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 mono text-[10px] text-secondary font-bold">%</span>
+                                </div>
                             </div>
                         </div>
 
                         {showInterestInfo && (
-                            <div className="p-4 bg-primary/5 border border-primary/10 rounded-lg animate-in slide-in-from-top-2 duration-300">
-                                <h4 className="text-xs font-bold text-primary uppercase mb-2">Monthly vs E.A. (Effective Annual)</h4>
-                                <div className="space-y-2 text-xs text-secondary leading-relaxed">
-                                    <p>
-                                        <strong className="text-foreground">Monthly:</strong> The interest charged every month. For example, 2% monthly means you pay 2% of the balance each month.
-                                    </p>
-                                    <p>
-                                        <strong className="text-foreground">E.A. (Annual):</strong> The real yearly cost. It considers compound interest. Usually, credit cards mention their "E.A." rate, which is higher than (Monthly rate × 12).
-                                    </p>
-                                </div>
+                            <div className="p-3 bg-accent/5 border border-accent/20 mono text-[9px] text-secondary leading-relaxed">
+                                <strong className="text-accent">NOTE:</strong> Verify if rate is Monthly or E.A. (Effective Annual). E.A. includes compound effects.
                             </div>
                         )}
 
-                        <div>
-                            <label className="block text-xs font-semibold text-secondary uppercase mb-1">Rate Cycle</label>
-                            <div className="flex gap-2">
+                        <div className="space-y-2 pt-2">
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Cycle_Type</label>
+                            <div className="grid grid-cols-2 gap-px bg-border/40 border border-border/40">
                                 <button
                                     onClick={() => setInterestType('monthly')}
-                                    className={`flex-1 py-2 text-xs font-medium rounded-md border transition-all ${interestType === 'monthly' ? 'bg-primary text-white border-primary' : 'bg-transparent text-secondary border-border hover:bg-muted'}`}
+                                    className={`py-3 mono text-[9px] font-bold uppercase tracking-widest transition-all ${interestType === 'monthly' ? 'bg-primary text-white' : 'bg-background text-secondary hover:text-primary'}`}
                                 >
-                                    Monthly
+                                    Monthly_Rate
                                 </button>
                                 <button
                                     onClick={() => setInterestType('annual')}
-                                    className={`flex-1 py-2 text-xs font-medium rounded-md border transition-all ${interestType === 'annual' ? 'bg-primary text-white border-primary' : 'bg-transparent text-secondary border-border hover:bg-muted'}`}
+                                    className={`py-3 mono text-[9px] font-bold uppercase tracking-widest transition-all ${interestType === 'annual' ? 'bg-primary text-white' : 'bg-background text-secondary hover:text-primary'}`}
                                 >
-                                    E.A. (Annual)
+                                    E.A._Annual
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Analysis Results */}
-                <div className="flex flex-col gap-6">
+                {/* Analysis Output */}
+                <div className="lg:col-span-7 space-y-6 flex flex-col">
+                    <div className="flex items-center justify-between border-b border-border/40 pb-2">
+                        <h2 className="mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Projection_Logic</h2>
+                        {analysis && <span className="mono text-[9px] text-accent font-bold uppercase tracking-widest">Calculated</span>}
+                    </div>
+
                     {!analysis ? (
-                        <div className="minimal-card p-6 flex flex-col items-center justify-center text-center h-full border-dashed border-2 stroke-muted">
-                            <TrendingUp className="text-muted mb-4" size={48} />
-                            <p className="text-secondary text-sm">Enter a purchase value to see the detailed financing analysis.</p>
+                        <div className="flex-1 border-2 border-dashed border-border/40 flex flex-col items-center justify-center p-12 text-center space-y-4 opacity-50">
+                            <TrendingUp size={48} className="text-secondary/40" />
+                            <p className="mono text-xs text-secondary uppercase tracking-[0.2em]">Awaiting_Input_Vectors</p>
                         </div>
                     ) : (
-                        <>
-                            <div className="minimal-card p-6 bg-primary/5 border-primary/20">
-                                <h2 className="text-sm font-semibold text-primary uppercase tracking-wider mb-4">Plan Summary</h2>
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-end border-b border-primary/10 pb-2">
-                                        <span className="text-secondary text-sm">Monthly Payment</span>
-                                        <span className="text-2xl font-bold text-foreground font-mono">${analysis.monthlyPayment}</span>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4 pt-2">
-                                        <div>
-                                            <p className="text-xs text-secondary mb-1">Total Cost</p>
-                                            <p className="font-semibold text-sm">${analysis.totalCost}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-xs text-secondary mb-1">Total Interest</p>
-                                            <p className={`font-semibold text-sm ${parseFloat(analysis.totalInterest) > 0 ? 'text-red-500' : 'text-green-600'}`}>
-                                                +${analysis.totalInterest}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="mt-4 p-3 bg-white/50 rounded-lg border border-primary/10 text-xs">
-                                        <p className="flex items-center gap-2 text-secondary">
-                                            <Info size={14} className="text-primary" />
-                                            {analysis.isFair
-                                                ? "This is a 0% interest plan. No extra cost!"
-                                                : `You are paying ${analysis.interestPercentage}% extra in interest.`}
-                                        </p>
-                                    </div>
+                        <div className="flex-1 space-y-6">
+                            {/* Primary Metric */}
+                            <div className="bg-primary text-white p-8 shadow-[8px_8px_0px_rgba(0,0,0,0.1)] flex justify-between items-center relative overflow-hidden group">
+                                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+                                <div className="relative z-10">
+                                    <p className="mono text-[10px] text-white/60 uppercase tracking-[0.2em] mb-1">Monthly_Obligation</p>
+                                    <h3 className="text-5xl font-black italic tracking-tighter">${analysis.monthlyPayment}</h3>
+                                </div>
+                                <div className="relative z-10 w-12 h-12 border border-white/20 flex items-center justify-center">
+                                    <ArrowRight size={20} className="text-white group-hover:translate-x-1 transition-transform" />
                                 </div>
                             </div>
 
-                            <div className="minimal-card p-6 space-y-4">
-                                <h2 className="text-sm font-semibold text-secondary uppercase tracking-wider">Save to My Debts</h2>
-                                <div className="flex flex-col gap-3">
-                                    {saveError && (
-                                        <div className="p-2.5 bg-red-50 border border-red-100 rounded-md text-red-600 text-[10px] flex items-center gap-2 animate-in fade-in slide-in-from-top-1">
-                                            <AlertCircle size={14} />
-                                            <span>{saveError}</span>
-                                        </div>
-                                    )}
-                                    <div className="grid grid-cols-4 gap-3">
-                                        <div className="col-span-3">
-                                            <label className="block text-[10px] font-bold text-secondary uppercase mb-1 ml-1">Nombre de la compra</label>
-                                            <input
-                                                className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
-                                                value={title}
-                                                onChange={e => setTitle(e.target.value)}
-                                                placeholder="Ej: Laptop nueva"
-                                            />
-                                        </div>
-                                        <div className="col-span-1">
-                                            <label className="block text-[10px] font-bold text-secondary uppercase mb-1 ml-1">Día Pago</label>
-                                            <input
-                                                type="number"
-                                                min="1"
-                                                max="31"
-                                                className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
-                                                value={dueDay}
-                                                onChange={e => setDueDay(e.target.value)}
-                                                placeholder="1-31"
-                                                title="Día del mes para el recordatorio de pago"
-                                            />
-                                        </div>
+                            {/* Secondary Metrics */}
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="tech-card p-6 bg-background hover:border-accent/40 transition-colors">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <p className="mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Total_Cost</p>
+                                        <Check size={14} className="text-secondary/40" />
                                     </div>
+                                    <p className="text-2xl font-black text-primary tracking-tight">${analysis.totalCost}</p>
+                                </div>
+                                <div className={`tech-card p-6 bg-background transition-colors ${parseFloat(analysis.totalInterest) > 0 ? 'hover:border-red-500/40' : 'hover:border-green-500/40'}`}>
+                                    <div className="flex justify-between items-start mb-4">
+                                        <p className="mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Interest_Delta</p>
+                                        {parseFloat(analysis.totalInterest) > 0 ? <TrendingUp size={14} className="text-red-500" /> : <AppWindow size={14} className="text-green-500" />}
+                                    </div>
+                                    <p className={`text-2xl font-black tracking-tight ${parseFloat(analysis.totalInterest) > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                                        +${analysis.totalInterest}
+                                    </p>
+                                    <p className="mono text-[9px] text-secondary mt-1 uppercase tracking-widest">{analysis.interestPercentage}% Markup</p>
+                                </div>
+                            </div>
+
+                            {/* Save Module */}
+                            <div className="border-t border-border/40 pt-6">
+                                <div className="flex gap-4">
+                                    <input
+                                        className="flex-1 bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono"
+                                        value={title}
+                                        onChange={e => setTitle(e.target.value)}
+                                        placeholder="IDENTIFIER (E.G. NEW LAPTOP)"
+                                    />
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max="31"
+                                        className="w-20 bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono text-center"
+                                        value={dueDay}
+                                        onChange={e => setDueDay(e.target.value)}
+                                        placeholder="DAY"
+                                        title="Due Day"
+                                    />
                                     <button
                                         onClick={handleSaveDebt}
                                         disabled={isSaving || !title}
-                                        className={`w-full py-3 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2 ${saved ? 'bg-green-500 text-white' : 'bg-foreground text-background hover:opacity-90 disabled:opacity-50'}`}
+                                        className={`px-8 font-black text-sm uppercase italic tracking-widest transition-all shadow-[4px_4px_0px_rgba(0,0,0,0.1)] flex items-center gap-2 ${saved ? 'bg-green-600 text-white' : 'bg-primary text-white hover:bg-accent'}`}
                                     >
-                                        {saved ? <><Check size={18} /> Saved!</> : isSaving ? 'Saving...' : <><Save size={18} /> Record as Active Debt</>}
+                                        {saved ? 'Recorded' : 'Commit'}
+                                        <Save size={14} />
                                     </button>
                                 </div>
+                                {saveError && (
+                                    <div className="mt-3 mono text-[9px] text-red-600 flex items-center gap-2">
+                                        <AlertCircle size={10} />
+                                        <span>ERROR: {saveError}</span>
+                                    </div>
+                                )}
                             </div>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>

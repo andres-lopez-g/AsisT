@@ -12,6 +12,7 @@ import {
     X,
     Loader2,
     ChevronRight,
+    ChevronLeft,
     AlertCircle,
     Edit3,
     Tag
