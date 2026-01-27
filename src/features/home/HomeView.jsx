@@ -20,7 +20,6 @@ const HomeView = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch Finances
                 const finRes = await authFetch('/api/finance');
                 if (finRes.ok) {
                     const trans = await finRes.json();
@@ -29,11 +28,10 @@ const HomeView = () => {
                     setFinances({ income, expenses, balance: income - expenses });
                 }
 
-                // Fetch Tasks
                 const taskRes = await authFetch('/api/planner');
                 if (taskRes.ok) {
                     const tasks = await taskRes.json();
-                    setNextTasks(tasks.filter(t => t.status !== 'done').slice(0, 3));
+                    setNextTasks(tasks.filter(t => t.status !== 'done').slice(0, 4));
                 }
             } catch (err) {
                 console.error('Error fetching dashboard data:', err);
@@ -46,128 +44,139 @@ const HomeView = () => {
     }, []);
 
     return (
-        <div className="p-6 md:p-10 space-y-8 max-w-7xl mx-auto h-full overflow-auto">
-            {/* Welcome Section */}
-            <div className="space-y-2">
-                <h1 className="text-4xl font-bold tracking-tight text-foreground">
-                    Hello, {user?.name ? user.name.split(' ')[0] : 'there'} 👋
-                </h1>
-                <p className="text-secondary text-lg">Here's a quick summary of your activity for today.</p>
+        <div className="p-8 md:p-12 space-y-12 max-w-7xl mx-auto">
+            {/* Header Module */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b-2 border-primary/10">
+                <div className="space-y-1">
+                    <p className="mono text-xs font-bold text-accent uppercase tracking-[0.3em]">System Status: Online</p>
+                    <h1 className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic text-primary">
+                        {user?.name ? user.name.split(' ')[0] : 'OPERATOR'}
+                    </h1>
+                </div>
+                <div className="flex items-center gap-4 mono text-[10px] font-bold text-secondary uppercase tracking-widest bg-muted px-4 py-2 border border-border/50">
+                    <Calendar size={12} />
+                    <span>{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Financial Summary */}
-                <div className="col-span-1 lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="minimal-card p-6 flex flex-col justify-between bg-primary/5 border-primary/10">
-                        <div className="flex justify-between items-start">
-                            <div>
-                                <p className="text-secondary text-sm font-medium mb-1">Total Balance</p>
-                                <h3 className="text-3xl md:text-4xl font-bold text-primary tracking-tight">
-                                    ${finances.balance.toLocaleString()}
-                                </h3>
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                {/* Financial Instrument Module */}
+                <div className="lg:col-span-3 space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border/40 border border-border/40">
+                        <div className="bg-background p-8 space-y-6">
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <p className="mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em] mb-2">Total Capital</p>
+                                    <h3 className="mono text-5xl font-bold text-primary tracking-tighter">
+                                        ${finances.balance.toLocaleString()}
+                                    </h3>
+                                </div>
+                                <div className="p-3 border border-border bg-muted/30">
+                                    <DollarSign size={20} className="text-primary" />
+                                </div>
                             </div>
-                            <div className="p-3 bg-primary/10 rounded-xl text-primary">
-                                <DollarSign size={24} />
+                            <div className="flex gap-8 pt-4">
+                                <div className="space-y-1">
+                                    <span className="mono text-[9px] text-green-600 font-bold uppercase">Inflow</span>
+                                    <div className="flex items-center gap-2 mono text-sm font-bold">
+                                        <TrendingUp size={14} className="text-green-500" />
+                                        <span>${finances.income.toLocaleString()}</span>
+                                    </div>
+                                </div>
+                                <div className="space-y-1">
+                                    <span className="mono text-[9px] text-red-600 font-bold uppercase">Outflow</span>
+                                    <div className="flex items-center gap-2 mono text-sm font-bold">
+                                        <TrendingDown size={14} className="text-red-500" />
+                                        <span>${finances.expenses.toLocaleString()}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="mt-6 flex gap-4">
-                            <div className="flex items-center gap-1.5 text-xs font-medium text-green-600">
-                                <TrendingUp size={14} />
-                                <span>+${finances.income.toLocaleString()}</span>
-                            </div>
-                            <div className="flex items-center gap-1.5 text-xs font-medium text-red-600">
-                                <TrendingDown size={14} />
-                                <span>-${finances.expenses.toLocaleString()}</span>
+
+                        <div className="bg-muted/10 p-8 flex flex-col justify-center gap-6">
+                            <h4 className="mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Flow Distribution</h4>
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <div className="flex justify-between mono text-[10px] font-bold">
+                                        <span>OPERATIONAL LIMIT</span>
+                                        <span>100%</span>
+                                    </div>
+                                    <div className="h-1 bg-border/40 overflow-hidden">
+                                        <div className="h-full bg-primary" style={{ width: '100%' }} />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <div className="flex justify-between mono text-[10px] font-bold">
+                                        <span>CURRENT UTILIZATION</span>
+                                        <span>{finances.income > 0 ? Math.round((finances.expenses / finances.income) * 100) : 0}%</span>
+                                    </div>
+                                    <div className="h-1 bg-border/40 overflow-hidden">
+                                        <div
+                                            className={`h-full transition-all duration-1000 ${finances.expenses > finances.income ? 'bg-red-500' : 'bg-accent'}`}
+                                            style={{ width: finances.income > 0 ? `${Math.min((finances.expenses / finances.income) * 100, 100)}%` : '0%' }}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="minimal-card p-6 flex flex-col justify-center gap-4 bg-muted/20">
-                        <h4 className="font-semibold text-foreground">Financial Status</h4>
-                        <div className="space-y-3">
-                            <div className="flex justify-between items-center text-sm">
-                                <span className="text-secondary">Monthly Income</span>
-                                <span className="font-medium text-foreground">${finances.income.toLocaleString()}</span>
+                    {/* Quick Access Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border/40 border border-border/40">
+                        <Link to="/finance" className="group bg-background p-8 hover:bg-muted/30 transition-colors">
+                            <div className="flex justify-between items-start mb-4">
+                                <h5 className="text-lg font-black tracking-tight uppercase italic group-hover:text-accent transition-colors">Capital Ledger</h5>
+                                <ArrowRight size={18} className="text-secondary group-hover:text-accent transition-transform group-hover:translate-x-1" />
                             </div>
-                            <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-                                <div
-                                    className="h-full bg-green-500 rounded-full"
-                                    style={{ width: finances.income > 0 ? '100%' : '0%' }}
-                                />
+                            <p className="text-secondary text-sm leading-relaxed">Full audit of all transaction cycles and liquidity reports.</p>
+                        </Link>
+                        <Link to="/planner" className="group bg-background p-8 hover:bg-muted/30 transition-colors">
+                            <div className="flex justify-between items-start mb-4">
+                                <h5 className="text-lg font-black tracking-tight uppercase italic group-hover:text-accent transition-colors">Mission Control</h5>
+                                <ArrowRight size={18} className="text-secondary group-hover:text-accent transition-transform group-hover:translate-x-1" />
                             </div>
-                            <div className="flex justify-between items-center text-sm">
-                                <span className="text-secondary">Monthly Expenses</span>
-                                <span className="font-medium text-foreground">${finances.expenses.toLocaleString()}</span>
-                            </div>
-                            <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-                                <div
-                                    className="h-full bg-red-500 rounded-full"
-                                    style={{ width: finances.income > 0 ? `${(finances.expenses / finances.income) * 100}%` : '0%' }}
-                                />
-                            </div>
-                        </div>
+                            <p className="text-secondary text-sm leading-relaxed">Strategic objective planning and operational execution board.</p>
+                        </Link>
                     </div>
                 </div>
 
-                {/* Tasks Summary */}
-                <div className="minimal-card p-6 flex flex-col gap-4">
+                {/* Sidebar Module: Logistics */}
+                <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                        <h4 className="font-semibold text-foreground flex items-center gap-2">
-                            <Calendar size={18} className="text-primary" />
-                            Next Tasks
-                        </h4>
-                        <Link to="/planner" className="text-primary hover:underline text-xs font-medium flex items-center gap-1">
-                            View all <ArrowRight size={12} />
-                        </Link>
+                        <h4 className="mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Next Objectives</h4>
+                        <Link to="/planner" className="mono text-[9px] font-bold text-accent underline uppercase tracking-tighter">Expand</Link>
                     </div>
 
-                    <div className="space-y-3 flex-1">
+                    <div className="space-y-px bg-border/40 border border-border/40">
                         {nextTasks.length > 0 ? (
                             nextTasks.map(task => (
-                                <div key={task.id} className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer group">
-                                    {task.status === 'in-progress' ? (
-                                        <div className="w-4 h-4 rounded-full border-2 border-blue-500 flex items-center justify-center">
-                                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+                                <div key={task.id} className="bg-background p-4 hover:bg-muted/20 transition-colors cursor-pointer group flex flex-col gap-3">
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-1.5 h-1.5 rounded-full ${task.status === 'in-progress' ? 'bg-accent animate-pulse' : 'bg-secondary/40'}`} />
+                                            <p className="text-xs font-bold text-primary group-hover:translate-x-0.5 transition-transform">{task.title}</p>
                                         </div>
-                                    ) : (
-                                        <Circle size={16} className="text-secondary group-hover:text-primary transition-colors" />
-                                    )}
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium text-foreground truncate">{task.title}</p>
-                                        <p className="text-[10px] text-secondary">{task.date}</p>
+                                        <span className={`tech-tag ${task.priority === 'high' ? 'border-red-500 text-red-600 bg-red-50' :
+                                                task.priority === 'medium' ? 'border-orange-500 text-orange-600 bg-orange-50' :
+                                                    'border-accent text-accent bg-blue-50'
+                                            }`}>
+                                            {task.priority}
+                                        </span>
                                     </div>
-                                    <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider
-                                        ${task.priority === 'high' ? 'bg-red-100 text-red-600' :
-                                            task.priority === 'medium' ? 'bg-orange-100 text-orange-600' :
-                                                'bg-blue-100 text-blue-600'}`}>
-                                        {task.priority}
-                                    </span>
+                                    <div className="flex justify-between items-center pl-4 mt-1 border-l border-border/60">
+                                        <span className="mono text-[9px] text-secondary uppercase tracking-wider">{task.date}</span>
+                                        <ArrowRight size={12} className="text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    </div>
                                 </div>
                             ))
                         ) : (
-                            <div className="h-full flex flex-col items-center justify-center text-center p-6 border border-dashed border-border rounded-lg">
-                                <CheckCircle2 size={32} className="text-muted mb-2" />
-                                <p className="text-xs text-secondary italic">Everything's up to date!</p>
+                            <div className="bg-background p-12 text-center">
+                                <p className="mono text-[10px] text-secondary italic uppercase tracking-widest">No Active Missions</p>
                             </div>
                         )}
                     </div>
                 </div>
-            </div>
-
-            {/* Quick Actions / Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                <Link to="/finance" className="group">
-                    <div className="minimal-card p-6 hover:border-primary/30 transition-all">
-                        <h5 className="font-bold text-foreground group-hover:text-primary transition-colors">Detailed Financial Analysis</h5>
-                        <p className="text-secondary text-sm mt-1">Review your income and expense charts, and manage your transactions.</p>
-                    </div>
-                </Link>
-                <Link to="/planner" className="group">
-                    <div className="minimal-card p-6 hover:border-primary/30 transition-all">
-                        <h5 className="font-bold text-foreground group-hover:text-primary transition-colors">Task Management</h5>
-                        <p className="text-secondary text-sm mt-1">Organize your workflow in the Kanban board and complete your objectives.</p>
-                    </div>
-                </Link>
             </div>
         </div>
     );

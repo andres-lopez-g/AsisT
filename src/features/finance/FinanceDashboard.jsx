@@ -16,19 +16,20 @@ import {
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import CategoryManager from './CategoryManager';
 
-const StatCard = ({ label, amount, icon: Icon, trend, trendUp }) => (
-    <div className="minimal-card p-6 flex flex-col justify-between h-full">
-        <div className="flex items-start justify-between mb-4">
+const StatCard = ({ label, amount, icon: Icon }) => (
+    <div className="bg-background border border-border/60 p-6 flex flex-col justify-between h-full hover:border-accent/40 transition-colors group">
+        <div className="flex items-start justify-between mb-2">
             <div>
-                <p className="text-secondary text-sm font-medium mb-1">{label}</p>
-                <h3 className="text-3xl font-bold text-foreground tracking-tight">
+                <p className="mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em] mb-2">{label}</p>
+                <h3 className="mono text-3xl font-bold text-primary tracking-tighter group-hover:text-accent transition-colors">
                     {amount}
                 </h3>
             </div>
-            <div className="p-2 bg-muted rounded-md text-secondary">
-                <Icon size={20} />
+            <div className="p-2 border border-border/40 bg-muted/20 text-secondary group-hover:text-accent group-hover:border-accent/20 transition-all">
+                <Icon size={18} />
             </div>
         </div>
+        <div className="h-px w-full bg-border/20 group-hover:bg-accent/10 transition-colors" />
     </div>
 );
 
@@ -72,85 +73,90 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
             onAdd(data);
         }
         onClose();
-        setFormData({ title: '', amount: '', type: 'expense', category: 'General', date: new Date().toISOString().split('T')[0] });
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm">
-            <div className="bg-background border border-border rounded-lg shadow-xl w-full max-w-md p-6 animate-in fade-in zoom-in-95 duration-200">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-bold">{editingTransaction ? 'Edit Transaction' : 'Add Transaction'}</h2>
-                    <button onClick={onClose} className="text-secondary hover:text-foreground">
-                        <X size={20} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary/20 backdrop-blur-[2px]">
+            <div className="bg-background border-2 border-primary shadow-[10px_10px_0px_rgba(0,0,0,0.1)] w-full max-w-md p-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                <div className="flex justify-between items-start mb-8 pb-4 border-b border-border/40">
+                    <div className="space-y-1">
+                        <p className="mono text-[10px] font-bold text-accent uppercase tracking-[0.2em]">Transaction Protocol</p>
+                        <h2 className="text-2xl font-black tracking-tight italic uppercase">{editingTransaction ? 'Modify_Entry' : 'New_Entry'}</h2>
+                    </div>
+                    <button onClick={onClose} className="text-secondary hover:text-primary transition-colors border border-border p-1">
+                        <X size={18} />
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-xs font-semibold text-secondary uppercase mb-1">Title</label>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                        <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Description_Label</label>
                         <input
                             required
-                            className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none"
+                            className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono"
                             value={formData.title}
                             onChange={e => setFormData({ ...formData, title: e.target.value })}
-                            placeholder="e.g. Grocery Run"
+                            placeholder="TRANSACTION NAME"
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-xs font-semibold text-secondary uppercase mb-1">Amount</label>
+                        <div className="space-y-2">
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Magnitude</label>
                             <input
                                 required
                                 type="number"
                                 step="0.01"
-                                className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none"
+                                className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono font-bold"
                                 value={formData.amount}
                                 onChange={e => setFormData({ ...formData, amount: e.target.value })}
                                 placeholder="0.00"
                             />
                         </div>
-                        <div>
-                            <label className="block text-xs font-semibold text-secondary uppercase mb-1">Type</label>
+                        <div className="space-y-2">
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Vector_Type</label>
                             <select
-                                className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none"
+                                className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono appearance-none cursor-pointer"
                                 value={formData.type}
                                 onChange={e => setFormData({ ...formData, type: e.target.value })}
                             >
-                                <option value="expense">Expense</option>
-                                <option value="income">Income</option>
+                                <option value="expense">EXPENSE (-)</option>
+                                <option value="income">INCOME (+)</option>
                             </select>
                         </div>
                     </div>
 
-                    <div>
-                        <label className="block text-xs font-semibold text-secondary uppercase mb-1">Category</label>
-                        <select
-                            className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none"
-                            value={formData.category}
-                            onChange={e => setFormData({ ...formData, category: e.target.value })}
-                        >
-                            <option value="General">General</option>
-                            {filteredCategories.map(cat => (
-                                <option key={cat.id} value={cat.name}>{cat.name}</option>
-                            ))}
-                        </select>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Category_Class</label>
+                            <select
+                                className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono appearance-none cursor-pointer"
+                                value={formData.category}
+                                onChange={e => setFormData({ ...formData, category: e.target.value })}
+                            >
+                                <option value="General">GENERAL</option>
+                                {filteredCategories.map(cat => (
+                                    <option key={cat.id} value={cat.name}>{cat.name.toUpperCase()}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="space-y-2">
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Timestamp</label>
+                            <input
+                                type="date"
+                                required
+                                className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono"
+                                value={formData.date}
+                                onChange={e => setFormData({ ...formData, date: e.target.value })}
+                            />
+                        </div>
                     </div>
 
-                    <div>
-                        <label className="block text-xs font-semibold text-secondary uppercase mb-1">Date</label>
-                        <input
-                            type="date"
-                            required
-                            className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none"
-                            value={formData.date}
-                            onChange={e => setFormData({ ...formData, date: e.target.value })}
-                        />
+                    <div className="pt-4">
+                        <button type="submit" className="w-full bg-primary text-white py-4 font-black text-sm uppercase italic tracking-widest hover:bg-accent transition-all">
+                            {editingTransaction ? 'Execute_Update' : 'Commit_Transaction'}
+                        </button>
                     </div>
-
-                    <button type="submit" className="w-full bg-primary text-white py-2 rounded-md font-medium text-sm mt-4 hover:opacity-90 transition-opacity">
-                        {editingTransaction ? 'Update Transaction' : 'Save Transaction'}
-                    </button>
                 </form>
             </div>
         </div>
@@ -349,7 +355,7 @@ const FinanceDashboard = () => {
 
 
     return (
-        <div className="p-6 md:p-10 space-y-8 max-w-6xl mx-auto">
+        <div className="p-8 md:p-12 space-y-12 max-w-7xl mx-auto">
             <TransactionModal
                 isOpen={isModalOpen}
                 onClose={() => {
@@ -370,153 +376,179 @@ const FinanceDashboard = () => {
                 onDelete={deleteCategory}
             />
 
-            {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-6">
-                <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-foreground">Finance</h1>
+            {/* Header Module */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b-2 border-primary/10">
+                <div className="space-y-1">
+                    <p className="mono text-xs font-bold text-accent uppercase tracking-[0.3em]">Module: Capital_Ledger</p>
+                    <h1 className="text-5xl font-black tracking-tighter uppercase italic text-primary">Capital</h1>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                     <button
                         onClick={() => setIsCategoryModalOpen(true)}
-                        className="flex items-center gap-2 bg-muted hover:bg-muted/80 text-secondary hover:text-foreground px-4 py-2 rounded-md font-medium transition-all text-sm border border-border"
-                        title="Manage Categories"
+                        className="flex items-center gap-2 mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em] border border-border px-4 py-3 hover:bg-muted transition-colors"
                     >
-                        <Settings size={16} />
-                        <span>Categorías</span>
+                        <Settings size={14} />
+                        <span>Categories</span>
                     </button>
                     <button
                         onClick={() => {
                             setEditingTransaction(null);
                             setIsModalOpen(true);
                         }}
-                        className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md font-medium transition-all text-sm shadow-sm"
+                        className="flex items-center gap-2 mono text-[10px] font-bold text-white bg-primary uppercase tracking-[0.2em] px-6 py-3 hover:bg-accent transition-colors shadow-[4px_4px_0px_rgba(0,0,0,0.1)]"
                     >
-                        <Plus size={16} />
-                        <span>New Transaction</span>
+                        <Plus size={14} />
+                        <span>New_Entry</span>
                     </button>
                 </div>
             </div>
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <StatCard
-                    label="Current Balance"
-                    amount={`$${stats.balance.toFixed(2)}`}
-                    icon={DollarSign}
-                />
-                <StatCard
-                    label="Income"
-                    amount={`$${stats.income.toFixed(2)}`}
-                    icon={ArrowUpRight}
-                />
-                <StatCard
-                    label="Expenses"
-                    amount={`$${stats.expenses.toFixed(2)}`}
-                    icon={ArrowDownLeft}
-                />
-                <StatCard
-                    label="Total Debt"
-                    amount={`$${stats.totalDebt.toFixed(2)}`}
-                    icon={TrendingDown}
-                />
+            {/* Stats Instrument Array */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-px bg-border/40 border border-border/40">
+                <div className="bg-background">
+                    <StatCard
+                        label="Net_Liquidity"
+                        amount={`$${stats.balance.toFixed(2)}`}
+                        icon={DollarSign}
+                    />
+                </div>
+                <div className="bg-background">
+                    <StatCard
+                        label="Positive_Flux"
+                        amount={`$${stats.income.toFixed(2)}`}
+                        icon={ArrowUpRight}
+                    />
+                </div>
+                <div className="bg-background">
+                    <StatCard
+                        label="Negative_Flux"
+                        amount={`$${stats.expenses.toFixed(2)}`}
+                        icon={ArrowDownLeft}
+                    />
+                </div>
+                <div className="bg-background">
+                    <StatCard
+                        label="Liabilities"
+                        amount={`$${stats.totalDebt.toFixed(2)}`}
+                        icon={TrendingDown}
+                    />
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="minimal-card p-6 lg:col-span-2 min-h-[400px]">
-                    <h2 className="text-sm font-semibold text-secondary uppercase tracking-wider mb-6">Overview</h2>
-                    <div className="h-[300px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
-                                <defs>
-                                    <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#2563eb" stopOpacity={0.1} />
-                                        <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
-                                    </linearGradient>
-                                </defs>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                                <XAxis
-                                    dataKey="name"
-                                    axisLine={false}
-                                    tickLine={false}
-                                    tick={{ fill: '#64748b', fontSize: 10 }}
-                                    dy={10}
-                                />
-                                <YAxis
-                                    axisLine={false}
-                                    tickLine={false}
-                                    tick={{ fill: '#64748b', fontSize: 10 }}
-                                    tickFormatter={(value) => `$${Intl.NumberFormat('en', { notation: 'compact' }).format(value)}`}
-                                />
-                                <Tooltip
-                                    contentStyle={{ backgroundColor: '#fff', borderColor: '#e2e8f0', borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                                    formatter={(value) => [`$${value.toLocaleString()}`, 'Balance']}
-                                />
-                                <Area type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={3} fillOpacity={1} fill="url(#colorValue)" />
-                            </AreaChart>
-                        </ResponsiveContainer>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                {/* Visual Analysis Module */}
+                <div className="lg:col-span-2 space-y-6">
+                    <div className="flex items-center justify-between">
+                        <h2 className="mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Flux_Trajectory</h2>
+                    </div>
+                    <div className="border border-border/60 p-8 min-h-[400px] bg-muted/5 relative">
+                        <div className="absolute top-4 right-4 mono text-[8px] text-secondary/40 uppercase tracking-[0.2em]">Sample_Interval: 7D</div>
+                        <div className="h-[320px] w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                    <defs>
+                                        <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="rgb(var(--accent))" stopOpacity={0.1} />
+                                            <stop offset="95%" stopColor="rgb(var(--accent))" stopOpacity={0} />
+                                        </linearGradient>
+                                    </defs>
+                                    <CartesianGrid strokeDasharray="2 2" stroke="rgb(var(--border) / 0.4)" vertical={false} />
+                                    <XAxis
+                                        dataKey="name"
+                                        axisLine={{ stroke: 'rgb(var(--border) / 0.6)' }}
+                                        tickLine={false}
+                                        tick={{ fill: 'rgb(var(--secondary))', fontSize: 9, fontFamily: 'Space Mono' }}
+                                        dy={10}
+                                    />
+                                    <YAxis
+                                        axisLine={{ stroke: 'rgb(var(--border) / 0.6)' }}
+                                        tickLine={false}
+                                        tick={{ fill: 'rgb(var(--secondary))', fontSize: 9, fontFamily: 'Space Mono' }}
+                                        tickFormatter={(value) => `$${value}`}
+                                    />
+                                    <Tooltip
+                                        contentStyle={{
+                                            backgroundColor: 'rgb(var(--background))',
+                                            border: '1px solid rgb(var(--primary))',
+                                            borderRadius: '0px',
+                                            boxShadow: '4px 4px 0px rgba(0,0,0,0.1)',
+                                            fontFamily: 'Space Mono',
+                                            fontSize: '10px'
+                                        }}
+                                        cursor={{ stroke: 'rgb(var(--accent))', strokeWidth: 1 }}
+                                    />
+                                    <Area type="monotone" dataKey="value" stroke="rgb(var(--accent))" strokeWidth={2} fillOpacity={1} fill="url(#colorValue)" />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        </div>
                     </div>
                 </div>
 
-                <div className="minimal-card p-0 flex flex-col h-full overflow-hidden">
-                    <div className="p-4 border-b border-border bg-muted/30">
-                        <h2 className="text-sm font-semibold text-secondary uppercase tracking-wider">Transactions</h2>
+                {/* Audit Log Module */}
+                <div className="space-y-6 flex flex-col h-full overflow-hidden">
+                    <div className="flex items-center justify-between">
+                        <h2 className="mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Transaction_Audit</h2>
                     </div>
-                    <div className="overflow-auto max-h-[400px] divide-y divide-border">
-                        {transactions.length === 0 ? (
-                            <div className="p-8 text-center text-secondary text-sm">
-                                {loading ? 'Loading...' : 'No transactions found.'}
-                            </div>
-                        ) : (
-                            transactions.map((tx) => (
-                                <div key={tx.id} className="flex items-center justify-between p-4 hover:bg-muted/30 transition-colors group">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-8 h-8 rounded-md flex items-center justify-center text-xs font-bold ${tx.type === 'income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                            {tx.type === 'income' ? '+' : '-'}
-                                        </div>
-                                        <div>
-                                            <h4 className="font-medium text-foreground text-sm">{tx.title}</h4>
-                                            <p className="text-xs text-secondary">{new Date(tx.date).toLocaleDateString()} • {tx.category}</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className={`font-medium text-sm ${tx.type === 'income' ? 'text-green-600' : 'text-foreground'}`}>
-                                            {tx.type === 'income' ? '+' : '-'}${parseFloat(tx.amount).toFixed(2)}
-                                        </span>
-                                        <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button
-                                                onClick={() => {
-                                                    setEditingTransaction(tx);
-                                                    setIsModalOpen(true);
-                                                }}
-                                                className="text-secondary hover:text-primary p-1"
-                                            >
-                                                <Edit3 size={14} />
-                                            </button>
-                                            <button onClick={() => deleteTransaction(tx.id)} className="text-secondary hover:text-red-500 p-1">
-                                                <Trash2 size={14} />
-                                            </button>
-                                        </div>
-                                    </div>
+                    <div className="flex-1 border border-border/60 bg-background overflow-hidden flex flex-col">
+                        <div className="overflow-auto divide-y divide-border/40">
+                            {transactions.length === 0 ? (
+                                <div className="p-12 text-center text-secondary mono text-[10px] uppercase tracking-widest">
+                                    {loading ? 'Scanning_Database...' : 'Null_Entries'}
                                 </div>
-                            ))
-                        )}
+                            ) : (
+                                transactions.map((tx) => (
+                                    <div key={tx.id} className="flex items-center justify-between p-4 hover:bg-muted/30 transition-colors group">
+                                        <div className="flex items-center gap-4">
+                                            <div className={`mono text-[10px] font-black w-6 h-6 border flex items-center justify-center ${tx.type === 'income' ? 'border-green-500/40 text-green-600 bg-green-50/50' : 'border-red-500/40 text-red-600 bg-red-50/50'}`}>
+                                                {tx.type === 'income' ? '+' : '-'}
+                                            </div>
+                                            <div className="min-w-0">
+                                                <h4 className="font-bold text-primary text-xs truncate uppercase tracking-tight">{tx.title}</h4>
+                                                <p className="mono text-[8px] text-secondary uppercase tracking-widest mt-0.5">
+                                                    {tx.category} • {new Date(tx.date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' })}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-3 pl-4">
+                                            <span className={`mono text-xs font-bold ${tx.type === 'income' ? 'text-green-600' : 'text-primary'}`}>
+                                                ${parseFloat(tx.amount).toFixed(2)}
+                                            </span>
+                                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button
+                                                    onClick={() => {
+                                                        setEditingTransaction(tx);
+                                                        setIsModalOpen(true);
+                                                    }}
+                                                    className="p-1.5 border border-border hover:border-accent hover:text-accent transition-colors"
+                                                >
+                                                    <Edit3 size={12} />
+                                                </button>
+                                                <button onClick={() => deleteTransaction(tx.id)} className="p-1.5 border border-border hover:border-red-500 hover:text-red-500 transition-colors">
+                                                    <Trash2 size={12} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* Debts Section */}
-            <div className="minimal-card p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-sm font-semibold text-secondary uppercase tracking-wider flex items-center gap-2">
-                        <CreditCard size={18} className="text-primary" />
-                        Active Debts & Installments
+            {/* Liability Array Module */}
+            <div className="space-y-8">
+                <div className="flex items-center justify-between border-b border-border/40 pb-4">
+                    <h2 className="mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em] flex items-center gap-3">
+                        <CreditCard size={14} className="text-accent" />
+                        Active_Liabilities & Recurring_Cycles
                     </h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border/40 border border-border/40">
                     {debts.length === 0 ? (
-                        <div className="col-span-full py-10 text-center text-secondary text-sm bg-muted/20 rounded-lg border border-dashed border-border">
-                            No active debts. Use the Payment Analyst to record one.
+                        <div className="col-span-full py-16 text-center bg-background mono text-[10px] text-secondary uppercase tracking-[0.2em]">
+                            System_Clear: No_Active_Liabilities
                         </div>
                     ) : (
                         debts.map(debt => {
@@ -524,58 +556,55 @@ const FinanceDashboard = () => {
                             const progress = (debt.installments_paid / debt.installments_total) * 100;
 
                             return (
-                                <div key={debt.id} className="border border-border rounded-lg p-5 hover:border-primary/30 transition-colors bg-background">
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div className="flex-1">
-                                            <div className="flex items-center gap-2 group/title">
-                                                <h3 className="font-bold text-foreground">{debt.title}</h3>
+                                <div key={debt.id} className="bg-background p-8 group hover:bg-muted/10 transition-colors">
+                                    <div className="flex justify-between items-start mb-8">
+                                        <div className="space-y-1">
+                                            <div className="flex items-center gap-3">
+                                                <h3 className="text-sm font-black uppercase italic tracking-tight">{debt.title}</h3>
                                                 <button
                                                     onClick={() => {
                                                         setEditingDebt(debt);
                                                         setIsDebtModalOpen(true);
                                                     }}
-                                                    className="opacity-0 group-hover/title:opacity-100 transition-opacity text-secondary hover:text-primary"
+                                                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1 border border-border hover:border-accent hover:text-accent"
                                                 >
-                                                    <Edit3 size={12} />
+                                                    <Edit3 size={10} />
                                                 </button>
                                             </div>
-                                            <p className="text-xs text-secondary">Interest: {debt.interest_rate}%</p>
+                                            <p className="mono text-[9px] text-secondary uppercase tracking-[0.1em]">Rate: {debt.interest_rate}%</p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="text-sm font-bold text-primary">${parseFloat(debt.remaining_amount).toFixed(2)}</p>
-                                            <div className="flex flex-col items-end">
-                                                <p className="text-[10px] text-secondary uppercase">Remaining</p>
-                                                <span className="text-[9px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded mt-1">Día {debt.due_day}</span>
-                                            </div>
+                                            <p className="mono text-lg font-bold text-primary tracking-tighter">${parseFloat(debt.remaining_amount).toFixed(2)}</p>
+                                            <p className="mono text-[8px] text-secondary uppercase tracking-[0.2em]">REMAINING</p>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4">
-                                        <div className="space-y-1.5">
-                                            <div className="flex justify-between text-[10px] font-bold uppercase text-secondary">
-                                                <span>Progress</span>
-                                                <span>{debt.installments_paid} / {debt.installments_total} cuotas</span>
+                                    <div className="space-y-6">
+                                        <div className="space-y-2">
+                                            <div className="flex justify-between mono text-[9px] font-bold uppercase text-secondary tracking-widest">
+                                                <span>Cycle_Completion</span>
+                                                <span className="text-primary">{debt.installments_paid} // {debt.installments_total} units</span>
                                             </div>
-                                            <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                                            <div className="w-full h-1 bg-border/30 overflow-hidden rounded-none">
                                                 <div
-                                                    className="h-full bg-primary transition-all duration-500"
+                                                    className="h-full bg-accent transition-all duration-1000"
                                                     style={{ width: `${progress}%` }}
                                                 />
                                             </div>
                                         </div>
 
-                                        <div className="flex flex-col gap-2 pt-2">
+                                        <div className="flex flex-col gap-4 pt-4 border-t border-border/20">
                                             <div className="flex items-center justify-between">
-                                                <div>
-                                                    <p className="text-[10px] text-secondary uppercase">Next Payment</p>
-                                                    <p className="text-sm font-semibold">${installmentAmount}</p>
+                                                <div className="space-y-1">
+                                                    <p className="mono text-[8px] text-secondary uppercase tracking-[0.2em]">Scheduled_Inflow</p>
+                                                    <p className="mono text-sm font-bold">${installmentAmount}</p>
                                                 </div>
                                                 <div className="w-24">
                                                     <input
                                                         type="number"
                                                         step="0.01"
-                                                        className="w-full bg-muted/50 border border-border rounded px-2 py-1 text-xs focus:ring-1 focus:ring-primary outline-none"
-                                                        placeholder="Monto"
+                                                        className="w-full bg-muted/40 border border-border rounded-none px-3 py-2 mono text-[10px] focus:border-accent outline-none"
+                                                        placeholder="VALUE"
                                                         defaultValue={installmentAmount}
                                                         id={`amount-${debt.id}`}
                                                     />
@@ -587,9 +616,9 @@ const FinanceDashboard = () => {
                                                     payDebt(debt.id, val || installmentAmount);
                                                 }}
                                                 disabled={debt.installments_paid >= debt.installments_total}
-                                                className="w-full bg-foreground text-background text-xs py-2 rounded-md font-medium hover:opacity-90 disabled:opacity-30 transition-opacity"
+                                                className="w-full bg-primary text-white mono text-[10px] font-bold py-3 uppercase tracking-widest hover:bg-accent disabled:opacity-20 transition-all shadow-[4px_4px_0px_rgba(0,0,0,0.1)]"
                                             >
-                                                {debt.installments_paid >= debt.installments_total ? 'Paid' : 'Pay Amount'}
+                                                {debt.installments_paid >= debt.installments_total ? 'SYSTEM_FINALIZED' : `Cycle_${debt.installments_paid + 1}_Commit`}
                                             </button>
                                         </div>
                                     </div>
@@ -600,32 +629,35 @@ const FinanceDashboard = () => {
                 </div>
             </div>
 
-            {/* Simple Debt Edit Modal */}
+            {/* Protocol Edit Modal */}
             {isDebtModalOpen && editingDebt && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm">
-                    <div className="bg-background border border-border rounded-lg shadow-xl w-full max-w-sm p-6 animate-in fade-in zoom-in-95 duration-200">
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-lg font-bold">Edit Debt Status</h2>
-                            <button onClick={() => setIsDebtModalOpen(false)} className="text-secondary hover:text-foreground">
-                                <X size={20} />
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary/20 backdrop-blur-[2px]">
+                    <div className="bg-background border-2 border-primary shadow-[10px_10px_0px_rgba(0,0,0,0.1)] w-full max-w-sm p-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                        <div className="flex justify-between items-start mb-8 pb-4 border-b border-border/40">
+                            <div className="space-y-1">
+                                <p className="mono text-[10px] font-bold text-accent uppercase tracking-[0.2em]">Protocol adjustment</p>
+                                <h2 className="text-xl font-black tracking-tight italic uppercase">Modify_Liability</h2>
+                            </div>
+                            <button onClick={() => setIsDebtModalOpen(false)} className="text-secondary hover:text-primary transition-colors border border-border p-1">
+                                <X size={18} />
                             </button>
                         </div>
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-xs font-semibold text-secondary uppercase mb-1">Nombre</label>
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Label</label>
                                 <input
-                                    className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none"
+                                    className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono uppercase"
                                     value={editingDebt.title}
                                     onChange={e => setEditingDebt({ ...editingDebt, title: e.target.value })}
                                 />
                             </div>
-                            <div>
-                                <label className="block text-xs font-semibold text-secondary uppercase mb-1">Día de Pago (1-31)</label>
+                            <div className="space-y-2">
+                                <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Cycle_Trigger_Day (1-31)</label>
                                 <input
                                     type="number"
                                     min="1"
                                     max="31"
-                                    className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none"
+                                    className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono"
                                     value={editingDebt.due_day}
                                     onChange={e => setEditingDebt({ ...editingDebt, due_day: parseInt(e.target.value) })}
                                 />
@@ -635,9 +667,9 @@ const FinanceDashboard = () => {
                                     updateDebt(editingDebt.id, { title: editingDebt.title, due_day: editingDebt.due_day });
                                     setIsDebtModalOpen(false);
                                 }}
-                                className="w-full bg-primary text-white py-2 rounded-md font-medium text-sm mt-4 hover:opacity-90 transition-opacity"
+                                className="w-full bg-primary text-white py-4 font-black text-sm uppercase italic tracking-widest hover:bg-accent transition-all shadow-[4px_4px_0px_rgba(0,0,0,0.1)]"
                             >
-                                Guardar Cambios
+                                Confirm_Protocol
                             </button>
                         </div>
                     </div>

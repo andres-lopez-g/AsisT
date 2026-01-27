@@ -32,71 +32,77 @@ import {
 } from 'date-fns';
 
 const TaskCard = ({ task, onDelete, onStatusChange, onEdit }) => (
-    <div className="minimal-card p-3 mb-2 hover:shadow-md transition-all group border-l-4 border-l-transparent hover:border-l-primary/50 relative">
-        <div className="flex justify-between items-start mb-2">
-            <div className="flex flex-wrap gap-1">
-                <span className={`px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide
-            ${task.priority === 'high' ? 'bg-red-50 text-red-600' :
-                        task.priority === 'medium' ? 'bg-orange-50 text-orange-600' :
-                            'bg-blue-50 text-blue-600'}`}>
+    <div className="bg-background border border-border/60 p-4 mb-3 hover:border-accent/40 transition-colors group relative">
+        <div className="flex justify-between items-start mb-3">
+            <div className="flex flex-wrap gap-2">
+                <span className={`mono text-[9px] font-bold px-2 py-0.5 border uppercase tracking-widest
+                    ${task.priority === 'high' ? 'border-red-500/30 text-red-600 bg-red-50/50' :
+                        task.priority === 'medium' ? 'border-orange-500/30 text-orange-600 bg-orange-50/50' :
+                            'border-blue-500/30 text-blue-600 bg-blue-50/50'}`}>
                     {task.priority}
                 </span>
                 {task.category && (
-                    <span className="px-1.5 py-0.5 rounded text-[10px] bg-muted text-secondary font-medium">
+                    <span className="mono text-[9px] font-bold px-2 py-0.5 border border-border/40 text-secondary uppercase tracking-widest">
                         {task.category}
                     </span>
                 )}
             </div>
-            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex gap-2 bg-background border border-border/20 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                     onClick={() => onEdit(task)}
-                    className="text-secondary hover:text-primary p-0.5"
+                    className="text-secondary hover:text-accent p-0.5 transition-colors"
                 >
                     <Edit3 size={12} />
                 </button>
                 <button
                     onClick={() => onDelete(task.id)}
-                    className="text-secondary hover:text-red-500 p-0.5"
+                    className="text-secondary hover:text-red-500 p-0.5 transition-colors"
                 >
-                    <Trash2 size={14} />
+                    <Trash2 size={12} />
                 </button>
             </div>
         </div>
-        <h4 className="font-medium text-sm text-foreground mb-2 line-clamp-2">{task.title}</h4>
-        <div className="flex items-center justify-between">
-            <div className="flex items-center text-xs text-secondary gap-1.5">
-                <CalendarIcon size={12} />
+        <h4 className="font-bold text-xs text-primary mb-4 leading-relaxed uppercase tracking-tight line-clamp-2">{task.title}</h4>
+        <div className="flex items-center justify-between pt-3 border-t border-border/20">
+            <div className="flex items-center mono text-[9px] text-secondary gap-2 uppercase tracking-widest">
+                <CalendarIcon size={10} className="text-accent" />
                 <span>{task.date}</span>
             </div>
-            <select
-                value={task.status}
-                onChange={(e) => onStatusChange(task.id, e.target.value)}
-                className="text-[10px] bg-muted/50 border-none rounded px-1 py-0.5 focus:ring-0 cursor-pointer"
-            >
-                <option value="todo">To Do</option>
-                <option value="in-progress">In Progress</option>
-                <option value="done">Done</option>
-            </select>
+            <div className="relative">
+                <select
+                    value={task.status}
+                    onChange={(e) => onStatusChange(task.id, e.target.value)}
+                    className="mono text-[8px] font-bold bg-muted/30 border border-border/40 px-2 py-1 focus:ring-0 cursor-pointer uppercase tracking-widest outline-none hover:border-accent/40 transition-colors"
+                >
+                    <option value="todo">TODO</option>
+                    <option value="in-progress">ACTIVE</option>
+                    <option value="done">COMPLETED</option>
+                </select>
+            </div>
         </div>
     </div>
 );
 
 const Column = ({ title, tasks, icon: Icon, colorClass, onDelete, onStatusChange, onAdd, onEdit }) => (
-    <div className="flex-1 min-w-[280px] bg-muted/30 rounded-lg p-3 h-full overflow-hidden flex flex-col border border-border/50">
-        <div className="flex items-center justify-between mb-3 px-1">
-            <div className="flex items-center gap-2">
-                <Icon size={16} className={colorClass} />
-                <h3 className="font-semibold text-sm text-foreground">{title}</h3>
-                <span className="text-xs text-secondary font-mono">({tasks.length})</span>
+    <div className="flex-1 min-w-[320px] bg-muted/10 border border-border/40 p-4 h-full overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-primary/10">
+            <div className="flex items-center gap-3">
+                <div className={`p-2 border border-border/40 bg-background ${colorClass}`}>
+                    <Icon size={14} />
+                </div>
+                <div className="space-y-0.5">
+                    <h3 className="text-xs font-black uppercase italic tracking-widest text-primary">{title}</h3>
+                    <p className="mono text-[8px] text-secondary font-bold tracking-[0.2em]">{tasks.length} OBJECTIVES_LOADED</p>
+                </div>
             </div>
             <button
                 onClick={onAdd}
-                className="text-secondary hover:text-foreground hover:bg-black/5 rounded p-0.5"
+                className="text-white bg-primary hover:bg-accent p-2 transition-all shadow-[2px_2px_0px_rgba(0,0,0,0.1)]"
             >
-                <Plus size={16} />
+                <Plus size={14} />
             </button>
         </div>
-        <div className="space-y-2 overflow-y-auto flex-1 pr-1 custom-scrollbar">
+        <div className="space-y-1 overflow-y-auto flex-1 pr-1 custom-scrollbar">
             {tasks.map(task => (
                 <TaskCard
                     key={task.id}
@@ -107,8 +113,8 @@ const Column = ({ title, tasks, icon: Icon, colorClass, onDelete, onStatusChange
                 />
             ))}
             {tasks.length === 0 && (
-                <div className="py-8 text-center text-secondary text-xs border border-dashed border-border rounded-lg">
-                    Empty
+                <div className="py-20 text-center mono text-[9px] text-secondary/40 border-2 border-dashed border-border/40 uppercase tracking-[0.3em]">
+                    Objective_Null
                 </div>
             )}
         </div>
@@ -154,80 +160,86 @@ const TaskModal = ({ isOpen, onClose, onAdd, onUpdate, editingTask, categories }
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm">
-            <div className="bg-background border border-border rounded-lg shadow-xl w-full max-w-sm p-6 animate-in fade-in zoom-in-95 duration-200">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-bold text-foreground">{editingTask ? 'Edit Task' : 'Add Task'}</h2>
-                    <button onClick={onClose} className="text-secondary hover:text-foreground">
-                        <X size={20} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary/20 backdrop-blur-[2px]">
+            <div className="bg-background border-2 border-primary shadow-[10px_10px_0px_rgba(0,0,0,0.1)] w-full max-w-md p-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                <div className="flex justify-between items-start mb-8 pb-4 border-b border-border/40">
+                    <div className="space-y-1">
+                        <p className="mono text-[10px] font-bold text-accent uppercase tracking-[0.2em]">Strategy_Module</p>
+                        <h2 className="text-2xl font-black tracking-tight italic uppercase">{editingTask ? 'Modify_Objective' : 'Initialize_Task'}</h2>
+                    </div>
+                    <button onClick={onClose} className="text-secondary hover:text-primary transition-colors border border-border p-1">
+                        <X size={18} />
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-xs font-semibold text-secondary uppercase mb-1">Title</label>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                        <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Objective_Description</label>
                         <input
                             required
-                            className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none text-foreground"
+                            className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono"
                             value={title}
                             onChange={e => setTitle(e.target.value)}
-                            placeholder="e.g. Finish report"
+                            placeholder="TASK IDENTIFIER"
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-xs font-semibold text-secondary uppercase mb-1">Date</label>
+                        <div className="space-y-2">
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Target_Date</label>
                             <input
                                 type="date"
-                                className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none text-foreground"
+                                required
+                                className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono"
                                 value={date}
                                 onChange={e => setDate(e.target.value)}
                             />
                         </div>
-                        <div>
-                            <label className="block text-xs font-semibold text-secondary uppercase mb-1">Priority</label>
+                        <div className="space-y-2">
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Priority_Tier</label>
                             <select
-                                className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none text-foreground"
+                                className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono appearance-none cursor-pointer"
                                 value={priority}
                                 onChange={e => setPriority(e.target.value)}
                             >
-                                <option value="low">Low</option>
-                                <option value="medium">Medium</option>
-                                <option value="high">High</option>
+                                <option value="low">LOW_PRIORITY</option>
+                                <option value="medium">MEDIUM_PRIORITY</option>
+                                <option value="high">CRITICAL_OBJ</option>
                             </select>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-xs font-semibold text-secondary uppercase mb-1">Status</label>
+                        <div className="space-y-2">
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Initial_State</label>
                             <select
-                                className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none text-foreground"
+                                className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono appearance-none cursor-pointer"
                                 value={status}
                                 onChange={e => setStatus(e.target.value)}
                             >
-                                <option value="todo">To Do</option>
-                                <option value="in-progress">In Progress</option>
-                                <option value="done">Done</option>
+                                <option value="todo">TODO_STACK</option>
+                                <option value="in-progress">ACTIVE_EXEC</option>
+                                <option value="done">COMPLETE_LOG</option>
                             </select>
                         </div>
-                        <div>
-                            <label className="block text-xs font-semibold text-secondary uppercase mb-1">Category</label>
+                        <div className="space-y-2">
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Category_Class</label>
                             <select
-                                className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none text-foreground"
+                                className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono appearance-none cursor-pointer"
                                 value={category}
                                 onChange={e => setCategory(e.target.value)}
                             >
-                                <option value="General">General</option>
+                                <option value="General">GENERAL</option>
                                 {taskCategories.map(cat => (
-                                    <option key={cat.id} value={cat.name}>{cat.name}</option>
+                                    <option key={cat.id} value={cat.name}>{cat.name.toUpperCase()}</option>
                                 ))}
                             </select>
                         </div>
                     </div>
 
-                    <button type="submit" className="w-full bg-primary text-white py-2 rounded-md font-medium text-sm mt-4 hover:opacity-90 transition-opacity">
-                        {editingTask ? 'Update Task' : 'Create Task'}
-                    </button>
+                    <div className="pt-4">
+                        <button type="submit" className="w-full bg-primary text-white py-4 font-black text-sm uppercase italic tracking-widest hover:bg-accent transition-all">
+                            {editingTask ? 'Commit_Update' : 'Initialize_Strategy'}
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -354,7 +366,7 @@ const PlannerBoard = () => {
     }
 
     return (
-        <div className="p-6 md:p-10 space-y-6 max-w-7xl mx-auto h-full flex flex-col">
+        <div className="p-8 md:p-12 space-y-12 max-w-7xl mx-auto h-full flex flex-col">
             <TaskModal
                 isOpen={isAddModalOpen}
                 onClose={() => {
@@ -367,42 +379,43 @@ const PlannerBoard = () => {
                 categories={categories}
             />
 
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-border pb-6">
-                <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-foreground">Planner</h1>
+            {/* Header Module */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b-2 border-primary/10">
+                <div className="space-y-1">
+                    <p className="mono text-xs font-bold text-accent uppercase tracking-[0.3em]">Module: Operational_Planner</p>
+                    <h1 className="text-5xl font-black tracking-tighter uppercase italic text-primary">Objectives</h1>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-6">
                     <button
                         onClick={() => openAddModal()}
-                        className="bg-primary text-white p-2 rounded-full hover:opacity-90 transition-opacity md:hidden"
+                        className="bg-primary text-white p-3 md:hidden shadow-[4px_4px_0px_rgba(0,0,0,0.1)]"
                     >
                         <Plus size={20} />
                     </button>
-                    <div className="flex bg-muted/50 p-1 rounded-md">
+                    <div className="flex bg-muted/30 border border-border p-1">
                         <button
                             onClick={() => setView('kanban')}
-                            className={`px-3 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-2 ${view === 'kanban' ? 'bg-white text-primary shadow-sm' : 'text-secondary hover:text-foreground'}`}
+                            className={`px-6 py-2 mono text-[10px] font-bold transition-all flex items-center gap-3 uppercase tracking-widest ${view === 'kanban' ? 'bg-primary text-white' : 'text-secondary hover:text-primary hover:bg-muted'}`}
                         >
                             <Layout size={14} />
-                            <span className="hidden sm:inline">Board</span>
+                            <span className="hidden sm:inline">Tactical_Board</span>
                         </button>
                         <button
                             onClick={() => setView('calendar')}
-                            className={`px-3 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-2 ${view === 'calendar' ? 'bg-white text-primary shadow-sm' : 'text-secondary hover:text-foreground'}`}
+                            className={`px-6 py-2 mono text-[10px] font-bold transition-all flex items-center gap-3 uppercase tracking-widest ${view === 'calendar' ? 'bg-primary text-white' : 'text-secondary hover:text-primary hover:bg-muted'}`}
                         >
                             <CalendarIcon size={14} />
-                            <span className="hidden sm:inline">Calendar</span>
+                            <span className="hidden sm:inline">Temporal_Grid</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* Kanban Board */}
+            {/* Tactical Board View */}
             {view === 'kanban' && (
-                <div className="flex gap-4 overflow-x-auto pb-4 h-full items-start">
+                <div className="flex gap-8 overflow-x-auto pb-6 h-full items-start scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
                     <Column
-                        title="To Do"
+                        title="Draft"
                         tasks={todoTasks}
                         icon={Circle}
                         colorClass="text-secondary"
@@ -412,17 +425,17 @@ const PlannerBoard = () => {
                         onEdit={(t) => { setEditingTask(t); setIsAddModalOpen(true); }}
                     />
                     <Column
-                        title="In Progress"
+                        title="Execution"
                         tasks={inProgressTasks}
                         icon={Clock}
-                        colorClass="text-blue-600"
+                        colorClass="text-accent"
                         onDelete={deleteTask}
                         onStatusChange={updateTaskStatus}
                         onAdd={() => openAddModal('in-progress')}
                         onEdit={(t) => { setEditingTask(t); setIsAddModalOpen(true); }}
                     />
                     <Column
-                        title="Done"
+                        title="Archived"
                         tasks={doneTasks}
                         icon={CheckCircle2}
                         colorClass="text-green-600"
@@ -434,47 +447,52 @@ const PlannerBoard = () => {
                 </div>
             )}
 
-            {/* Calendar View */}
+            {/* Temporal Grid View */}
             {view === 'calendar' && (
-                <div className="minimal-card p-6 flex-1 flex flex-col bg-background border-border overflow-hidden">
-                    {/* Calendar Header */}
-                    <div className="flex items-center justify-between mb-8">
-                        <h2 className="text-xl font-bold text-foreground">
-                            {format(currentMonth, 'MMMM yyyy')}
-                        </h2>
-                        <div className="flex gap-2">
-                            <button
-                                onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-                                className="p-2 hover:bg-muted rounded-full transition-colors"
-                            >
-                                <ChevronLeft size={20} />
-                            </button>
+                <div className="flex-1 flex flex-col bg-background border border-border/60 overflow-hidden">
+                    {/* Calendar Controls */}
+                    <div className="flex items-center justify-between p-8 border-b border-border/40">
+                        <div className="space-y-1">
+                            <p className="mono text-[10px] font-bold text-accent uppercase tracking-[0.2em]">Active_Timeline</p>
+                            <h2 className="text-2xl font-black text-primary uppercase italic tracking-tight">
+                                {format(currentMonth, 'MMMM_yyyy')}
+                            </h2>
+                        </div>
+                        <div className="flex items-center gap-4">
                             <button
                                 onClick={() => setCurrentMonth(new Date())}
-                                className="px-3 py-1 text-xs font-semibold hover:bg-muted rounded transition-colors"
+                                className="px-4 py-2 mono text-[10px] font-bold border border-border hover:bg-muted uppercase tracking-widest text-secondary transition-colors"
                             >
-                                Today
+                                Core_Time
                             </button>
-                            <button
-                                onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-                                className="p-2 hover:bg-muted rounded-full transition-colors"
-                            >
-                                <ChevronRight size={20} />
-                            </button>
+                            <div className="flex border border-border">
+                                <button
+                                    onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+                                    className="p-3 hover:bg-muted border-r border-border transition-colors text-primary"
+                                >
+                                    <ChevronLeft size={18} />
+                                </button>
+                                <button
+                                    onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+                                    className="p-3 hover:bg-muted transition-colors text-primary"
+                                >
+                                    <ChevronRight size={18} />
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Day Names */}
-                    <div className="grid grid-cols-7 border-b border-border pb-2 mb-2">
+                    {/* Day labels */}
+                    <div className="grid grid-cols-7 bg-muted/30 border-b border-border/40">
                         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                            <div key={day} className="text-center text-[10px] font-bold uppercase tracking-widest text-secondary">
+                            <div key={day} className="py-4 text-center mono text-[9px] font-black uppercase tracking-[0.3em] text-secondary border-r last:border-r-0 border-border/20">
                                 {day}
                             </div>
                         ))}
                     </div>
 
-                    {/* Days Grid */}
-                    <div className="grid grid-cols-7 flex-1 border-l border-t border-border/50">
+                    {/* Grid Units */}
+                    <div className="grid grid-cols-7 flex-1">
                         {(() => {
                             const monthStart = startOfMonth(currentMonth);
                             const monthEnd = endOfMonth(monthStart);
@@ -495,26 +513,31 @@ const PlannerBoard = () => {
                                 return (
                                     <div
                                         key={i}
-                                        className={`min-h-[100px] border-r border-b border-border/50 p-2 flex flex-col gap-1 transition-colors ${!isCurrentMonth ? 'bg-muted/10 opacity-40' : 'hover:bg-muted/5'}`}
+                                        className={`min-h-[120px] border-r border-b border-border/20 p-3 flex flex-col gap-2 transition-colors relative group ${!isCurrentMonth ? 'bg-muted/5 opacity-30 contrast-75' : 'bg-background hover:bg-muted/5'}`}
                                     >
-                                        <span className={`text-xs font-mono ${isSameDay(date, new Date()) ? 'bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center font-bold' : 'text-secondary'}`}>
-                                            {format(date, 'd')}
-                                        </span>
+                                        <div className="flex justify-between items-start">
+                                            <span className={`mono text-[10px] font-bold ${isSameDay(date, new Date()) ? 'text-accent border-b-2 border-accent pb-0.5' : 'text-secondary/60'}`}>
+                                                {format(date, 'd')}
+                                            </span>
+                                            {dayTasks.length > 0 && (
+                                                <div className="w-1 h-1 bg-accent rounded-none" />
+                                            )}
+                                        </div>
 
-                                        <div className="flex-1 overflow-y-auto space-y-1 custom-scrollbar pr-1">
+                                        <div className="flex-1 overflow-y-auto space-y-1.5 custom-scrollbar pr-1">
                                             {dayDebts.map(debt => (
-                                                <div key={`debt-${debt.id}`} className="bg-red-50 text-red-700 p-1 rounded text-[9px] font-bold border border-red-100 flex items-center gap-1 shadow-sm animate-in fade-in zoom-in-95">
-                                                    <AlertCircle size={10} />
-                                                    <span className="truncate">Pay: {debt.title}</span>
+                                                <div key={`debt-${debt.id}`} className="bg-red-500 text-white px-2 py-1 mono text-[8px] font-black uppercase flex items-center gap-1.5 shadow-[2px_2px_0px_rgba(0,0,0,0.1)]">
+                                                    <AlertCircle size={8} />
+                                                    <span className="truncate">Cycle_Trigger: {debt.title}</span>
                                                 </div>
                                             ))}
                                             {dayTasks.map(task => (
                                                 <div
                                                     key={task.id}
-                                                    className={`p-1 rounded text-[9px] font-medium border flex flex-col gap-0.5 shadow-sm transition-all hover:scale-[1.02] cursor-default
-                                                        ${task.priority === 'high' ? 'bg-orange-50 text-orange-700 border-orange-100' :
-                                                            task.priority === 'medium' ? 'bg-blue-50 text-blue-700 border-blue-100' :
-                                                                'bg-muted/50 text-secondary border-border'}`}
+                                                    className={`px-2 py-1 mono text-[8px] border font-bold uppercase transition-all hover:scale-[1.02] cursor-default
+                                                        ${task.priority === 'high' ? 'bg-primary text-white border-primary' :
+                                                            task.priority === 'medium' ? 'bg-background text-primary border-primary/40' :
+                                                                'bg-muted text-secondary border-border/60'}`}
                                                 >
                                                     <span className="truncate">{task.title}</span>
                                                 </div>

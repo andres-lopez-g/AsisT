@@ -4,38 +4,62 @@
 
 @layer base {
   :root {
-    /* NOTION-STYLE LIGHT THEME (RGB Channels) */
+    /* PRECISION OBSERVATORY THEME (Industrial / Refined) */
 
-    /* Main Background: #ffffff */
-    --background: 255 255 255;
-    /* Primary Text: #37352f (Notion Dark Gray) */
-    --foreground: 55 53 47;
+    /* Background: Paper-like off-white #FDFCFB */
+    --background: 253 252 251;
+    /* Primary Foreground: Deep Charcoal #1A1A1A */
+    --foreground: 26 26 26;
 
-    /* Primary Action: #2eaadc (Notion Blue-ish) or Black. Let's go with a soft black/slate */
-    /* Slate 900: #0f172a */
-    --primary: 15 23 42;
+    /* Primary Action: Solid charcoal for high contrast */
+    --primary: 26 26 26;
 
-    /* Secondary/Muted Text: #9b9a97 */
-    --secondary: 155 154 151;
+    /* Secondary/Muted/Technical Metadata: #706F6C */
+    --secondary: 112 111 108;
 
-    /* Accent: #e16259 (Notion Red-ish) or keeping a clean blue */
-    /* Blue 600: #2563eb */
-    --accent: 37 99 235;
+    /* Accent: Precision Blue #0047FF */
+    --accent: 0 71 255;
 
-    /* Sidebar/Muted Backgrounds: #f7f7f5 */
-    --muted: 247 247 245;
+    /* Layout Muted Backgrounds: Technical Gray #F2F1EF */
+    --muted: 242 241 239;
 
-    /* Borders: #e9e9e8 */
-    --border: 233 233 232;
+    /* Borders: Hairline Technical #D8D4CF */
+    --border: 216 212 207;
 
-    /* Card Background: #ffffff */
-    --card: 255 255 255;
+    /* Card Background: Clean Paper */
+    --card: 253 252 251;
+
+    --radius-none: 0px;
+    --radius-sm: 2px;
+    --radius-md: 4px;
   }
 
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/10 selection:text-primary;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    @apply bg-background text-foreground antialiased selection:bg-accent/10 selection:text-accent;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.01em;
   }
+
+  .mono {
+    font-family: 'Space Mono', monospace;
+    letter-spacing: -0.02em;
+  }
+}
+
+.tech-card {
+  @apply bg-card border border-border/60 rounded-sm shadow-[2px_2px_0px_rgba(0, 0, 0, 0.02)] hover:border-border transition-all duration-200;
+}
+
+.tech-border-b {
+  @apply border-b border-border/40;
+}
+
+.tech-border-r {
+  @apply border-r border-border/40;
+}
+
+.tech-tag {
+  @apply mono text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 border border-border/50 rounded-sm;
 }
 
 .minimal-card {
