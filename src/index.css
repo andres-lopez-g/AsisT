@@ -47,7 +47,8 @@
 }
 
 .tech-card {
-  @apply bg-card border border-border/60 rounded-sm shadow-[2px_2px_0px_rgba(0, 0, 0, 0.02)] hover:border-border transition-all duration-200;
+  @apply bg-card border border-border/60 rounded-sm hover:border-border transition-all duration-200;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.02);
 }
 
 .tech-border-b {
