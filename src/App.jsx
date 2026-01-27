@@ -12,6 +12,7 @@ const HomeView = lazy(() => import('./features/home/HomeView'));
 const FinanceDashboard = lazy(() => import('./features/finance/FinanceDashboard'));
 const PaymentAnalyst = lazy(() => import('./features/finance/PaymentAnalyst'));
 const PlannerBoard = lazy(() => import('./features/planner/PlannerBoard'));
+const LandingPage = lazy(() => import('./features/landing/LandingPage'));
 
 const LoadingFallback = () => (
   <div className="flex items-center justify-center h-full w-full">
@@ -48,45 +49,7 @@ const SidebarLink = ({ to, icon: Icon, label, onClick }) => {
 
 import ErrorBoundary from './components/ErrorBoundary';
 
-const LanguageSwitcher = () => {
-  const switchLanguage = (lang) => {
-    // Set cookie for Google Translate
-    document.cookie = `googtrans=/en/${lang}; path=/`;
-    document.cookie = `googtrans=/en/${lang}; path=/; domain=${window.location.hostname}`;
-
-    // Attempt to change via dropdown if it exists, otherwise force reload
-    const trySwitch = (attempts) => {
-      const select = document.querySelector('.goog-te-combo');
-      if (select) {
-        select.value = lang;
-        select.dispatchEvent(new Event('change'));
-      } else {
-        // If widget not found (e.g. hidden or error), reload to apply cookie
-        window.location.reload();
-      }
-    };
-
-    // Slight delay to allow UI feedback if needed, but mostly immediate
-    setTimeout(() => trySwitch(1), 100);
-  };
-
-  return (
-    <div className="flex border border-border/50 divide-x divide-border/50">
-      <button
-        onClick={() => switchLanguage('en')}
-        className="flex-1 mono text-[9px] font-bold py-1.5 hover:bg-muted transition-colors uppercase"
-      >
-        EN
-      </button>
-      <button
-        onClick={() => switchLanguage('es')}
-        className="flex-1 mono text-[9px] font-bold py-1.5 hover:bg-muted transition-colors uppercase"
-      >
-        ES
-      </button>
-    </div>
-  );
-};
+import LanguageSwitcher from './components/LanguageSwitcher';
 
 const ProtectedLayout = () => {
   const { user, logout } = useAuth();
@@ -112,7 +75,7 @@ const ProtectedLayout = () => {
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="p-6 h-20 border-b border-border flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 group" onClick={() => setSidebarOpen(false)}>
+          <Link to="/home" className="flex items-center gap-3 group" onClick={() => setSidebarOpen(false)}>
             <div className="w-9 h-9 bg-primary flex items-center justify-center rounded-sm group-hover:bg-accent transition-colors duration-300">
               <img src="/favicon.png" alt="AsisT" className="w-6 h-6 contrast-125 invert" />
             </div>
@@ -191,11 +154,15 @@ const App = () => {
         <Suspense fallback={<LoadingFallback />}>
           <ErrorBoundary>
             <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
 
+              {/* Protected Routes */}
               <Route element={<ProtectedLayout />}>
-                <Route path="/" element={<Navigate to="/home" replace />} />
+                {/* Redirect /app or similar if needed, or just let users navigate manually from landing */}
+                {/* Actually, if user goes to /home, they see HomeView. We keep that. */}
                 <Route path="/home" element={<HomeView />} />
                 <Route path="/finance" element={<FinanceDashboard />} />
                 <Route path="/payment-analyst" element={<PaymentAnalyst />} />
