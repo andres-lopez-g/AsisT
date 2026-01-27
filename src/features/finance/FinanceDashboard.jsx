@@ -178,8 +178,8 @@ const FinanceDashboard = () => {
 
     // Derived State
     const stats = useMemo(() => {
-        const income = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + parseFloat(t.amount), 0);
-        const expenses = transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + parseFloat(t.amount), 0);
+        const income = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + (parseFloat(t.amount) || 0), 0);
+        const expenses = transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + (parseFloat(t.amount) || 0), 0);
         const balance = income - expenses;
         return { income, expenses, balance };
     }, [transactions]);
@@ -198,8 +198,8 @@ const FinanceDashboard = () => {
 
             // Sum balance up to this date
             const balanceAtDate = transactions
-                .filter(t => new Date(t.date) <= d)
-                .reduce((acc, t) => t.type === 'income' ? acc + parseFloat(t.amount) : acc - parseFloat(t.amount), 0);
+                .filter(t => t.date && new Date(t.date) <= d)
+                .reduce((acc, t) => t.type === 'income' ? acc + (parseFloat(t.amount) || 0) : acc - (parseFloat(t.amount) || 0), 0);
 
             data.push({
                 name: dayName,

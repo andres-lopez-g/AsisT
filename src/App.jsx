@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate, Outlet } from 'react-router-dom';
 import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X } from 'lucide-react';
 
@@ -37,7 +37,7 @@ const SidebarLink = ({ to, icon: Icon, label, onClick }) => {
 
 const ProtectedLayout = () => {
   const { user, logout } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -78,9 +78,9 @@ const ProtectedLayout = () => {
           <div className="flex items-center justify-between group">
             <div className="flex items-center gap-3 text-sm font-medium text-foreground/80">
               <div className="w-6 h-6 rounded bg-accent/10 flex items-center justify-center text-accent text-xs">
-                {user.name.charAt(0)}
+                {user?.name?.charAt(0) || user?.email?.charAt(0) || '?'}
               </div>
-              <span className="truncate max-w-[100px]">{user.name}</span>
+              <span className="truncate max-w-[100px]">{user?.name || user?.email || 'User'}</span>
             </div>
             <button onClick={logout} className="text-secondary hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100" title="Logout">
               <LogOut size={16} />

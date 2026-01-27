@@ -50,7 +50,7 @@ const HomeView = () => {
             {/* Welcome Section */}
             <div className="space-y-2">
                 <h1 className="text-4xl font-bold tracking-tight text-foreground">
-                    Hello, {user?.name.split(' ')[0]} 👋
+                    Hello, {user?.name ? user.name.split(' ')[0] : 'there'} 👋
                 </h1>
                 <p className="text-secondary text-lg">Here's a quick summary of your activity for today.</p>
             </div>
