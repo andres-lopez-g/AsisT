@@ -12,6 +12,7 @@ const PaymentAnalyst = () => {
     const [saved, setSaved] = useState(false);
     const [saveError, setSaveError] = useState('');
     const [title, setTitle] = useState('');
+    const [dueDay, setDueDay] = useState('1');
     const [showInterestInfo, setShowInterestInfo] = useState(false);
 
     const analysis = useMemo(() => {
@@ -64,7 +65,8 @@ const PaymentAnalyst = () => {
                     total_amount: analysis.totalCost,
                     interest_rate: interestRate,
                     installments_total: parseInt(installments),
-                    start_date: new Date().toISOString().split('T')[0]
+                    start_date: new Date().toISOString().split('T')[0],
+                    due_day: parseInt(dueDay)
                 })
             });
 
@@ -232,12 +234,26 @@ const PaymentAnalyst = () => {
                                             <span>{saveError}</span>
                                         </div>
                                     )}
-                                    <input
-                                        className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
-                                        value={title}
-                                        onChange={e => setTitle(e.target.value)}
-                                        placeholder="Name of purchase (e.g. New Laptop)"
-                                    />
+                                    <div className="flex gap-3">
+                                        <input
+                                            className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
+                                            value={title}
+                                            onChange={e => setTitle(e.target.value)}
+                                            placeholder="Name of purchase (e.g. New Laptop)"
+                                        />
+                                        <div className="w-24 shrink-0">
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                max="31"
+                                                className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
+                                                value={dueDay}
+                                                onChange={e => setDueDay(e.target.value)}
+                                                placeholder="Due Day"
+                                                title="Monthly payment due day"
+                                            />
+                                        </div>
+                                    </div>
                                     <button
                                         onClick={handleSaveDebt}
                                         disabled={isSaving || !title}

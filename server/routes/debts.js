@@ -20,7 +20,7 @@ router.get('/', authenticate, async (req, res) => {
 
 // Add new debt
 router.post('/', authenticate, async (req, res) => {
-    const { title, total_amount, interest_rate, installments_total, start_date } = req.body;
+    const { title, total_amount, interest_rate, installments_total, start_date, due_day } = req.body;
 
     if (!title || !total_amount || !installments_total || !start_date) {
         return res.status(400).json({ error: 'Missing required fields: title, total_amount, installments_total, and start_date are required' });
@@ -28,8 +28,8 @@ router.post('/', authenticate, async (req, res) => {
 
     try {
         const result = await db.query(
-            'INSERT INTO debts (user_id, title, total_amount, remaining_amount, interest_rate, installments_total, start_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-            [req.user.id, title, total_amount, total_amount, interest_rate || 0, installments_total, start_date]
+            'INSERT INTO debts (user_id, title, total_amount, remaining_amount, interest_rate, installments_total, start_date, due_day) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+            [req.user.id, title, total_amount, total_amount, interest_rate || 0, installments_total, start_date, due_day || 1]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {

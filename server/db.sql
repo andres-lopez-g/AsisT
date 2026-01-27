@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS debts (
   interest_rate DECIMAL(5, 2) DEFAULT 0, -- Annual or monthly as per app logic
   installments_total INTEGER DEFAULT 1,
   installments_paid INTEGER DEFAULT 0,
+  due_day INTEGER DEFAULT 1, -- Day of month for payment
   start_date DATE NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

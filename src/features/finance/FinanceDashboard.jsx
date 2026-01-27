@@ -9,7 +9,8 @@ import {
     ArrowDownLeft,
     Trash2,
     X,
-    CreditCard
+    CreditCard,
+    Edit3
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -29,7 +30,7 @@ const StatCard = ({ label, amount, icon: Icon, trend, trendUp }) => (
     </div>
 );
 
-const TransactionModal = ({ isOpen, onClose, onAdd }) => {
+const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction }) => {
     const [formData, setFormData] = useState({
         title: '',
         amount: '',
@@ -38,14 +39,34 @@ const TransactionModal = ({ isOpen, onClose, onAdd }) => {
         date: new Date().toISOString().split('T')[0]
     });
 
+    useEffect(() => {
+        if (editingTransaction) {
+            setFormData({
+                title: editingTransaction.title || '',
+                amount: editingTransaction.amount || '',
+                type: editingTransaction.type || 'expense',
+                category: editingTransaction.category || 'General',
+                date: editingTransaction.date ? new Date(editingTransaction.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+            });
+        } else {
+            setFormData({ title: '', amount: '', type: 'expense', category: 'General', date: new Date().toISOString().split('T')[0] });
+        }
+    }, [editingTransaction, isOpen]);
+
     if (!isOpen) return null;
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onAdd({
+        const data = {
             ...formData,
             amount: parseFloat(formData.amount)
-        });
+        };
+
+        if (editingTransaction) {
+            onUpdate(editingTransaction.id, data);
+        } else {
+            onAdd(data);
+        }
         onClose();
         setFormData({ title: '', amount: '', type: 'expense', category: 'General', date: new Date().toISOString().split('T')[0] });
     };
@@ -54,7 +75,7 @@ const TransactionModal = ({ isOpen, onClose, onAdd }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm">
             <div className="bg-background border border-border rounded-lg shadow-xl w-full max-w-md p-6 animate-in fade-in zoom-in-95 duration-200">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-bold">Add Transaction</h2>
+                    <h2 className="text-lg font-bold">{editingTransaction ? 'Edit Transaction' : 'Add Transaction'}</h2>
                     <button onClick={onClose} className="text-secondary hover:text-foreground">
                         <X size={20} />
                     </button>
@@ -110,7 +131,7 @@ const TransactionModal = ({ isOpen, onClose, onAdd }) => {
                     </div>
 
                     <button type="submit" className="w-full bg-primary text-white py-2 rounded-md font-medium text-sm mt-4 hover:opacity-90 transition-opacity">
-                        Save Transaction
+                        {editingTransaction ? 'Update Transaction' : 'Save Transaction'}
                     </button>
                 </form>
             </div>
@@ -122,6 +143,7 @@ const FinanceDashboard = () => {
     const [transactions, setTransactions] = useState([]);
     const [debts, setDebts] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingTransaction, setEditingTransaction] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const { authFetch } = useAuth();
@@ -161,6 +183,23 @@ const FinanceDashboard = () => {
             }
         } catch (err) {
             console.error('Failed to add transaction:', err);
+        }
+    };
+
+    const updateTransaction = async (id, tx) => {
+        try {
+            const res = await authFetch(`/api/finance/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(tx)
+            });
+
+            if (res.ok) {
+                const updatedTx = await res.json();
+                setTransactions(transactions.map(t => t.id === id ? updatedTx : t));
+            }
+        } catch (err) {
+            console.error('Failed to update transaction:', err);
         }
     };
 
@@ -239,7 +278,16 @@ const FinanceDashboard = () => {
 
     return (
         <div className="p-6 md:p-10 space-y-8 max-w-6xl mx-auto">
-            <TransactionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAdd={addTransaction} />
+            <TransactionModal
+                isOpen={isModalOpen}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setEditingTransaction(null);
+                }}
+                onAdd={addTransaction}
+                onUpdate={updateTransaction}
+                editingTransaction={editingTransaction}
+            />
 
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-6">
@@ -247,7 +295,10 @@ const FinanceDashboard = () => {
                     <h1 className="text-3xl font-bold tracking-tight text-foreground">Finance</h1>
                 </div>
                 <button
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => {
+                        setEditingTransaction(null);
+                        setIsModalOpen(true);
+                    }}
                     className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md font-medium transition-all text-sm shadow-sm"
                 >
                     <Plus size={16} />
@@ -340,9 +391,20 @@ const FinanceDashboard = () => {
                                         <span className={`font-medium text-sm ${tx.type === 'income' ? 'text-green-600' : 'text-foreground'}`}>
                                             {tx.type === 'income' ? '+' : '-'}${parseFloat(tx.amount).toFixed(2)}
                                         </span>
-                                        <button onClick={() => deleteTransaction(tx.id)} className="text-secondary hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <Trash2 size={14} />
-                                        </button>
+                                        <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button
+                                                onClick={() => {
+                                                    setEditingTransaction(tx);
+                                                    setIsModalOpen(true);
+                                                }}
+                                                className="text-secondary hover:text-primary p-1"
+                                            >
+                                                <Edit3 size={14} />
+                                            </button>
+                                            <button onClick={() => deleteTransaction(tx.id)} className="text-secondary hover:text-red-500 p-1">
+                                                <Trash2 size={14} />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             ))

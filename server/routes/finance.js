@@ -34,6 +34,28 @@ router.post('/', authenticate, async (req, res) => {
     }
 });
 
+// Update transaction
+router.patch('/:id', authenticate, async (req, res) => {
+    const { id } = req.params;
+    const { title, amount, type, category, date } = req.body;
+
+    try {
+        const result = await db.query(
+            'UPDATE transactions SET title = $1, amount = $2, type = $3, category = $4, date = $5 WHERE id = $6 AND user_id = $7 RETURNING *',
+            [title, amount, type, category, date, id, req.user.id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Transaction not found or unauthorized' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 // Delete transaction
 router.delete('/:id', authenticate, async (req, res) => {
     const { id } = req.params;

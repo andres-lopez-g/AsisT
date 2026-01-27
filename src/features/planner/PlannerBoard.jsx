@@ -10,8 +10,25 @@ import {
     Layout,
     Trash2,
     X,
-    Loader2
+    Loader2,
+    ChevronLeft,
+    ChevronRight,
+    AlertCircle
 } from 'lucide-react';
+import {
+    format,
+    startOfMonth,
+    endOfMonth,
+    startOfWeek,
+    endOfWeek,
+    eachDayOfInterval,
+    isSameMonth,
+    isSameDay,
+    addMonths,
+    subMonths,
+    parseISO,
+    getDate
+} from 'date-fns';
 
 const TaskCard = ({ task, onDelete, onStatusChange }) => (
     <div className="minimal-card p-3 mb-2 hover:shadow-md transition-all group border-l-4 border-l-transparent hover:border-l-primary/50 relative">
@@ -166,7 +183,9 @@ const TaskModal = ({ isOpen, onClose, onAdd }) => {
 
 const PlannerBoard = () => {
     const [tasks, setTasks] = useState([]);
+    const [debts, setDebts] = useState([]);
     const [view, setView] = useState('kanban');
+    const [currentMonth, setCurrentMonth] = useState(new Date());
     const [loading, setLoading] = useState(true);
     const [isExportModalOpen, setIsExportModalOpen] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -174,22 +193,24 @@ const PlannerBoard = () => {
 
     const { authFetch } = useAuth();
 
-    const fetchTasks = async () => {
+    const fetchData = async () => {
         try {
-            const res = await authFetch('/api/planner');
-            if (res.ok) {
-                const data = await res.json();
-                setTasks(data);
-            }
+            const [tasksRes, debtsRes] = await Promise.all([
+                authFetch('/api/planner'),
+                authFetch('/api/debts')
+            ]);
+
+            if (tasksRes.ok) setTasks(await tasksRes.json());
+            if (debtsRes.ok) setDebts(await debtsRes.json());
         } catch (err) {
-            console.error('Failed to fetch tasks:', err);
+            console.error('Failed to fetch data:', err);
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchTasks();
+        fetchData();
     }, []);
 
     const addTask = async (taskData) => {
@@ -329,15 +350,96 @@ const PlannerBoard = () => {
                 </div>
             )}
 
-            {/* Calendar Placeholder */}
+            {/* Calendar View */}
             {view === 'calendar' && (
-                <div className="minimal-card p-12 flex items-center justify-center flex-1 bg-muted/10 border-dashed">
-                    <div className="text-center">
-                        <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                            <CalendarIcon size={32} className="text-secondary" />
+                <div className="minimal-card p-6 flex-1 flex flex-col bg-background border-border overflow-hidden">
+                    {/* Calendar Header */}
+                    <div className="flex items-center justify-between mb-8">
+                        <h2 className="text-xl font-bold text-foreground">
+                            {format(currentMonth, 'MMMM yyyy')}
+                        </h2>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+                                className="p-2 hover:bg-muted rounded-full transition-colors"
+                            >
+                                <ChevronLeft size={20} />
+                            </button>
+                            <button
+                                onClick={() => setCurrentMonth(new Date())}
+                                className="px-3 py-1 text-xs font-semibold hover:bg-muted rounded transition-colors"
+                            >
+                                Today
+                            </button>
+                            <button
+                                onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+                                className="p-2 hover:bg-muted rounded-full transition-colors"
+                            >
+                                <ChevronRight size={20} />
+                            </button>
                         </div>
-                        <h3 className="text-lg font-bold mb-1">Calendar View</h3>
-                        <p className="text-secondary text-sm">Feature coming in next update.</p>
+                    </div>
+
+                    {/* Day Names */}
+                    <div className="grid grid-cols-7 border-b border-border pb-2 mb-2">
+                        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                            <div key={day} className="text-center text-[10px] font-bold uppercase tracking-widest text-secondary">
+                                {day}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Days Grid */}
+                    <div className="grid grid-cols-7 flex-1 border-l border-t border-border/50">
+                        {(() => {
+                            const monthStart = startOfMonth(currentMonth);
+                            const monthEnd = endOfMonth(monthStart);
+                            const startDate = startOfWeek(monthStart);
+                            const endDate = endOfWeek(monthEnd);
+                            const calendarDays = eachDayOfInterval({ start: startDate, end: endDate });
+
+                            return calendarDays.map((date, i) => {
+                                const dateStr = format(date, 'yyyy-MM-dd');
+                                const dayTasks = tasks.filter(t => t.date === dateStr);
+                                const dayDebts = debts.filter(d =>
+                                    d.due_day === getDate(date) &&
+                                    isSameMonth(date, currentMonth) &&
+                                    parseInt(d.installments_paid) < parseInt(d.installments_total)
+                                );
+                                const isCurrentMonth = isSameMonth(date, currentMonth);
+
+                                return (
+                                    <div
+                                        key={i}
+                                        className={`min-h-[100px] border-r border-b border-border/50 p-2 flex flex-col gap-1 transition-colors ${!isCurrentMonth ? 'bg-muted/10 opacity-40' : 'hover:bg-muted/5'}`}
+                                    >
+                                        <span className={`text-xs font-mono ${isSameDay(date, new Date()) ? 'bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center font-bold' : 'text-secondary'}`}>
+                                            {format(date, 'd')}
+                                        </span>
+
+                                        <div className="flex-1 overflow-y-auto space-y-1 custom-scrollbar pr-1">
+                                            {dayDebts.map(debt => (
+                                                <div key={`debt-${debt.id}`} className="bg-red-50 text-red-700 p-1 rounded text-[9px] font-bold border border-red-100 flex items-center gap-1 shadow-sm animate-in fade-in zoom-in-95">
+                                                    <AlertCircle size={10} />
+                                                    <span className="truncate">Pay: {debt.title}</span>
+                                                </div>
+                                            ))}
+                                            {dayTasks.map(task => (
+                                                <div
+                                                    key={task.id}
+                                                    className={`p-1 rounded text-[9px] font-medium border flex flex-col gap-0.5 shadow-sm transition-all hover:scale-[1.02] cursor-default
+                                                        ${task.priority === 'high' ? 'bg-orange-50 text-orange-700 border-orange-100' :
+                                                            task.priority === 'medium' ? 'bg-blue-50 text-blue-700 border-blue-100' :
+                                                                'bg-muted/50 text-secondary border-border'}`}
+                                                >
+                                                    <span className="truncate">{task.title}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            });
+                        })()}
                     </div>
                 </div>
             )}

@@ -30,9 +30,11 @@ const poolConfig = connectionString
 
 // SSL is required for Supabase/Vercel
 // We use rejectUnauthorized: false to allow self-signed certs common in cloud providers
-poolConfig.ssl = {
-    rejectUnauthorized: false
-};
+if (process.env.DB_SSL === 'true' || isProduction) {
+    poolConfig.ssl = {
+        rejectUnauthorized: false
+    };
+}
 
 const pool = new Pool(poolConfig);
 
