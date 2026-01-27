@@ -397,17 +397,32 @@ const FinanceDashboard = () => {
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center justify-between pt-2">
-                                            <div>
-                                                <p className="text-[10px] text-secondary uppercase">Next Payment</p>
-                                                <p className="text-sm font-semibold">${installmentAmount}</p>
+                                        <div className="flex flex-col gap-2 pt-2">
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <p className="text-[10px] text-secondary uppercase">Next Payment</p>
+                                                    <p className="text-sm font-semibold">${installmentAmount}</p>
+                                                </div>
+                                                <div className="w-24">
+                                                    <input
+                                                        type="number"
+                                                        step="0.01"
+                                                        className="w-full bg-muted/50 border border-border rounded px-2 py-1 text-xs focus:ring-1 focus:ring-primary outline-none"
+                                                        placeholder="Monto"
+                                                        defaultValue={installmentAmount}
+                                                        id={`amount-${debt.id}`}
+                                                    />
+                                                </div>
                                             </div>
                                             <button
-                                                onClick={() => payDebt(debt.id, installmentAmount)}
+                                                onClick={() => {
+                                                    const val = document.getElementById(`amount-${debt.id}`).value;
+                                                    payDebt(debt.id, val || installmentAmount);
+                                                }}
                                                 disabled={debt.installments_paid >= debt.installments_total}
-                                                className="bg-foreground text-background text-xs px-3 py-1.5 rounded-md font-medium hover:opacity-90 disabled:opacity-30 transition-opacity"
+                                                className="w-full bg-foreground text-background text-xs py-2 rounded-md font-medium hover:opacity-90 disabled:opacity-30 transition-opacity"
                                             >
-                                                {debt.installments_paid >= debt.installments_total ? 'Paid' : 'Pay Installment'}
+                                                {debt.installments_paid >= debt.installments_total ? 'Paid' : 'Pay Amount'}
                                             </button>
                                         </div>
                                     </div>

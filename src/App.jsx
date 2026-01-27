@@ -1,6 +1,6 @@
 import React, { useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X, Loader2, TrendingUp } from 'lucide-react';
+import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X, Loader2, TrendingUp, Languages } from 'lucide-react';
 
 // Auth
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -39,6 +39,36 @@ const SidebarLink = ({ to, icon: Icon, label, onClick }) => {
       <span>{label}</span>
       {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />}
     </Link>
+  );
+};
+
+const LanguageSwitcher = () => {
+  const switchLanguage = (lang) => {
+    const select = document.querySelector('.goog-te-combo');
+    if (select) {
+      select.value = lang;
+      select.dispatchEvent(new Event('change'));
+    }
+  };
+
+  return (
+    <div className="flex items-center gap-2 p-1 bg-white/50 rounded-lg border border-border/50">
+      <button
+        onClick={() => switchLanguage('en')}
+        className="px-2 py-1 text-[10px] font-bold rounded hover:bg-white transition-colors"
+      >
+        EN
+      </button>
+      <div className="w-[1px] h-3 bg-border" />
+      <Languages size={14} className="text-secondary" />
+      <div className="w-[1px] h-3 bg-border" />
+      <button
+        onClick={() => switchLanguage('es')}
+        className="px-2 py-1 text-[10px] font-bold rounded hover:bg-white transition-colors"
+      >
+        ES
+      </button>
+    </div>
   );
 };
 
@@ -82,8 +112,12 @@ const ProtectedLayout = () => {
           <SidebarLink to="/planner" icon={Calendar} label="Planner" onClick={() => setSidebarOpen(false)} />
         </nav>
 
-        <div className="p-4 border-t border-border">
-          <div id="google_translate_element" className="mb-4 min-h-[30px]"></div>
+        <div className="p-4 border-t border-border space-y-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-[10px] font-bold text-secondary uppercase tracking-widest ml-1">Language</p>
+            <LanguageSwitcher />
+            <div id="google_translate_element" className="hidden"></div>
+          </div>
           <div className="flex items-center justify-between group">
             <div className="flex items-center gap-3 text-sm font-medium text-foreground/80">
               <div className="w-6 h-6 rounded bg-accent/10 flex items-center justify-center text-accent text-xs">
