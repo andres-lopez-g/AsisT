@@ -122,36 +122,33 @@ const FinanceDashboard = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    const token = localStorage.getItem('token');
+    const { authFetch } = useAuth();
 
     // Fetch Transactions
     useEffect(() => {
         const fetchTransactions = async () => {
             try {
-                const res = await fetch('/api/finance', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const res = await authFetch('/api/finance');
                 if (res.ok) {
                     const data = await res.json();
                     setTransactions(data);
                 }
             } catch (err) {
-                console.error(err);
+                console.error('Failed to fetch transactions:', err);
             } finally {
                 setLoading(false);
             }
         };
 
-        if (token) fetchTransactions();
-    }, [token]);
+        fetchTransactions();
+    }, []);
 
     const addTransaction = async (tx) => {
         try {
-            const res = await fetch('/api/finance', {
+            const res = await authFetch('/api/finance', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(tx)
             });
@@ -161,22 +158,21 @@ const FinanceDashboard = () => {
                 setTransactions([newTx, ...transactions]);
             }
         } catch (err) {
-            console.error(err);
+            console.error('Failed to add transaction:', err);
         }
     };
 
     const deleteTransaction = async (id) => {
         try {
-            const res = await fetch(`/api/finance/${id}`, {
+            const res = await authFetch(`/api/finance/${id}`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (res.ok) {
                 setTransactions(transactions.filter(t => t.id !== id));
             }
         } catch (err) {
-            console.error(err);
+            console.error('Failed to delete transaction:', err);
         }
     };
 

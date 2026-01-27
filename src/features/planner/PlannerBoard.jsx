@@ -171,35 +171,32 @@ const PlannerBoard = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [defaultStatus, setDefaultStatus] = useState('todo');
 
-    const token = localStorage.getItem('token');
+    const { authFetch } = useAuth();
 
     const fetchTasks = async () => {
         try {
-            const res = await fetch('/api/planner', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            const res = await authFetch('/api/planner');
             if (res.ok) {
                 const data = await res.json();
                 setTasks(data);
             }
         } catch (err) {
-            console.error(err);
+            console.error('Failed to fetch tasks:', err);
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        if (token) fetchTasks();
-    }, [token]);
+        fetchTasks();
+    }, []);
 
     const addTask = async (taskData) => {
         try {
-            const res = await fetch('/api/planner', {
+            const res = await authFetch('/api/planner', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(taskData)
             });
@@ -208,17 +205,16 @@ const PlannerBoard = () => {
                 setTasks([...tasks, newTask]);
             }
         } catch (err) {
-            console.error(err);
+            console.error('Failed to add task:', err);
         }
     };
 
     const updateTaskStatus = async (taskId, newStatus) => {
         try {
-            const res = await fetch(`/api/planner/${taskId}`, {
+            const res = await authFetch(`/api/planner/${taskId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ status: newStatus })
             });
@@ -226,21 +222,20 @@ const PlannerBoard = () => {
                 setTasks(tasks.map(t => t.id === taskId ? { ...t, status: newStatus } : t));
             }
         } catch (err) {
-            console.error(err);
+            console.error('Failed to update task status:', err);
         }
     };
 
     const deleteTask = async (taskId) => {
         try {
-            const res = await fetch(`/api/planner/${taskId}`, {
+            const res = await authFetch(`/api/planner/${taskId}`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (res.ok) {
                 setTasks(tasks.filter(t => t.id !== taskId));
             }
         } catch (err) {
-            console.error(err);
+            console.error('Failed to delete task:', err);
         }
     };
 
