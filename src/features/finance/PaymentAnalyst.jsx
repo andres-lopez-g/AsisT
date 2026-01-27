@@ -234,14 +234,18 @@ const PaymentAnalyst = () => {
                                             <span>{saveError}</span>
                                         </div>
                                     )}
-                                    <div className="flex gap-3">
-                                        <input
-                                            className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
-                                            value={title}
-                                            onChange={e => setTitle(e.target.value)}
-                                            placeholder="Name of purchase (e.g. New Laptop)"
-                                        />
-                                        <div className="w-24 shrink-0">
+                                    <div className="grid grid-cols-4 gap-3">
+                                        <div className="col-span-3">
+                                            <label className="block text-[10px] font-bold text-secondary uppercase mb-1 ml-1">Nombre de la compra</label>
+                                            <input
+                                                className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
+                                                value={title}
+                                                onChange={e => setTitle(e.target.value)}
+                                                placeholder="Ej: Laptop nueva"
+                                            />
+                                        </div>
+                                        <div className="col-span-1">
+                                            <label className="block text-[10px] font-bold text-secondary uppercase mb-1 ml-1">Día Pago</label>
                                             <input
                                                 type="number"
                                                 min="1"
@@ -249,8 +253,8 @@ const PaymentAnalyst = () => {
                                                 className="w-full bg-muted/30 border border-border rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary outline-none transition-all"
                                                 value={dueDay}
                                                 onChange={e => setDueDay(e.target.value)}
-                                                placeholder="Due Day"
-                                                title="Monthly payment due day"
+                                                placeholder="1-31"
+                                                title="Día del mes para el recordatorio de pago"
                                             />
                                         </div>
                                     </div>

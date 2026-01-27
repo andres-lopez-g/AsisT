@@ -100,4 +100,26 @@ router.delete('/:id', authenticate, async (req, res) => {
     }
 });
 
+// Update debt
+router.patch('/:id', authenticate, async (req, res) => {
+    const { id } = req.params;
+    const { title, due_day } = req.body;
+
+    try {
+        const result = await db.query(
+            'UPDATE debts SET title = COALESCE($1, title), due_day = COALESCE($2, due_day) WHERE id = $3 AND user_id = $4 RETURNING *',
+            [title, due_day, id, req.user.id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Debt not found or unauthorized' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 export default router;

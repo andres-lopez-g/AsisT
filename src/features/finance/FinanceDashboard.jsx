@@ -143,7 +143,9 @@ const FinanceDashboard = () => {
     const [transactions, setTransactions] = useState([]);
     const [debts, setDebts] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDebtModalOpen, setIsDebtModalOpen] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState(null);
+    const [editingDebt, setEditingDebt] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const { authFetch } = useAuth();
@@ -214,6 +216,23 @@ const FinanceDashboard = () => {
             }
         } catch (err) {
             console.error('Failed to delete transaction:', err);
+        }
+    };
+
+    const updateDebt = async (id, data) => {
+        try {
+            const res = await authFetch(`/api/debts/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                const updatedDebt = await res.json();
+                setDebts(debts.map(d => d.id === id ? updatedDebt : d));
+            }
+        } catch (err) {
+            console.error('Failed to update debt:', err);
         }
     };
 
@@ -435,13 +454,27 @@ const FinanceDashboard = () => {
                             return (
                                 <div key={debt.id} className="border border-border rounded-lg p-5 hover:border-primary/30 transition-colors bg-background">
                                     <div className="flex justify-between items-start mb-4">
-                                        <div>
-                                            <h3 className="font-bold text-foreground">{debt.title}</h3>
+                                        <div className="flex-1">
+                                            <div className="flex items-center gap-2 group/title">
+                                                <h3 className="font-bold text-foreground">{debt.title}</h3>
+                                                <button
+                                                    onClick={() => {
+                                                        setEditingDebt(debt);
+                                                        setIsDebtModalOpen(true);
+                                                    }}
+                                                    className="opacity-0 group-hover/title:opacity-100 transition-opacity text-secondary hover:text-primary"
+                                                >
+                                                    <Edit3 size={12} />
+                                                </button>
+                                            </div>
                                             <p className="text-xs text-secondary">Interest: {debt.interest_rate}%</p>
                                         </div>
                                         <div className="text-right">
                                             <p className="text-sm font-bold text-primary">${parseFloat(debt.remaining_amount).toFixed(2)}</p>
-                                            <p className="text-[10px] text-secondary uppercase">Remaining</p>
+                                            <div className="flex flex-col items-end">
+                                                <p className="text-[10px] text-secondary uppercase">Remaining</p>
+                                                <span className="text-[9px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded mt-1">Día {debt.due_day}</span>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -494,6 +527,50 @@ const FinanceDashboard = () => {
                     )}
                 </div>
             </div>
+
+            {/* Simple Debt Edit Modal */}
+            {isDebtModalOpen && editingDebt && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm">
+                    <div className="bg-background border border-border rounded-lg shadow-xl w-full max-w-sm p-6 animate-in fade-in zoom-in-95 duration-200">
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-lg font-bold">Edit Debt Status</h2>
+                            <button onClick={() => setIsDebtModalOpen(false)} className="text-secondary hover:text-foreground">
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-secondary uppercase mb-1">Nombre</label>
+                                <input
+                                    className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none"
+                                    value={editingDebt.title}
+                                    onChange={e => setEditingDebt({ ...editingDebt, title: e.target.value })}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-secondary uppercase mb-1">Día de Pago (1-31)</label>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max="31"
+                                    className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none"
+                                    value={editingDebt.due_day}
+                                    onChange={e => setEditingDebt({ ...editingDebt, due_day: parseInt(e.target.value) })}
+                                />
+                            </div>
+                            <button
+                                onClick={() => {
+                                    updateDebt(editingDebt.id, { title: editingDebt.title, due_day: editingDebt.due_day });
+                                    setIsDebtModalOpen(false);
+                                }}
+                                className="w-full bg-primary text-white py-2 rounded-md font-medium text-sm mt-4 hover:opacity-90 transition-opacity"
+                            >
+                                Guardar Cambios
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
