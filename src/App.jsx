@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X } from 'lucide-react';
+import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X, Loader2 } from 'lucide-react';
 
 // Auth
 import { AuthProvider, useAuth } from './context/AuthContext';
-import LoginPage from './features/auth/LoginPage';
-import RegisterPage from './features/auth/RegisterPage';
+const LoginPage = lazy(() => import('./features/auth/LoginPage'));
+const RegisterPage = lazy(() => import('./features/auth/RegisterPage'));
 
 // Imports
-import HomeView from './features/home/HomeView';
-import FinanceDashboard from './features/finance/FinanceDashboard';
-import PlannerBoard from './features/planner/PlannerBoard';
+const HomeView = lazy(() => import('./features/home/HomeView'));
+const FinanceDashboard = lazy(() => import('./features/finance/FinanceDashboard'));
+const PlannerBoard = lazy(() => import('./features/planner/PlannerBoard'));
+
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center h-full w-full">
+    <Loader2 className="w-8 h-8 text-primary animate-spin" />
+  </div>
+);
 
 const SidebarLink = ({ to, icon: Icon, label, onClick }) => {
   const location = useLocation();
@@ -120,17 +126,19 @@ const App = () => {
   return (
     <AuthProvider>
       <Router>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
 
-          <Route element={<ProtectedLayout />}>
-            <Route path="/" element={<Navigate to="/home" replace />} />
-            <Route path="/home" element={<HomeView />} />
-            <Route path="/finance" element={<FinanceDashboard />} />
-            <Route path="/planner" element={<PlannerBoard />} />
-          </Route>
-        </Routes>
+            <Route element={<ProtectedLayout />}>
+              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/home" element={<HomeView />} />
+              <Route path="/finance" element={<FinanceDashboard />} />
+              <Route path="/planner" element={<PlannerBoard />} />
+            </Route>
+          </Routes>
+        </Suspense>
       </Router>
     </AuthProvider>
   );

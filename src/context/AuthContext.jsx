@@ -67,6 +67,38 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('user');
     };
 
+    // Inactivity Logout logic
+    useEffect(() => {
+        let inactivityTimer;
+        const INACTIVITY_LIMIT = 15 * 60 * 1000; // 15 minutes
+
+        const resetTimer = () => {
+            if (inactivityTimer) clearTimeout(inactivityTimer);
+            if (user) {
+                inactivityTimer = setTimeout(() => {
+                    console.log('Logging out due to inactivity');
+                    logout();
+                }, INACTIVITY_LIMIT);
+            }
+        };
+
+        const activityEvents = ['mousemove', 'keydown', 'mousedown', 'touchstart', 'scroll'];
+
+        if (user) {
+            resetTimer();
+            activityEvents.forEach(event => {
+                window.addEventListener(event, resetTimer);
+            });
+        }
+
+        return () => {
+            if (inactivityTimer) clearTimeout(inactivityTimer);
+            activityEvents.forEach(event => {
+                window.removeEventListener(event, resetTimer);
+            });
+        };
+    }, [user]);
+
     // Helper for authenticated requests that handles 401/403
     const authFetch = async (url, options = {}) => {
         const token = localStorage.getItem('token');

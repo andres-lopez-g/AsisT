@@ -17,17 +17,6 @@ CREATE TABLE IF NOT EXISTS transactions (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS documents (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  name VARCHAR(255) NOT NULL,
-  type VARCHAR(50),
-  size VARCHAR(50),
-  category VARCHAR(50),
-  file_path TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE IF NOT EXISTS tasks (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -37,3 +26,7 @@ CREATE TABLE IF NOT EXISTS tasks (
   priority VARCHAR(20) DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high')),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+-- Indexes for performance
+CREATE INDEX IF NOT EXISTS idx_transactions_user_id_date ON transactions(user_id, date DESC);
+CREATE INDEX IF NOT EXISTS idx_tasks_user_id_status ON tasks(user_id, status);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);

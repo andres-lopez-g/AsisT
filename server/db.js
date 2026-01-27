@@ -4,6 +4,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Fix for SELF_SIGNED_CERT_IN_CHAIN on Vercel/Supabase
+// SECURITY WARNING: Disabling TLS rejection is a risk (MITM attacks).
+// This is used here to allow connections to some hosted DBs with self-signed certs.
+// In a highly secure production environment, you should use proper CA certificates.
 if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 }
