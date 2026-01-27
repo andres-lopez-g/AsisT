@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import financeRoutes from './routes/finance.js';
 import plannerRoutes from './routes/planner.js';
+import debtRoutes from './routes/debts.js';
 import errorHandler from './middleware/errorHandler.js';
 
 dotenv.config();
@@ -53,6 +54,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/finance', financeRoutes);
 app.use('/api/planner', plannerRoutes);
+app.use('/api/debts', debtRoutes);
 
 app.use(errorHandler);
 

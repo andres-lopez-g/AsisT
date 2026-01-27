@@ -120,37 +120,38 @@ const TransactionModal = ({ isOpen, onClose, onAdd }) => {
 
 const FinanceDashboard = () => {
     const [transactions, setTransactions] = useState([]);
+    const [debts, setDebts] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(true);
 
     const { authFetch } = useAuth();
 
-    // Fetch Transactions
+    // Fetch Transactions and Debts
     useEffect(() => {
-        const fetchTransactions = async () => {
+        const fetchData = async () => {
             try {
-                const res = await authFetch('/api/finance');
-                if (res.ok) {
-                    const data = await res.json();
-                    setTransactions(data);
-                }
+                const [txRes, debtRes] = await Promise.all([
+                    authFetch('/api/finance'),
+                    authFetch('/api/debts')
+                ]);
+
+                if (txRes.ok) setTransactions(await txRes.json());
+                if (debtRes.ok) setDebts(await debtRes.json());
             } catch (err) {
-                console.error('Failed to fetch transactions:', err);
+                console.error('Failed to fetch finance data:', err);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchTransactions();
+        fetchData();
     }, []);
 
     const addTransaction = async (tx) => {
         try {
             const res = await authFetch('/api/finance', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(tx)
             });
 
@@ -177,13 +178,38 @@ const FinanceDashboard = () => {
         }
     };
 
+    const payDebt = async (debtId, amount) => {
+        try {
+            const res = await authFetch(`/api/debts/${debtId}/payments`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount,
+                    payment_date: new Date().toISOString().split('T')[0]
+                })
+            });
+
+            if (res.ok) {
+                const updatedDebt = await res.json();
+                setDebts(debts.map(d => d.id === debtId ? updatedDebt : d));
+
+                // Fetch transactions again to show the payment
+                const txRes = await authFetch('/api/finance');
+                if (txRes.ok) setTransactions(await txRes.json());
+            }
+        } catch (err) {
+            console.error('Failed to process debt payment:', err);
+        }
+    };
+
     // Derived State
     const stats = useMemo(() => {
         const income = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + (parseFloat(t.amount) || 0), 0);
         const expenses = transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + (parseFloat(t.amount) || 0), 0);
+        const totalDebt = debts.reduce((acc, d) => acc + (parseFloat(d.remaining_amount) || 0), 0);
         const balance = income - expenses;
-        return { income, expenses, balance };
-    }, [transactions]);
+        return { income, expenses, balance, totalDebt };
+    }, [transactions, debts]);
 
     // Calculate Chart Data based on actual transactions
     const chartData = useMemo(() => {
@@ -197,7 +223,6 @@ const FinanceDashboard = () => {
             const dateStr = d.toISOString().split('T')[0];
             const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
 
-            // Sum balance up to this date
             const balanceAtDate = transactions
                 .filter(t => t.date && new Date(t.date) <= d)
                 .reduce((acc, t) => t.type === 'income' ? acc + (parseFloat(t.amount) || 0) : acc - (parseFloat(t.amount) || 0), 0);
@@ -231,9 +256,9 @@ const FinanceDashboard = () => {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <StatCard
-                    label="Total Balance"
+                    label="Current Balance"
                     amount={`$${stats.balance.toFixed(2)}`}
                     icon={DollarSign}
                 />
@@ -247,10 +272,14 @@ const FinanceDashboard = () => {
                     amount={`$${stats.expenses.toFixed(2)}`}
                     icon={ArrowDownLeft}
                 />
+                <StatCard
+                    label="Total Debt"
+                    amount={`$${stats.totalDebt.toFixed(2)}`}
+                    icon={TrendingDown}
+                />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Chart & List (Same structure as before, just removed glass effects completely) */}
                 <div className="minimal-card p-6 lg:col-span-2 min-h-[400px]">
                     <h2 className="text-sm font-semibold text-secondary uppercase tracking-wider mb-6">Overview</h2>
                     <div className="h-[300px] w-full">
@@ -319,6 +348,73 @@ const FinanceDashboard = () => {
                             ))
                         )}
                     </div>
+                </div>
+            </div>
+
+            {/* Debts Section */}
+            <div className="minimal-card p-6">
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-sm font-semibold text-secondary uppercase tracking-wider flex items-center gap-2">
+                        <CreditCard size={18} className="text-primary" />
+                        Active Debts & Installments
+                    </h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {debts.length === 0 ? (
+                        <div className="col-span-full py-10 text-center text-secondary text-sm bg-muted/20 rounded-lg border border-dashed border-border">
+                            No active debts. Use the Payment Analyst to record one.
+                        </div>
+                    ) : (
+                        debts.map(debt => {
+                            const installmentAmount = (parseFloat(debt.total_amount) / debt.installments_total).toFixed(2);
+                            const progress = (debt.installments_paid / debt.installments_total) * 100;
+
+                            return (
+                                <div key={debt.id} className="border border-border rounded-lg p-5 hover:border-primary/30 transition-colors bg-background">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div>
+                                            <h3 className="font-bold text-foreground">{debt.title}</h3>
+                                            <p className="text-xs text-secondary">Interest: {debt.interest_rate}%</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-sm font-bold text-primary">${parseFloat(debt.remaining_amount).toFixed(2)}</p>
+                                            <p className="text-[10px] text-secondary uppercase">Remaining</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <div className="space-y-1.5">
+                                            <div className="flex justify-between text-[10px] font-bold uppercase text-secondary">
+                                                <span>Progress</span>
+                                                <span>{debt.installments_paid} / {debt.installments_total} cuotas</span>
+                                            </div>
+                                            <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                                                <div
+                                                    className="h-full bg-primary transition-all duration-500"
+                                                    style={{ width: `${progress}%` }}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center justify-between pt-2">
+                                            <div>
+                                                <p className="text-[10px] text-secondary uppercase">Next Payment</p>
+                                                <p className="text-sm font-semibold">${installmentAmount}</p>
+                                            </div>
+                                            <button
+                                                onClick={() => payDebt(debt.id, installmentAmount)}
+                                                disabled={debt.installments_paid >= debt.installments_total}
+                                                className="bg-foreground text-background text-xs px-3 py-1.5 rounded-md font-medium hover:opacity-90 disabled:opacity-30 transition-opacity"
+                                            >
+                                                {debt.installments_paid >= debt.installments_total ? 'Paid' : 'Pay Installment'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    )}
                 </div>
             </div>
         </div>

@@ -10,6 +10,7 @@ const RegisterPage = lazy(() => import('./features/auth/RegisterPage'));
 // Imports
 const HomeView = lazy(() => import('./features/home/HomeView'));
 const FinanceDashboard = lazy(() => import('./features/finance/FinanceDashboard'));
+const PaymentAnalyst = lazy(() => import('./features/finance/PaymentAnalyst'));
 const PlannerBoard = lazy(() => import('./features/planner/PlannerBoard'));
 
 const LoadingFallback = () => (
@@ -77,6 +78,7 @@ const ProtectedLayout = () => {
         <nav className="flex-1 p-2 space-y-0.5">
           <SidebarLink to="/home" icon={LayoutDashboard} label="Home" onClick={() => setSidebarOpen(false)} />
           <SidebarLink to="/finance" icon={CreditCard} label="Finance" onClick={() => setSidebarOpen(false)} />
+          <SidebarLink to="/payment-analyst" icon={TrendingUp} label="Payment Analyst" onClick={() => setSidebarOpen(false)} />
           <SidebarLink to="/planner" icon={Calendar} label="Planner" onClick={() => setSidebarOpen(false)} />
         </nav>
 
@@ -135,6 +137,7 @@ const App = () => {
               <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="/home" element={<HomeView />} />
               <Route path="/finance" element={<FinanceDashboard />} />
+              <Route path="/payment-analyst" element={<PaymentAnalyst />} />
               <Route path="/planner" element={<PlannerBoard />} />
             </Route>
           </Routes>
