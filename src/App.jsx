@@ -1,6 +1,6 @@
 import React, { useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X, Loader2 } from 'lucide-react';
+import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X, Loader2, TrendingUp } from 'lucide-react';
 
 // Auth
 import { AuthProvider, useAuth } from './context/AuthContext';
