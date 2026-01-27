@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS tasks (
   date VARCHAR(50),
   status VARCHAR(20) DEFAULT 'todo' CHECK (status IN ('todo', 'in-progress', 'done')),
   priority VARCHAR(20) DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high')),
+  category VARCHAR(50),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- Debts tracking
@@ -55,3 +56,16 @@ CREATE INDEX IF NOT EXISTS idx_tasks_user_id_status ON tasks(user_id, status);
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_debts_user_id ON debts(user_id);
 CREATE INDEX IF NOT EXISTS idx_debt_payments_debt_id ON debt_payments(debt_id);
+
+CREATE TABLE IF NOT EXISTS categories (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  name VARCHAR(50) NOT NULL,
+  type VARCHAR(20) NOT NULL CHECK (type IN ('income', 'expense', 'task')),
+  color VARCHAR(7) DEFAULT '#2eaadc',
+  icon VARCHAR(50), 
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id, name, type)
+);
+
+CREATE INDEX IF NOT EXISTS idx_categories_user_id ON categories(user_id);

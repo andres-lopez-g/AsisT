@@ -20,12 +20,12 @@ router.get('/', authenticate, async (req, res) => {
 
 // Add task
 router.post('/', authenticate, async (req, res) => {
-    const { title, date, status, priority } = req.body;
+    const { title, date, status, priority, category } = req.body;
 
     try {
         const result = await db.query(
-            'INSERT INTO tasks (user_id, title, date, status, priority) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [req.user.id, title, date, status || 'todo', priority || 'medium']
+            'INSERT INTO tasks (user_id, title, date, status, priority, category) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [req.user.id, title, date, status || 'todo', priority || 'medium', category || 'General']
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
@@ -34,13 +34,13 @@ router.post('/', authenticate, async (req, res) => {
     }
 });
 
-// Update task status
+// Update task
 router.patch('/:id', authenticate, async (req, res) => {
-    const { status } = req.body;
+    const { title, date, status, priority, category } = req.body;
     try {
         const result = await db.query(
-            'UPDATE tasks SET status = $1 WHERE id = $2 AND user_id = $3 RETURNING *',
-            [status, req.params.id, req.user.id]
+            'UPDATE tasks SET title = COALESCE($1, title), date = COALESCE($2, date), status = COALESCE($3, status), priority = COALESCE($4, priority), category = COALESCE($5, category) WHERE id = $6 AND user_id = $7 RETURNING *',
+            [title, date, status, priority, category, req.params.id, req.user.id]
         );
         if (result.rows.length === 0) return res.status(404).json({ error: 'Task not found' });
         res.json(result.rows[0]);

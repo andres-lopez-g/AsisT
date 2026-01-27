@@ -11,9 +11,10 @@ import {
     Trash2,
     X,
     Loader2,
-    ChevronLeft,
     ChevronRight,
-    AlertCircle
+    AlertCircle,
+    Edit3,
+    Tag
 } from 'lucide-react';
 import {
     format,
@@ -30,16 +31,29 @@ import {
     getDate
 } from 'date-fns';
 
-const TaskCard = ({ task, onDelete, onStatusChange }) => (
+const TaskCard = ({ task, onDelete, onStatusChange, onEdit }) => (
     <div className="minimal-card p-3 mb-2 hover:shadow-md transition-all group border-l-4 border-l-transparent hover:border-l-primary/50 relative">
         <div className="flex justify-between items-start mb-2">
-            <span className={`px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide
-        ${task.priority === 'high' ? 'bg-red-50 text-red-600' :
-                    task.priority === 'medium' ? 'bg-orange-50 text-orange-600' :
-                        'bg-blue-50 text-blue-600'}`}>
-                {task.priority}
-            </span>
+            <div className="flex flex-wrap gap-1">
+                <span className={`px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide
+            ${task.priority === 'high' ? 'bg-red-50 text-red-600' :
+                        task.priority === 'medium' ? 'bg-orange-50 text-orange-600' :
+                            'bg-blue-50 text-blue-600'}`}>
+                    {task.priority}
+                </span>
+                {task.category && (
+                    <span className="px-1.5 py-0.5 rounded text-[10px] bg-muted text-secondary font-medium">
+                        {task.category}
+                    </span>
+                )}
+            </div>
             <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                    onClick={() => onEdit(task)}
+                    className="text-secondary hover:text-primary p-0.5"
+                >
+                    <Edit3 size={12} />
+                </button>
                 <button
                     onClick={() => onDelete(task.id)}
                     className="text-secondary hover:text-red-500 p-0.5"
@@ -67,7 +81,7 @@ const TaskCard = ({ task, onDelete, onStatusChange }) => (
     </div>
 );
 
-const Column = ({ title, tasks, icon: Icon, colorClass, onDelete, onStatusChange, onAdd }) => (
+const Column = ({ title, tasks, icon: Icon, colorClass, onDelete, onStatusChange, onAdd, onEdit }) => (
     <div className="flex-1 min-w-[280px] bg-muted/30 rounded-lg p-3 h-full overflow-hidden flex flex-col border border-border/50">
         <div className="flex items-center justify-between mb-3 px-1">
             <div className="flex items-center gap-2">
@@ -89,6 +103,7 @@ const Column = ({ title, tasks, icon: Icon, colorClass, onDelete, onStatusChange
                     task={task}
                     onDelete={onDelete}
                     onStatusChange={onStatusChange}
+                    onEdit={onEdit}
                 />
             ))}
             {tasks.length === 0 && (
@@ -100,18 +115,41 @@ const Column = ({ title, tasks, icon: Icon, colorClass, onDelete, onStatusChange
     </div>
 );
 
-const TaskModal = ({ isOpen, onClose, onAdd }) => {
+const TaskModal = ({ isOpen, onClose, onAdd, onUpdate, editingTask, categories }) => {
     const [title, setTitle] = useState('');
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [priority, setPriority] = useState('medium');
     const [status, setStatus] = useState('todo');
+    const [category, setCategory] = useState('General');
+
+    const taskCategories = categories.filter(c => c.type === 'task');
+
+    useEffect(() => {
+        if (editingTask) {
+            setTitle(editingTask.title || '');
+            setDate(editingTask.date || new Date().toISOString().split('T')[0]);
+            setPriority(editingTask.priority || 'medium');
+            setStatus(editingTask.status || 'todo');
+            setCategory(editingTask.category || 'General');
+        } else {
+            setTitle('');
+            setDate(new Date().toISOString().split('T')[0]);
+            setPriority('medium');
+            setStatus('todo');
+            setCategory('General');
+        }
+    }, [editingTask, isOpen]);
 
     if (!isOpen) return null;
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onAdd({ title, date, priority, status });
-        setTitle('');
+        const data = { title, date, priority, status, category };
+        if (editingTask) {
+            onUpdate(editingTask.id, data);
+        } else {
+            onAdd(data);
+        }
         onClose();
     };
 
@@ -119,7 +157,7 @@ const TaskModal = ({ isOpen, onClose, onAdd }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm">
             <div className="bg-background border border-border rounded-lg shadow-xl w-full max-w-sm p-6 animate-in fade-in zoom-in-95 duration-200">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-bold text-foreground">Add Task</h2>
+                    <h2 className="text-lg font-bold text-foreground">{editingTask ? 'Edit Task' : 'Add Task'}</h2>
                     <button onClick={onClose} className="text-secondary hover:text-foreground">
                         <X size={20} />
                     </button>
@@ -159,21 +197,36 @@ const TaskModal = ({ isOpen, onClose, onAdd }) => {
                             </select>
                         </div>
                     </div>
-                    <div>
-                        <label className="block text-xs font-semibold text-secondary uppercase mb-1">Initial Status</label>
-                        <select
-                            className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none text-foreground"
-                            value={status}
-                            onChange={e => setStatus(e.target.value)}
-                        >
-                            <option value="todo">To Do</option>
-                            <option value="in-progress">In Progress</option>
-                            <option value="done">Done</option>
-                        </select>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-xs font-semibold text-secondary uppercase mb-1">Status</label>
+                            <select
+                                className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none text-foreground"
+                                value={status}
+                                onChange={e => setStatus(e.target.value)}
+                            >
+                                <option value="todo">To Do</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="done">Done</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-secondary uppercase mb-1">Category</label>
+                            <select
+                                className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none text-foreground"
+                                value={category}
+                                onChange={e => setCategory(e.target.value)}
+                            >
+                                <option value="General">General</option>
+                                {taskCategories.map(cat => (
+                                    <option key={cat.id} value={cat.name}>{cat.name}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
 
                     <button type="submit" className="w-full bg-primary text-white py-2 rounded-md font-medium text-sm mt-4 hover:opacity-90 transition-opacity">
-                        Create Task
+                        {editingTask ? 'Update Task' : 'Create Task'}
                     </button>
                 </form>
             </div>
@@ -184,24 +237,27 @@ const TaskModal = ({ isOpen, onClose, onAdd }) => {
 const PlannerBoard = () => {
     const [tasks, setTasks] = useState([]);
     const [debts, setDebts] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [view, setView] = useState('kanban');
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [loading, setLoading] = useState(true);
-    const [isExportModalOpen, setIsExportModalOpen] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [editingTask, setEditingTask] = useState(null);
     const [defaultStatus, setDefaultStatus] = useState('todo');
 
     const { authFetch } = useAuth();
 
     const fetchData = async () => {
         try {
-            const [tasksRes, debtsRes] = await Promise.all([
+            const [tasksRes, debtsRes, catsRes] = await Promise.all([
                 authFetch('/api/planner'),
-                authFetch('/api/debts')
+                authFetch('/api/debts'),
+                authFetch('/api/categories')
             ]);
 
             if (tasksRes.ok) setTasks(await tasksRes.json());
             if (debtsRes.ok) setDebts(await debtsRes.json());
+            if (catsRes.ok) setCategories(await catsRes.json());
         } catch (err) {
             console.error('Failed to fetch data:', err);
         } finally {
@@ -241,10 +297,29 @@ const PlannerBoard = () => {
                 body: JSON.stringify({ status: newStatus })
             });
             if (res.ok) {
-                setTasks(tasks.map(t => t.id === taskId ? { ...t, status: newStatus } : t));
+                const updated = await res.json();
+                setTasks(tasks.map(t => t.id === taskId ? updated : t));
             }
         } catch (err) {
             console.error('Failed to update task status:', err);
+        }
+    };
+
+    const updateTask = async (taskId, data) => {
+        try {
+            const res = await authFetch(`/api/planner/${taskId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) {
+                const updated = await res.json();
+                setTasks(tasks.map(t => t.id === taskId ? updated : t));
+            }
+        } catch (err) {
+            console.error('Failed to update task:', err);
         }
     };
 
@@ -282,8 +357,14 @@ const PlannerBoard = () => {
         <div className="p-6 md:p-10 space-y-6 max-w-7xl mx-auto h-full flex flex-col">
             <TaskModal
                 isOpen={isAddModalOpen}
-                onClose={() => setIsAddModalOpen(false)}
+                onClose={() => {
+                    setIsAddModalOpen(false);
+                    setEditingTask(null);
+                }}
                 onAdd={addTask}
+                onUpdate={updateTask}
+                editingTask={editingTask}
+                categories={categories}
             />
 
             {/* Header */}
@@ -328,6 +409,7 @@ const PlannerBoard = () => {
                         onDelete={deleteTask}
                         onStatusChange={updateTaskStatus}
                         onAdd={() => openAddModal('todo')}
+                        onEdit={(t) => { setEditingTask(t); setIsAddModalOpen(true); }}
                     />
                     <Column
                         title="In Progress"
@@ -337,6 +419,7 @@ const PlannerBoard = () => {
                         onDelete={deleteTask}
                         onStatusChange={updateTaskStatus}
                         onAdd={() => openAddModal('in-progress')}
+                        onEdit={(t) => { setEditingTask(t); setIsAddModalOpen(true); }}
                     />
                     <Column
                         title="Done"
@@ -346,6 +429,7 @@ const PlannerBoard = () => {
                         onDelete={deleteTask}
                         onStatusChange={updateTaskStatus}
                         onAdd={() => openAddModal('done')}
+                        onEdit={(t) => { setEditingTask(t); setIsAddModalOpen(true); }}
                     />
                 </div>
             )}

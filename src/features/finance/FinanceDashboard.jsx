@@ -10,9 +10,11 @@ import {
     Trash2,
     X,
     CreditCard,
-    Edit3
+    Edit3,
+    Settings
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import CategoryManager from './CategoryManager';
 
 const StatCard = ({ label, amount, icon: Icon, trend, trendUp }) => (
     <div className="minimal-card p-6 flex flex-col justify-between h-full">
@@ -30,7 +32,7 @@ const StatCard = ({ label, amount, icon: Icon, trend, trendUp }) => (
     </div>
 );
 
-const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction }) => {
+const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction, categories }) => {
     const [formData, setFormData] = useState({
         title: '',
         amount: '',
@@ -38,6 +40,8 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
         category: 'General',
         date: new Date().toISOString().split('T')[0]
     });
+
+    const filteredCategories = categories.filter(c => c.type === formData.type);
 
     useEffect(() => {
         if (editingTransaction) {
@@ -120,6 +124,20 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
                     </div>
 
                     <div>
+                        <label className="block text-xs font-semibold text-secondary uppercase mb-1">Category</label>
+                        <select
+                            className="w-full bg-muted/30 border border-border rounded p-2 text-sm focus:ring-1 focus:ring-primary outline-none"
+                            value={formData.category}
+                            onChange={e => setFormData({ ...formData, category: e.target.value })}
+                        >
+                            <option value="General">General</option>
+                            {filteredCategories.map(cat => (
+                                <option key={cat.id} value={cat.name}>{cat.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div>
                         <label className="block text-xs font-semibold text-secondary uppercase mb-1">Date</label>
                         <input
                             type="date"
@@ -142,8 +160,10 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
 const FinanceDashboard = () => {
     const [transactions, setTransactions] = useState([]);
     const [debts, setDebts] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDebtModalOpen, setIsDebtModalOpen] = useState(false);
+    const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState(null);
     const [editingDebt, setEditingDebt] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -154,13 +174,15 @@ const FinanceDashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [txRes, debtRes] = await Promise.all([
+                const [txRes, debtRes, catRes] = await Promise.all([
                     authFetch('/api/finance'),
-                    authFetch('/api/debts')
+                    authFetch('/api/debts'),
+                    authFetch('/api/categories')
                 ]);
 
                 if (txRes.ok) setTransactions(await txRes.json());
                 if (debtRes.ok) setDebts(await debtRes.json());
+                if (catRes.ok) setCategories(await catRes.json());
             } catch (err) {
                 console.error('Failed to fetch finance data:', err);
             } finally {
@@ -216,6 +238,37 @@ const FinanceDashboard = () => {
             }
         } catch (err) {
             console.error('Failed to delete transaction:', err);
+        }
+    };
+
+    const addCategory = async (cat) => {
+        try {
+            const res = await authFetch('/api/categories', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(cat)
+            });
+
+            if (res.ok) {
+                const newCat = await res.json();
+                setCategories([...categories, newCat]);
+            }
+        } catch (err) {
+            console.error('Failed to add category:', err);
+        }
+    };
+
+    const deleteCategory = async (id) => {
+        try {
+            const res = await authFetch(`/api/categories/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (res.ok) {
+                setCategories(categories.filter(c => c.id !== id));
+            }
+        } catch (err) {
+            console.error('Failed to delete category:', err);
         }
     };
 
@@ -306,6 +359,15 @@ const FinanceDashboard = () => {
                 onAdd={addTransaction}
                 onUpdate={updateTransaction}
                 editingTransaction={editingTransaction}
+                categories={categories}
+            />
+
+            <CategoryManager
+                isOpen={isCategoryModalOpen}
+                onClose={() => setIsCategoryModalOpen(false)}
+                categories={categories}
+                onAdd={addCategory}
+                onDelete={deleteCategory}
             />
 
             {/* Header */}
@@ -313,16 +375,26 @@ const FinanceDashboard = () => {
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight text-foreground">Finance</h1>
                 </div>
-                <button
-                    onClick={() => {
-                        setEditingTransaction(null);
-                        setIsModalOpen(true);
-                    }}
-                    className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md font-medium transition-all text-sm shadow-sm"
-                >
-                    <Plus size={16} />
-                    <span>New Transaction</span>
-                </button>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => setIsCategoryModalOpen(true)}
+                        className="flex items-center gap-2 bg-muted hover:bg-muted/80 text-secondary hover:text-foreground px-4 py-2 rounded-md font-medium transition-all text-sm border border-border"
+                        title="Manage Categories"
+                    >
+                        <Settings size={16} />
+                        <span>Categorías</span>
+                    </button>
+                    <button
+                        onClick={() => {
+                            setEditingTransaction(null);
+                            setIsModalOpen(true);
+                        }}
+                        className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md font-medium transition-all text-sm shadow-sm"
+                    >
+                        <Plus size={16} />
+                        <span>New Transaction</span>
+                    </button>
+                </div>
             </div>
 
             {/* Stats Grid */}

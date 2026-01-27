@@ -44,11 +44,18 @@ const SidebarLink = ({ to, icon: Icon, label, onClick }) => {
 
 const LanguageSwitcher = () => {
   const switchLanguage = (lang) => {
+    // 1. Update cookie for persistence
+    document.cookie = `googtrans=/en/${lang}; path=/`;
+    document.cookie = `googtrans=/en/${lang}; path=/; domain=${window.location.hostname}`;
+
+    // 2. Trigger the select if it exists
     const trySwitch = (attempts) => {
       const select = document.querySelector('.goog-te-combo');
       if (select) {
         select.value = lang;
         select.dispatchEvent(new Event('change'));
+        // Reload as a fallback if the change doesn't trigger
+        if (attempts === 1) window.location.reload();
       } else if (attempts > 0) {
         setTimeout(() => trySwitch(attempts - 1), 500);
       }
@@ -121,7 +128,6 @@ const ProtectedLayout = () => {
           <div className="flex flex-col gap-2">
             <p className="text-[10px] font-bold text-secondary uppercase tracking-widest ml-1">Language</p>
             <LanguageSwitcher />
-            <div id="google_translate_element" className="hidden"></div>
           </div>
           <div className="flex items-center justify-between group">
             <div className="flex items-center gap-3 text-sm font-medium text-foreground/80">

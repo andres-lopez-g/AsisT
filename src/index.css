@@ -75,21 +75,33 @@ iframe.goog-te-banner-frame,
 
 body {
   top: 0px !important;
+  position: static !important;
 }
 
 #google_translate_element {
   display: none !important;
 }
 
-/* Prevent Google from adding empty space at the top */
+/* Hide Google's "Original text" popup */
+iframe[id^=":1.container"],
+iframe[id^=":2.container"],
 .skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Prevent Google from adding empty space at the top */
+.goog-te-banner {
   display: none !important;
 }
 
 /* Hide "original text" tooltip on hover */
 #goog-gt-tt,
-.goog-te-balloon-frame {
+.goog-te-balloon-frame,
+.goog-te-balloon-frame-active {
   display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
 }
 
 .goog-text-highlight {
