@@ -12,13 +12,14 @@ import HomeView from './features/home/HomeView';
 import FinanceDashboard from './features/finance/FinanceDashboard';
 import PlannerBoard from './features/planner/PlannerBoard';
 
-const SidebarLink = ({ to, icon: Icon, label }) => {
+const SidebarLink = ({ to, icon: Icon, label, onClick }) => {
   const location = useLocation();
   const isActive = location.pathname.startsWith(to);
 
   return (
     <Link
       to={to}
+      onClick={onClick}
       className={`
         flex items-center gap-3 px-3 py-2 rounded-md transition-colors duration-200 text-sm font-medium
         ${isActive
@@ -36,26 +37,41 @@ const SidebarLink = ({ to, icon: Icon, label }) => {
 
 const ProtectedLayout = () => {
   const { user, logout } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
   return (
-    <div className="flex h-screen bg-background text-foreground overflow-hidden font-sans">
+    <div className="flex h-screen bg-background text-foreground overflow-hidden font-sans relative">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm animate-in fade-in duration-300"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className="w-64 bg-muted border-r border-border flex flex-col hidden md:flex transition-all">
-        <div className="p-4 h-14 border-b border-border flex items-center">
-          <Link to="/" className="flex items-center gap-2 text-primary font-semibold hover:opacity-80 transition-opacity">
+      <div className={`
+        fixed inset-y-0 left-0 z-50 w-64 bg-muted border-r border-border flex flex-col transition-transform duration-300 md:translate-x-0 md:static
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+        <div className="p-4 h-14 border-b border-border flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2 text-primary font-semibold hover:opacity-80 transition-opacity" onClick={() => setSidebarOpen(false)}>
             <img src="/favicon.png" alt="AsisT Logo" className="w-8 h-8 rounded-md shadow-sm" />
             <span className="text-lg tracking-tight">AsisT</span>
           </Link>
+          <button onClick={() => setSidebarOpen(false)} className="md:hidden text-secondary p-1">
+            <X size={20} />
+          </button>
         </div>
 
         <nav className="flex-1 p-2 space-y-0.5">
-          <SidebarLink to="/home" icon={LayoutDashboard} label="Home" />
-          <SidebarLink to="/finance" icon={CreditCard} label="Finance" />
-          <SidebarLink to="/planner" icon={Calendar} label="Planner" />
+          <SidebarLink to="/home" icon={LayoutDashboard} label="Home" onClick={() => setSidebarOpen(false)} />
+          <SidebarLink to="/finance" icon={CreditCard} label="Finance" onClick={() => setSidebarOpen(false)} />
+          <SidebarLink to="/planner" icon={Calendar} label="Planner" onClick={() => setSidebarOpen(false)} />
         </nav>
 
         <div className="p-4 border-t border-border">
@@ -73,24 +89,29 @@ const ProtectedLayout = () => {
         </div>
       </div>
 
-      {/* Mobile Header */}
-      <div className="md:hidden p-4 border-b border-border flex items-center justify-between bg-background">
-        <Link to="/home" className="flex items-center gap-2 font-semibold text-primary">
-          <img src="/favicon.png" alt="AsisT Logo" className="w-6 h-6 rounded" />
-          <span>AsisT</span>
-        </Link>
-        <div className="flex items-center gap-4">
-          <button onClick={logout} className="text-secondary hover:text-red-500 transition-colors md:hidden">
-            <LogOut size={18} />
-          </button>
-          <button className="text-foreground"><Menu size={20} /></button>
+      {/* Main Container */}
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        {/* Mobile Header */}
+        <div className="md:hidden p-4 border-b border-border flex items-center justify-between bg-background z-30">
+          <Link to="/home" className="flex items-center gap-2 font-semibold text-primary">
+            <img src="/favicon.png" alt="AsisT Logo" className="w-6 h-6 rounded" />
+            <span>AsisT</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <button onClick={logout} className="text-secondary hover:text-red-500 p-2">
+              <LogOut size={18} />
+            </button>
+            <button onClick={() => setSidebarOpen(true)} className="text-foreground p-2">
+              <Menu size={20} />
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-auto bg-background">
-        <Outlet />
-      </main>
+        {/* Main Content */}
+        <main className="flex-1 overflow-auto bg-background">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

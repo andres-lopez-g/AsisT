@@ -1,49 +1,66 @@
-# Nombre del Proyecto
+# AsisT - Smart Personal Assistant
 
-Una breve descripción de lo que hace este proyecto y su propósito.
+AsisT is a minimalist yet powerful personal management platform designed to help you organize your finances and productivity in one place. Built with a focus on speed, aesthetics, and user experience.
 
-## Requisitos Previos
+![AsisT Logo](/public/favicon.png)
 
-Antes de comenzar, asegúrate de tener instalados los siguientes requisitos:
+## 🚀 Features
 
-* [Requisito 1, ej: Node.js v14+]
-* [Requisito 2, ej: Docker]
+### 1. Unified Home Dashboard
+- **Personalized Welcome**: Start your day with a quick overview of your status.
+- **Financial Pulse**: Immediate balance analysis (Income vs. Expenses).
+- **Next Tasks Widget**: Keep track of your most urgent pending items without leaving the home screen.
 
-## Instalación
+### 2. Intelligent Finance Manager
+- **Transaction Tracking**: Log income and expenses with categories and dates.
+- **Visual Analytics**: Interactive area charts showing your historical balance over the last 7 days.
+- **Statistics Cards**: Quick view of total balance, total income, and total expenses.
 
-Sigue estos pasos para configurar el entorno de desarrollo:
+### 3. Productivity Planner
+- **Kanban Board**: Manage tasks through "To Do", "In Progress", and "Done" states.
+- **Priority System**: Categorize tasks by priority (High, Medium, Low) with visual color codes.
+- **Responsive Layout**: Designed to work perfectly on both desktop and mobile devices.
 
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/usuario/proyecto.git
-   ```
-2. Entra en el directorio del proyecto:
-   ```bash
-   cd proyecto
-   ```
-3. Instala las dependencias:
+### 4. Robust Security
+- **Authentication**: Secure JWT-based login and registration system.
+- **Protection**: Integrated Rate Limiting to prevent brute-force attacks.
+- **Privacy**: Environment variables protection and secure database connections via SSL.
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React 19, Vite, Tailwind CSS, Lucide icons, Recharts, Framer Motion.
+- **Backend**: Node.js, Express, JWT, Bcryptjs.
+- **Database**: PostgreSQL (Supabase/Vercel Postgres compatible).
+- **Deployment**: Optimized for Vercel.
+
+## 📦 Getting Started
+
+### Prerequisites
+- Node.js installed.
+- A PostgreSQL database (Local or Cloud).
+
+### Installation
+1. Clone the repository.
+2. Install dependencies:
    ```bash
    npm install
    ```
+3. Create a `.env` file based on `.env.example`.
+4. Run the database setup:
+   ```bash
+   npm run db:setup
+   ```
+5. Start development:
+   ```bash
+   npm start
+   ```
 
-## Uso
+## 🌐 Deployment
 
-Para ejecutar el proyecto localmente:
+This project is configured for one-click deployment to **Vercel**.
+- **Backend**: Runs as Serverless Functions.
+- **Frontend**: Served as a high-performance static site.
+- **Configuration**: See `vercel.json` for details.
 
-```bash
-npm start
-```
-
-## Características
-
-* Característica 1
-* Característica 2
-* Característica 3
-
-## Contribución
-
-Las contribuciones son bienvenidas. Por favor, abre un *issue* primero para discutir lo que te gustaría cambiar.
-
-## Licencia
-
-Este proyecto está bajo la Licencia [MIT](https://choosealicense.com/licenses/mit/).
+---
+*Built with ❤️ for better productivity.*

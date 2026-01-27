@@ -188,19 +188,31 @@ const FinanceDashboard = () => {
         return { income, expenses, balance };
     }, [transactions]);
 
-    // Simple Chart Data
+    // Calculate Chart Data based on actual transactions
     const chartData = useMemo(() => {
         const data = [];
+        const days = 7;
         const today = new Date();
-        for (let i = 6; i >= 0; i--) {
+
+        for (let i = days - 1; i >= 0; i--) {
             const d = new Date(today);
             d.setDate(d.getDate() - i);
             const dateStr = d.toISOString().split('T')[0];
             const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
-            data.push({ name: dayName, value: Math.max(0, stats.balance * 0.5 + Math.random() * 500) });
+
+            // Sum balance up to this date
+            const balanceAtDate = transactions
+                .filter(t => new Date(t.date) <= d)
+                .reduce((acc, t) => t.type === 'income' ? acc + parseFloat(t.amount) : acc - parseFloat(t.amount), 0);
+
+            data.push({
+                name: dayName,
+                value: balanceAtDate,
+                date: dateStr
+            });
         }
         return data;
-    }, [stats.balance]);
+    }, [transactions]);
 
 
     return (
@@ -246,7 +258,7 @@ const FinanceDashboard = () => {
                     <h2 className="text-sm font-semibold text-secondary uppercase tracking-wider mb-6">Overview</h2>
                     <div className="h-[300px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={chartData}>
+                            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
                                 <defs>
                                     <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="5%" stopColor="#2563eb" stopOpacity={0.1} />
@@ -254,10 +266,24 @@ const FinanceDashboard = () => {
                                     </linearGradient>
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} dy={10} />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} tickFormatter={(value) => `$${value}`} />
-                                <Tooltip contentStyle={{ backgroundColor: '#fff', borderColor: '#e2e8f0', borderRadius: '6px' }} />
-                                <Area type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={2} fillOpacity={1} fill="url(#colorValue)" />
+                                <XAxis
+                                    dataKey="name"
+                                    axisLine={false}
+                                    tickLine={false}
+                                    tick={{ fill: '#64748b', fontSize: 10 }}
+                                    dy={10}
+                                />
+                                <YAxis
+                                    axisLine={false}
+                                    tickLine={false}
+                                    tick={{ fill: '#64748b', fontSize: 10 }}
+                                    tickFormatter={(value) => `$${Intl.NumberFormat('en', { notation: 'compact' }).format(value)}`}
+                                />
+                                <Tooltip
+                                    contentStyle={{ backgroundColor: '#fff', borderColor: '#e2e8f0', borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                                    formatter={(value) => [`$${value.toLocaleString()}`, 'Balance']}
+                                />
+                                <Area type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={3} fillOpacity={1} fill="url(#colorValue)" />
                             </AreaChart>
                         </ResponsiveContainer>
                     </div>
