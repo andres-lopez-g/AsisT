@@ -50,9 +50,9 @@ const HomeView = () => {
             {/* Welcome Section */}
             <div className="space-y-2">
                 <h1 className="text-4xl font-bold tracking-tight text-foreground">
-                    Hola, {user?.name.split(' ')[0]} 👋
+                    Hello, {user?.name.split(' ')[0]} 👋
                 </h1>
-                <p className="text-secondary text-lg">Aquí tienes un resumen de tu actividad para hoy.</p>
+                <p className="text-secondary text-lg">Here's a quick summary of your activity for today.</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -61,8 +61,8 @@ const HomeView = () => {
                     <div className="minimal-card p-6 flex flex-col justify-between bg-primary/5 border-primary/10">
                         <div className="flex justify-between items-start">
                             <div>
-                                <p className="text-secondary text-sm font-medium mb-1">Balance Total</p>
-                                <h3 className="text-4xl font-bold text-primary tracking-tight">
+                                <p className="text-secondary text-sm font-medium mb-1">Total Balance</p>
+                                <h3 className="text-3xl md:text-4xl font-bold text-primary tracking-tight">
                                     ${finances.balance.toLocaleString()}
                                 </h3>
                             </div>
@@ -83,10 +83,10 @@ const HomeView = () => {
                     </div>
 
                     <div className="minimal-card p-6 flex flex-col justify-center gap-4 bg-muted/20">
-                        <h4 className="font-semibold text-foreground">Estado Financiero</h4>
+                        <h4 className="font-semibold text-foreground">Financial Status</h4>
                         <div className="space-y-3">
                             <div className="flex justify-between items-center text-sm">
-                                <span className="text-secondary">Ingresos Mensuales</span>
+                                <span className="text-secondary">Monthly Income</span>
                                 <span className="font-medium text-foreground">${finances.income.toLocaleString()}</span>
                             </div>
                             <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
@@ -96,7 +96,7 @@ const HomeView = () => {
                                 />
                             </div>
                             <div className="flex justify-between items-center text-sm">
-                                <span className="text-secondary">Gastos Mensuales</span>
+                                <span className="text-secondary">Monthly Expenses</span>
                                 <span className="font-medium text-foreground">${finances.expenses.toLocaleString()}</span>
                             </div>
                             <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
@@ -114,10 +114,10 @@ const HomeView = () => {
                     <div className="flex items-center justify-between">
                         <h4 className="font-semibold text-foreground flex items-center gap-2">
                             <Calendar size={18} className="text-primary" />
-                            Próximas Tareas
+                            Next Tasks
                         </h4>
                         <Link to="/planner" className="text-primary hover:underline text-xs font-medium flex items-center gap-1">
-                            Ver todo <ArrowRight size={12} />
+                            View all <ArrowRight size={12} />
                         </Link>
                     </div>
 
@@ -147,7 +147,7 @@ const HomeView = () => {
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center text-center p-6 border border-dashed border-border rounded-lg">
                                 <CheckCircle2 size={32} className="text-muted mb-2" />
-                                <p className="text-xs text-secondary italic">¡Todo al día!</p>
+                                <p className="text-xs text-secondary italic">Everything's up to date!</p>
                             </div>
                         )}
                     </div>
@@ -155,17 +155,17 @@ const HomeView = () => {
             </div>
 
             {/* Quick Actions / Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <Link to="/finance" className="group">
                     <div className="minimal-card p-6 hover:border-primary/30 transition-all">
-                        <h5 className="font-bold text-foreground group-hover:text-primary transition-colors">Análisis Financiero Detallado</h5>
-                        <p className="text-secondary text-sm mt-1">Revisa tus gráficos de ingresos y gastos, y gestiona tus movimientos.</p>
+                        <h5 className="font-bold text-foreground group-hover:text-primary transition-colors">Detailed Financial Analysis</h5>
+                        <p className="text-secondary text-sm mt-1">Review your income and expense charts, and manage your transactions.</p>
                     </div>
                 </Link>
                 <Link to="/planner" className="group">
                     <div className="minimal-card p-6 hover:border-primary/30 transition-all">
-                        <h5 className="font-bold text-foreground group-hover:text-primary transition-colors">Gestión de Tareas</h5>
-                        <p className="text-secondary text-sm mt-1">Organiza tu flujo de trabajo en el tablero Kanban y completa tus objetivos.</p>
+                        <h5 className="font-bold text-foreground group-hover:text-primary transition-colors">Task Management</h5>
+                        <p className="text-secondary text-sm mt-1">Organize your workflow in the Kanban board and complete your objectives.</p>
                     </div>
                 </Link>
             </div>
