@@ -39,7 +39,7 @@ const RegisterPage = () => {
                         <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-white mb-4 shadow-xl shadow-primary/5 p-2 border border-border/50">
                             <img src="/favicon.png" alt="Logo" className="w-full h-full object-contain" />
                         </div>
-                        <h1 className="text-2xl font-bold mb-2 text-foreground">Create Account</h1>
+                        <h1 className="text-2xl font-bold mb-2 text-foreground">Create your AsisT account</h1>
                         <p className="text-secondary text-sm">Join the assistant platform today</p>
                     </div>
 

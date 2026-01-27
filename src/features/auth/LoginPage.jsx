@@ -36,12 +36,12 @@ const LoginPage = () => {
             <ParticlesBackground />
 
             <div className="w-full max-w-sm relative z-10">
-                <div className="minimal-card p-8 md:p-10 bg-white/80 backdrop-blur-sm">
+                <div className="minimal-card p-8 md:p-10 bg-gray/80 backdrop-blur-sm">
                     <div className="text-center mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-white mb-4 shadow-xl shadow-primary/5 p-2 border border-border/50">
                             <img src="/favicon.png" alt="Logo" className="w-full h-full object-contain" />
                         </div>
-                        <h1 className="text-2xl font-bold mb-2 text-foreground">Sign In</h1>
+                        <h1 className="text-2xl font-bold mb-2 text-foreground">Sign into AsisT</h1>
                         <p className="text-secondary text-sm">Welcome back to your assistant</p>
                     </div>
 
