@@ -73,8 +73,8 @@ const LandingPage = () => {
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-[1.1]">
-                        PRECISION <br className="hidden md:block" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-secondary">OBSERVATORY</span>
+                        AsisT <br className="hidden md:block" />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-secondary">FinApp</span>
                     </h1>
 
                     <p className="text-lg md:text-xl text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
