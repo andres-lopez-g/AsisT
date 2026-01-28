@@ -59,14 +59,14 @@ const LoginPage = () => {
                         <div className="absolute bottom-0 left-0 w-1 h-1 border-b border-l border-primary"></div>
                         <div className="absolute bottom-0 right-0 w-1 h-1 border-b border-r border-primary"></div>
                     </div>
-                    <h1 className="text-3xl font-black uppercase tracking-tighter text-primary italic">Access_Control</h1>
-                    <p className="mono text-[10px] text-secondary uppercase tracking-[0.3em]">Identity_Verification_Protocol</p>
+                    <h1 className="text-3xl font-black uppercase tracking-tighter text-primary italic">Login</h1>
+                    <p className="mono text-[10px] text-secondary uppercase tracking-[0.3em]">Sign in to your account</p>
                 </div>
 
                 <div className="tech-card p-8 bg-background/95 backdrop-blur-sm border-primary/10 shadow-[0px_0px_20px_rgba(0,0,0,0.05)]">
                     {/* Status Display */}
                     <div className="mb-8 flex items-center justify-between border-b border-border/40 pb-2">
-                        <span className="mono text-[9px] font-bold text-secondary uppercase tracking-widest">System_Status</span>
+                        <span className="mono text-[9px] font-bold text-secondary uppercase tracking-widest">Status</span>
                         <div className="flex items-center gap-1.5">
                             <span className="relative flex h-2 w-2">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -92,7 +92,7 @@ const LoginPage = () => {
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-2">
-                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Identity_String (Email)</label>
+                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Email</label>
                             <div className="relative group">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-accent transition-colors">
                                     <Mail size={14} />
@@ -102,14 +102,14 @@ const LoginPage = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-muted/30 border border-border rounded-none pl-10 pr-4 py-3 text-sm text-primary placeholder:text-secondary/30 focus:border-accent outline-none mono transition-all"
-                                    placeholder="USER@DOMAIN.COM"
+                                    placeholder="user@example.com"
                                     required
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Security_Key (Password)</label>
+                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Password</label>
                             <div className="relative group">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-accent transition-colors">
                                     <Lock size={14} />
@@ -134,7 +134,7 @@ const LoginPage = () => {
                                 <Loader2 className="animate-spin" size={14} />
                             ) : (
                                 <>
-                                    <span>Authenticate</span>
+                                    <span>Sign In</span>
                                     <ArrowRight size={14} />
                                 </>
                             )}
@@ -142,7 +142,7 @@ const LoginPage = () => {
 
                         <div className="text-center pt-2">
                             <Link to="/register" className="mono text-[9px] text-secondary hover:text-accent uppercase tracking-widest hover:underline decoration-1 underline-offset-4 transition-all">
-                                Initialize_New_Identity &rarr;
+                                Create new account &rarr;
                             </Link>
                         </div>
                     </form>
@@ -150,7 +150,7 @@ const LoginPage = () => {
 
                 {/* Footer Code */}
                 <div className="mt-8 text-center opacity-30">
-                    <p className="mono text-[8px] uppercase tracking-[0.5em]">System_Ref_v2.0.4</p>
+                    <p className="mono text-[8px] uppercase tracking-[0.5em]">Version 2.0.4</p>
                 </div>
             </div>
         </div>

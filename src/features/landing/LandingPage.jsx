@@ -55,7 +55,7 @@ const LandingPage = () => {
                         <div className="w-8 h-8 bg-primary text-white flex items-center justify-center font-bold rounded-sm">
                             <img src="/favicon.png" alt="Logo" className="w-5 h-5 filter invert contrast-125" />
                         </div>
-                        <span className="font-black text-lg tracking-tighter uppercase italic">AsisT <span className="text-secondary font-normal not-italic text-xs tracking-widest ml-2 hidden sm:inline-block opacity-60">| SYSTEM_ACCESS</span></span>
+                        <span className="font-black text-lg tracking-tighter uppercase italic">AsisT <span className="text-secondary font-normal not-italic text-xs tracking-widest ml-2 hidden sm:inline-block opacity-60">| Personal Assistant</span></span>
                     </div>
 
                     <div className="flex items-center gap-6">
@@ -65,7 +65,7 @@ const LandingPage = () => {
                             [ Login ]
                         </Link>
                         <Link to="/register" className="bg-primary hover:bg-accent text-white px-5 py-2 text-xs font-bold uppercase tracking-widest transition-all hover:shadow-lg hover:shadow-accent/20 flex items-center gap-2 group">
-                            <span>Initialize</span>
+                            <span>Sign Up</span>
                             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </Link>
                     </div>
@@ -80,7 +80,7 @@ const LandingPage = () => {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
                         </span>
-                        <span className="mono text-[9px] font-bold text-accent uppercase tracking-widest">System Online v2.0</span>
+                        <span className="mono text-[9px] font-bold text-accent uppercase tracking-widest">Version 2.0 Now Available</span>
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-[1.1]">
@@ -89,16 +89,16 @@ const LandingPage = () => {
                     </h1>
 
                     <p className="text-lg md:text-xl text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
-                        Advanced life-management orchestration for the modern operator.
-                        Financial telemetry, objective tracking, and operational analytics in one unified interface.
+                        Your complete personal assistant for modern life.
+                        Track your finances, manage your tasks, and analyze your progress in one simple interface.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <Link to="/register" className="w-full sm:w-auto px-8 py-4 bg-primary text-white font-bold uppercase tracking-widest hover:bg-accent transition-all hover:scale-105 shadow-xl duration-300">
-                            Start Operations
+                            Get Started
                         </Link>
                         <a href="#features" className="w-full sm:w-auto px-8 py-4 border border-border text-primary font-bold uppercase tracking-widest hover:bg-muted transition-all">
-                            View Capabilities
+                            View Features
                         </a>
                     </div>
                 </div>
@@ -108,34 +108,34 @@ const LandingPage = () => {
             <section id="features" className="py-20 px-6 bg-muted/30 border-y border-border/40 relative z-10">
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-16">
-                        <span className="mono text-[10px] font-bold text-accent uppercase tracking-widest block mb-2">System Modules</span>
-                        <h2 className="text-3xl font-black tracking-tight uppercase">Operational Capabilities</h2>
+                        <span className="mono text-[10px] font-bold text-accent uppercase tracking-widest block mb-2">Main Features</span>
+                        <h2 className="text-3xl font-black tracking-tight uppercase">What You Can Do</h2>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <FeatureCard
                             icon={LayoutDashboard}
-                            title="Command Center"
-                            code="MOD_DASH_01"
-                            description="Centralized telemetry of all user activities. Real-time updates on tasks, events, and system notifications."
+                            title="Dashboard"
+                            code="FEATURE_01"
+                            description="See all your information in one place. Get real-time updates on your tasks, events, and important notifications."
                         />
                         <FeatureCard
                             icon={CreditCard}
-                            title="Financial Core"
-                            code="MOD_FIN_02"
-                            description="Precise capital tracking. Monitor cashflow, manage debt vectors, and analyze spending patterns with granular control."
+                            title="Finance Manager"
+                            code="FEATURE_02"
+                            description="Track your money accurately. Monitor your income and expenses, manage your debts, and understand your spending habits."
                         />
                         <FeatureCard
                             icon={TrendingUp}
-                            title="Vector Analysis"
-                            code="MOD_ANL_03"
-                            description="Visual analytics engine. Transform raw data into actionable intelligence through advanced charting and trend projection."
+                            title="Analytics"
+                            code="FEATURE_03"
+                            description="Visualize your data clearly. See your progress with interactive charts and identify trends in your finances."
                         />
                         <FeatureCard
                             icon={Calendar}
-                            title="Objective Planner"
-                            code="MOD_PLN_04"
-                            description="Strategic timeline management. Kanban-style execution boards for short-term tasks and long-term directives."
+                            title="Task Planner"
+                            code="FEATURE_04"
+                            description="Organize your tasks efficiently. Use our Kanban board to manage your daily tasks and long-term goals."
                         />
                     </div>
                 </div>
@@ -146,7 +146,7 @@ const LandingPage = () => {
                 <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center md:justify-between gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
                     <div className="flex items-center gap-2">
                         <ShieldCheck size={20} />
-                        <span className="mono text-xs font-bold uppercase tracking-widest">Encrypted_Vault</span>
+                        <span className="mono text-xs font-bold uppercase tracking-widest">Secure & Encrypted</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <Activity size={20} />
@@ -154,7 +154,7 @@ const LandingPage = () => {
                     </div>
                     <div className="flex items-center gap-2">
                         <Globe size={20} />
-                        <span className="mono text-xs font-bold uppercase tracking-widest">Global_Access</span>
+                        <span className="mono text-xs font-bold uppercase tracking-widest">Access Anywhere</span>
                     </div>
                 </div>
             </section>
@@ -164,14 +164,14 @@ const LandingPage = () => {
                 <div className="absolute inset-0 bg-primary/5 skew-y-3 scale-110 pointer-events-none"></div>
                 <div className="max-w-4xl mx-auto text-center relative">
                     <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-8 uppercase">
-                        Ready to Optimize?
+                        Ready to Get Started?
                     </h2>
                     <p className="text-secondary text-lg mb-10 max-w-xl mx-auto">
-                        Join the network of high-performance operators using AsisT to manage their life infrastructure.
+                        Join thousands of users who are organizing their finances and tasks with AsisT.
                     </p>
                     <div className="inline-block p-1 border border-primary/20 bg-background/50 backdrop-blur-sm rounded-sm">
                         <Link to="/register" className="block px-12 py-5 bg-primary text-white font-bold uppercase tracking-[0.2em] hover:bg-accent transition-all hover:shadow-[0_0_30px_rgba(0,0,0,0.2)]">
-                            Initialize System Access
+                            Create Your Account
                         </Link>
                     </div>
                 </div>
@@ -182,10 +182,10 @@ const LandingPage = () => {
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="flex items-center gap-2 opacity-50">
                         <img src="/favicon.png" alt="Logo" className="w-4 h-4" />
-                        <span className="mono text-[10px] font-bold uppercase tracking-widest">AsisT // Fusion Observatory</span>
+                        <span className="mono text-[10px] font-bold uppercase tracking-widest">AsisT - Personal Assistant</span>
                     </div>
                     <div className="mono text-[10px] text-secondary uppercase tracking-widest">
-                        System_Ver 2.5.0 // © 2026
+                        Version 2.5.0 // © 2026
                     </div>
                 </div>
             </footer>

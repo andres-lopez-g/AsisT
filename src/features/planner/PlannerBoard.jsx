@@ -93,7 +93,7 @@ const Column = ({ title, tasks, icon: Icon, colorClass, onDelete, onStatusChange
                 </div>
                 <div className="space-y-0.5">
                     <h3 className="text-xs font-black uppercase italic tracking-widest text-primary">{title}</h3>
-                    <p className="mono text-[8px] text-secondary font-bold tracking-[0.2em]">{tasks.length} OBJECTIVES_LOADED</p>
+                    <p className="mono text-[8px] text-secondary font-bold tracking-[0.2em]">{tasks.length} TASKS</p>
                 </div>
             </div>
             <button
