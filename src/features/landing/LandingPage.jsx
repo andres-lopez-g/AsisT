@@ -1,8 +1,9 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Calendar, CreditCard, TrendingUp, ArrowRight, ShieldCheck, Activity, Globe } from 'lucide-react';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 import ParticlesBackground from '../auth/ParticlesBackground';
+import { useAuth } from '../../context/AuthContext';
 
 const FeatureCard = ({ icon: Icon, title, description, code }) => (
     <div className="tech-card p-6 group relative overflow-hidden bg-background/80 hover:bg-background/95 transition-all">
@@ -29,6 +30,16 @@ const FeatureCard = ({ icon: Icon, title, description, code }) => (
 );
 
 const LandingPage = () => {
+    const { user } = useAuth();
+    const navigate = useNavigate();
+
+    // Redirect to dashboard if user is already logged in
+    useEffect(() => {
+        if (user) {
+            navigate('/home');
+        }
+    }, [user, navigate]);
+
     return (
         <div className="min-h-screen bg-background text-foreground font-sans selection:bg-accent/20 overflow-x-hidden">
             {/* Background FX */}

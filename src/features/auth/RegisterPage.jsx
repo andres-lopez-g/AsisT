@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { UserPlus, Mail, Lock, User, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
@@ -11,8 +11,15 @@ const RegisterPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { register } = useAuth();
+    const { register, user } = useAuth();
     const navigate = useNavigate();
+
+    // Redirect to dashboard if user is already logged in
+    useEffect(() => {
+        if (user) {
+            navigate('/home');
+        }
+    }, [user, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

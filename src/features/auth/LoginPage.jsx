@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Lock, Mail, ArrowRight, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
@@ -10,11 +10,18 @@ const LoginPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { login } = useAuth();
+    const { login, user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
     const message = location.state?.message;
+
+    // Redirect to dashboard if user is already logged in
+    useEffect(() => {
+        if (user) {
+            navigate('/home');
+        }
+    }, [user, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -23,7 +30,7 @@ const LoginPage = () => {
 
         try {
             await login(email, password);
-            navigate('/');
+            navigate('/home');
         } catch (err) {
             setError(err.message || 'Invalid credentials');
         } finally {
