@@ -57,16 +57,16 @@ const RegisterPage = () => {
                         <div className="absolute bottom-0 left-0 w-1 h-1 border-b border-l border-primary"></div>
                         <div className="absolute bottom-0 right-0 w-1 h-1 border-b border-r border-primary"></div>
                     </div>
-                    <h1 className="text-3xl font-black uppercase tracking-tighter text-primary italic">Initialization</h1>
-                    <p className="mono text-[10px] text-secondary uppercase tracking-[0.3em]">New_Operative_Registration</p>
+                    <h1 className="text-3xl font-black uppercase tracking-tighter text-primary italic">Sign Up</h1>
+                    <p className="mono text-[10px] text-secondary uppercase tracking-[0.3em]">Create your new account</p>
                 </div>
 
                 <div className="tech-card p-8 bg-background/95 backdrop-blur-sm border-primary/10 shadow-[0px_0px_20px_rgba(0,0,0,0.05)]">
                     {/* Status Display */}
                     <div className="mb-8 flex items-center justify-between border-b border-border/40 pb-2">
-                        <span className="mono text-[9px] font-bold text-secondary uppercase tracking-widest">Protocol</span>
+                        <span className="mono text-[9px] font-bold text-secondary uppercase tracking-widest">Registration</span>
                         <div className="flex items-center gap-1.5">
-                            <span className="mono text-[9px] font-bold text-accent uppercase tracking-widest">Register_Sequence_01</span>
+                            <span className="mono text-[9px] font-bold text-accent uppercase tracking-widest">Step 1 of 1</span>
                         </div>
                     </div>
 
@@ -79,7 +79,7 @@ const RegisterPage = () => {
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-2">
-                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Operative_Designation (Name)</label>
+                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Full Name</label>
                             <div className="relative group">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-accent transition-colors">
                                     <User size={14} />
@@ -96,7 +96,7 @@ const RegisterPage = () => {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Comm_Link (Email)</label>
+                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Email</label>
                             <div className="relative group">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-accent transition-colors">
                                     <Mail size={14} />
@@ -106,14 +106,14 @@ const RegisterPage = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-muted/30 border border-border rounded-none pl-10 pr-4 py-3 text-sm text-primary placeholder:text-secondary/30 focus:border-accent outline-none mono transition-all"
-                                    placeholder="USER@DOMAIN.COM"
+                                    placeholder="USER@EXAMPLE.COM"
                                     required
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Security_Key (Password)</label>
+                            <label className="mono text-[9px] font-bold text-secondary uppercase tracking-widest ml-1">Password</label>
                             <div className="relative group">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-accent transition-colors">
                                     <Lock size={14} />
@@ -139,7 +139,7 @@ const RegisterPage = () => {
                                 <Loader2 className="animate-spin" size={14} />
                             ) : (
                                 <>
-                                    <span>Initialize</span>
+                                    <span>Create Account</span>
                                     <ArrowRight size={14} />
                                 </>
                             )}
@@ -147,7 +147,7 @@ const RegisterPage = () => {
 
                         <div className="text-center pt-2">
                             <Link to="/login" className="mono text-[9px] text-secondary hover:text-accent uppercase tracking-widest hover:underline decoration-1 underline-offset-4 transition-all">
-                                Return_to_Access_Control &rarr;
+                                Already have an account? &rarr;
                             </Link>
                         </div>
                     </form>
@@ -155,7 +155,7 @@ const RegisterPage = () => {
 
                 {/* Footer Code */}
                 <div className="mt-8 text-center opacity-30">
-                    <p className="mono text-[8px] uppercase tracking-[0.5em]">System_Ref_v2.0.4</p>
+                    <p className="mono text-[8px] uppercase tracking-[0.5em]">Version 2.0.4</p>
                 </div>
             </div>
         </div>

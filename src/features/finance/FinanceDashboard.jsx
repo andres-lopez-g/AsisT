@@ -80,8 +80,8 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
             <div className="bg-background border-2 border-primary shadow-[10px_10px_0px_rgba(0,0,0,0.1)] w-full max-w-md p-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
                 <div className="flex justify-between items-start mb-8 pb-4 border-b border-border/40">
                     <div className="space-y-1">
-                        <p className="mono text-[10px] font-bold text-accent uppercase tracking-[0.2em]">Transaction Protocol</p>
-                        <h2 className="text-2xl font-black tracking-tight italic uppercase">{editingTransaction ? 'Modify_Entry' : 'New_Entry'}</h2>
+                        <p className="mono text-[10px] font-bold text-accent uppercase tracking-[0.2em]">Transaction Form</p>
+                        <h2 className="text-2xl font-black tracking-tight italic uppercase">{editingTransaction ? 'Edit Transaction' : 'New Transaction'}</h2>
                     </div>
                     <button onClick={onClose} className="text-secondary hover:text-primary transition-colors border border-border p-1">
                         <X size={18} />
@@ -90,7 +90,7 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
-                        <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Description_Label</label>
+                        <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Description</label>
                         <input
                             required
                             className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono"
@@ -102,7 +102,7 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Magnitude</label>
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Amount</label>
                             <input
                                 required
                                 type="number"
@@ -114,7 +114,7 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Vector_Type</label>
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Type</label>
                             <select
                                 className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono appearance-none cursor-pointer"
                                 value={formData.type}
@@ -128,7 +128,7 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Category_Class</label>
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Category</label>
                             <select
                                 className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono appearance-none cursor-pointer"
                                 value={formData.category}
@@ -141,7 +141,7 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
                             </select>
                         </div>
                         <div className="space-y-2">
-                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Timestamp</label>
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Date</label>
                             <input
                                 type="date"
                                 required
@@ -154,7 +154,7 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
 
                     <div className="pt-4">
                         <button type="submit" className="w-full bg-primary text-white py-4 font-black text-sm uppercase italic tracking-widest hover:bg-accent transition-all">
-                            {editingTransaction ? 'Execute_Update' : 'Commit_Transaction'}
+                            {editingTransaction ? 'Update Transaction' : 'Save Transaction'}
                         </button>
                     </div>
                 </form>
@@ -398,7 +398,7 @@ const FinanceDashboard = () => {
                         className="flex items-center gap-2 mono text-[10px] font-bold text-white bg-primary uppercase tracking-[0.2em] px-6 py-3 hover:bg-accent transition-colors shadow-[4px_4px_0px_rgba(0,0,0,0.1)]"
                     >
                         <Plus size={14} />
-                        <span>New_Entry</span>
+                        <span>Add Transaction</span>
                     </button>
                 </div>
             </div>
@@ -407,21 +407,21 @@ const FinanceDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-px bg-border/40 border border-border/40">
                 <div className="bg-background">
                     <StatCard
-                        label="Net_Liquidity"
+                        label="Balance"
                         amount={`$${stats.balance.toFixed(2)}`}
                         icon={DollarSign}
                     />
                 </div>
                 <div className="bg-background">
                     <StatCard
-                        label="Positive_Flux"
+                        label="Total Income"
                         amount={`$${stats.income.toFixed(2)}`}
                         icon={ArrowUpRight}
                     />
                 </div>
                 <div className="bg-background">
                     <StatCard
-                        label="Negative_Flux"
+                        label="Total Expenses"
                         amount={`$${stats.expenses.toFixed(2)}`}
                         icon={ArrowDownLeft}
                     />
