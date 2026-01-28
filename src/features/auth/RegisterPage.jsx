@@ -17,7 +17,7 @@ const RegisterPage = () => {
     // Redirect to dashboard if user is already logged in
     useEffect(() => {
         if (user) {
-            navigate('/home');
+            navigate('/home', { replace: true });
         }
     }, [user, navigate]);
 
