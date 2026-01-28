@@ -102,7 +102,7 @@ const LoginPage = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-muted/30 border border-border rounded-none pl-10 pr-4 py-3 text-sm text-primary placeholder:text-secondary/30 focus:border-accent outline-none mono transition-all"
-                                    placeholder="user@example.com"
+                                    placeholder="USER@EXAMPLE.COM"
                                     required
                                 />
                             </div>
@@ -142,7 +142,7 @@ const LoginPage = () => {
 
                         <div className="text-center pt-2">
                             <Link to="/register" className="mono text-[9px] text-secondary hover:text-accent uppercase tracking-widest hover:underline decoration-1 underline-offset-4 transition-all">
-                                Create new account &rarr;
+                                Create a new account &rarr;
                             </Link>
                         </div>
                     </form>

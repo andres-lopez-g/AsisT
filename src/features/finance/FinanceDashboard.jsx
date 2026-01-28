@@ -96,7 +96,7 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
                             className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono"
                             value={formData.title}
                             onChange={e => setFormData({ ...formData, title: e.target.value })}
-                            placeholder="Transaction name"
+                            placeholder="TRANSACTION NAME"
                         />
                     </div>
 

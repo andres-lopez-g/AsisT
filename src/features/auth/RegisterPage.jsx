@@ -89,7 +89,7 @@ const RegisterPage = () => {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     className="w-full bg-muted/30 border border-border rounded-none pl-10 pr-4 py-3 text-sm text-primary placeholder:text-secondary/30 focus:border-accent outline-none mono transition-all"
-                                    placeholder="John Doe"
+                                    placeholder="FULL NAME"
                                     required
                                 />
                             </div>
@@ -106,7 +106,7 @@ const RegisterPage = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-muted/30 border border-border rounded-none pl-10 pr-4 py-3 text-sm text-primary placeholder:text-secondary/30 focus:border-accent outline-none mono transition-all"
-                                    placeholder="user@example.com"
+                                    placeholder="USER@EXAMPLE.COM"
                                     required
                                 />
                             </div>

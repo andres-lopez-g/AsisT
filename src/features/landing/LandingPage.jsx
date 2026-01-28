@@ -182,7 +182,7 @@ const LandingPage = () => {
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="flex items-center gap-2 opacity-50">
                         <img src="/favicon.png" alt="Logo" className="w-4 h-4" />
-                        <span className="mono text-[10px] font-bold uppercase tracking-widest">AsisT - Personal Assistant</span>
+                        <span className="mono text-[10px] font-bold uppercase tracking-widest">AsisT | Personal Assistant</span>
                     </div>
                     <div className="mono text-[10px] text-secondary uppercase tracking-widest">
                         Version 2.5.0 // © 2026
