@@ -30,7 +30,7 @@ const LoginPage = () => {
 
         try {
             await login(email, password);
-            navigate('/home');
+            // Navigation handled by useEffect when user state updates
         } catch (err) {
             setError(err.message || 'Invalid credentials');
         } finally {
