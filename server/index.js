@@ -60,7 +60,13 @@ app.use('/api/debts', debtRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/smart', smartFeaturesRoutes);
 
+// Error handler middleware (must be last)
 app.use(errorHandler);
+
+// Catch-all for unmatched routes - return JSON instead of HTML
+app.use((req, res) => {
+    res.status(404).json({ error: 'Route not found' });
+});
 
 // Only listen if not in a serverless environment
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
@@ -68,5 +74,19 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
         console.log(`Server running on port ${PORT}`);
     });
 }
+
+// Global error handlers to prevent crashes and ensure JSON responses
+process.on('uncaughtException', (err) => {
+    console.error('[FATAL] Uncaught Exception:', err);
+    // Don't exit in production to keep the server running
+    if (process.env.NODE_ENV !== 'production') {
+        process.exit(1);
+    }
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('[FATAL] Unhandled Rejection at:', promise, 'reason:', reason);
+    // Don't exit in production to keep the server running
+});
 
 export default app;

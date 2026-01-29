@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import db from '../db.js';
+import { sendErrorResponse } from '../utils/errorResponse.js';
 
 const router = express.Router();
 
@@ -41,8 +42,7 @@ router.post('/register', async (req, res) => {
 
         res.status(201).json(newUser.rows[0]);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Server error' });
+        sendErrorResponse(res, err, 500, 'Server error. Please try again later.');
     }
 });
 
@@ -51,6 +51,12 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        // Check if JWT_SECRET is configured
+        if (!process.env.JWT_SECRET) {
+            console.error('[AUTH] JWT_SECRET is not configured');
+            return res.status(500).json({ error: 'Server configuration error. Please contact support.' });
+        }
+
         const userResult = await db.query('SELECT * FROM users WHERE email = $1', [email]);
         if (userResult.rows.length === 0) {
             return res.status(400).json({ error: 'Invalid credentials' });
@@ -80,8 +86,7 @@ router.post('/login', async (req, res) => {
             }
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Server error' });
+        sendErrorResponse(res, err, 500, 'Server error. Please try again later.');
     }
 });
 
