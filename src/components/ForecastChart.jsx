@@ -7,7 +7,7 @@ import { useAuth } from '../context/AuthContext';
  * ForecastChart - Balance projection visualization
  * Shows 30/60/90-day balance forecasts with confidence bands
  */
-const ForecastChart = ({ days = 90 }) => {
+const ForecastChart = ({ days = 90, transactions = [] }) => {
     const { user } = useAuth();
     const [forecastData, setForecastData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ const ForecastChart = ({ days = 90 }) => {
 
     useEffect(() => {
         fetchForecast();
-    }, []);
+    }, [transactions]); // Re-fetch when transactions change
 
     const fetchForecast = async () => {
         try {

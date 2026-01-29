@@ -17,6 +17,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import CategoryManager from './CategoryManager';
 import ForecastChart from '../../components/ForecastChart';
 import SpendingInsights from './SpendingInsights';
+import { formatCurrency } from '../../utils/currency';
 
 const StatCard = ({ label, amount, icon: Icon }) => (
     <div className="bg-background border border-border/60 p-6 flex flex-col justify-between h-full hover:border-accent/40 transition-colors group">
@@ -41,7 +42,8 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
         amount: '',
         type: 'expense',
         category: 'General',
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toISOString().split('T')[0],
+        currency: 'USD'
     });
 
     const filteredCategories = categories.filter(c => c.type === formData.type);
@@ -53,10 +55,11 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
                 amount: editingTransaction.amount || '',
                 type: editingTransaction.type || 'expense',
                 category: editingTransaction.category || 'General',
-                date: editingTransaction.date ? new Date(editingTransaction.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+                date: editingTransaction.date ? new Date(editingTransaction.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+                currency: editingTransaction.currency || 'USD'
             });
         } else {
-            setFormData({ title: '', amount: '', type: 'expense', category: 'General', date: new Date().toISOString().split('T')[0] });
+            setFormData({ title: '', amount: '', type: 'expense', category: 'General', date: new Date().toISOString().split('T')[0], currency: 'USD' });
         }
     }, [editingTransaction, isOpen]);
 
@@ -116,6 +119,21 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
                             />
                         </div>
                         <div className="space-y-2">
+                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Currency</label>
+                            <select
+                                className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono appearance-none cursor-pointer"
+                                value={formData.currency}
+                                onChange={e => setFormData({ ...formData, currency: e.target.value })}
+                            >
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="COP">COP ($)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
                             <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Type</label>
                             <select
                                 className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono appearance-none cursor-pointer"
@@ -126,9 +144,6 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
                                 <option value="income">INCOME (+)</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Category</label>
                             <select
@@ -142,16 +157,17 @@ const TransactionModal = ({ isOpen, onClose, onAdd, onUpdate, editingTransaction
                                 ))}
                             </select>
                         </div>
-                        <div className="space-y-2">
-                            <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Date</label>
-                            <input
-                                type="date"
-                                required
-                                className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono"
-                                value={formData.date}
-                                onChange={e => setFormData({ ...formData, date: e.target.value })}
-                            />
-                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="mono text-[10px] font-bold text-secondary uppercase tracking-widest pl-1">Date</label>
+                        <input
+                            type="date"
+                            required
+                            className="w-full bg-muted/30 border border-border rounded-none p-3 text-sm focus:border-accent outline-none mono"
+                            value={formData.date}
+                            onChange={e => setFormData({ ...formData, date: e.target.value })}
+                        />
                     </div>
 
                     <div className="pt-4">
@@ -514,7 +530,7 @@ const FinanceDashboard = () => {
                                         </div>
                                         <div className="flex items-center gap-3 pl-4">
                                             <span className={`mono text-xs font-bold ${tx.type === 'income' ? 'text-green-600' : 'text-primary'}`}>
-                                                ${parseFloat(tx.amount).toFixed(2)}
+                                                {formatCurrency(tx.amount, tx.currency || 'USD')}
                                             </span>
                                             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button
@@ -577,7 +593,7 @@ const FinanceDashboard = () => {
                                             <p className="mono text-[9px] text-secondary uppercase tracking-[0.1em]">Rate: {debt.interest_rate}%</p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="mono text-lg font-bold text-primary tracking-tighter">${parseFloat(debt.remaining_amount).toFixed(2)}</p>
+                                            <p className="mono text-lg font-bold text-primary tracking-tighter">{formatCurrency(debt.remaining_amount, debt.currency || 'USD')}</p>
                                             <p className="mono text-[8px] text-secondary uppercase tracking-[0.2em]">REMAINING</p>
                                         </div>
                                     </div>
@@ -600,7 +616,7 @@ const FinanceDashboard = () => {
                                             <div className="flex items-center justify-between">
                                                 <div className="space-y-1">
                                                     <p className="mono text-[8px] text-secondary uppercase tracking-[0.2em]">Scheduled_Inflow</p>
-                                                    <p className="mono text-sm font-bold">${installmentAmount}</p>
+                                                    <p className="mono text-sm font-bold">{formatCurrency(installmentAmount, debt.currency || 'USD')}</p>
                                                 </div>
                                                 <div className="w-24">
                                                     <input
@@ -681,7 +697,7 @@ const FinanceDashboard = () => {
 
             {/* Smart Features Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
-                <ForecastChart />
+                <ForecastChart transactions={transactions} />
                 <SpendingInsights />
             </div>
         </div>
