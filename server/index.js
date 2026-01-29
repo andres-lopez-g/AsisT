@@ -10,6 +10,8 @@ import debtRoutes from './routes/debts.js';
 import categoryRoutes from './routes/categories.js';
 import smartFeaturesRoutes from './routes/smartFeatures.js';
 import errorHandler from './middleware/errorHandler.js';
+import db from './db.js';
+import * as exchangeRateService from './services/exchangeRateService.js';
 
 dotenv.config();
 
@@ -72,6 +74,9 @@ app.use((req, res) => {
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
+        
+        // Initialize automatic exchange rate updates
+        exchangeRateService.initializeAutoUpdates(db);
     });
 }
 

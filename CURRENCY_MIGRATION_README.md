@@ -1,14 +1,43 @@
 # Multi-Currency Support - Database Migration Guide
 
 ## Overview
-This migration adds support for multiple currencies (USD, EUR, COP) to the AsisT finance application.
+This migration adds support for multiple currencies (USD, EUR, COP) to the AsisT finance application with **automated exchange rate updates**.
 
 ## What Gets Added
 - Currency field to `transactions` table
 - Currency field to `debts` table  
 - Currency field to `recurring_transactions` table
 - New `exchange_rates` table for currency conversions
-- Default exchange rates for USD, EUR, and COP
+- **Automated exchange rate updates from free API**
+
+## Automated Exchange Rates 🔄
+
+The application now **automatically updates exchange rates** using a free API:
+
+- **API Source**: [open.exchangerate-api.com](https://open.exchangerate-api.com)
+- **Update Frequency**: Every 24 hours
+- **Startup Check**: Rates are checked and updated on server startup if older than 24 hours
+- **Free Tier**: 1,500 requests/month (more than enough for daily updates)
+- **No API Key Required**: Uses the free public endpoint
+
+### Manual Rate Update
+
+You can also manually trigger a rate update via API:
+
+```bash
+POST /api/finance/exchange-rates/update
+Authorization: Bearer <your-jwt-token>
+```
+
+Response:
+```json
+{
+  "message": "Exchange rates updated successfully",
+  "updatedCount": 9,
+  "timestamp": "2026-01-29T16:45:00.000Z",
+  "rates": [...]
+}
+```
 
 ## How to Run the Migration in Supabase
 
@@ -31,16 +60,33 @@ After running the migration, you should see:
 
 ## Updating Exchange Rates
 
-Exchange rates can become outdated. To update them:
+### Automatic Updates (Recommended) ✅
 
-1. Get current exchange rates from a reliable source (e.g., XE.com, Google Finance)
-2. Open `supabase_update_rates.sql`
-3. Update the rate values with current rates
-4. Run the script in Supabase SQL Editor
+The application **automatically** fetches and updates exchange rates:
 
-## Current Exchange Rates (as of migration)
+- **On Startup**: Checks if rates are older than 24 hours and updates if needed
+- **Scheduled**: Runs a check every 24 hours
+- **Source**: Free API from open.exchangerate-api.com
+- **No Configuration Required**: Works out of the box
 
-| From | To  | Rate       |
+### Manual Updates (Optional)
+
+If you want to force an immediate update:
+
+1. **Via API**: Send a POST request to `/api/finance/exchange-rates/update`
+2. **Via Frontend**: (Can be implemented as a button in settings)
+
+You no longer need to:
+- ❌ Run SQL scripts manually
+- ❌ Find current exchange rates
+- ❌ Remember to update rates
+- ❌ Use `supabase_update_rates.sql` (deprecated)
+
+## Current Exchange Rates (Initial Migration Values)
+
+The migration includes initial exchange rates. These will be **automatically updated** by the application every 24 hours.
+
+| From | To  | Initial Rate |
 |------|-----|------------|
 | USD  | EUR | 0.920000   |
 | USD  | COP | 4000.00    |
@@ -48,6 +94,8 @@ Exchange rates can become outdated. To update them:
 | EUR  | COP | 4347.83    |
 | COP  | USD | 0.000250   |
 | COP  | EUR | 0.000230   |
+
+**Note**: You don't need to manually update these rates anymore! The application handles this automatically.
 
 ## Troubleshooting
 
@@ -83,8 +131,33 @@ After running this migration, the application will:
 - ✅ Allow users to select currency (USD/EUR/COP) when creating transactions
 - ✅ Allow users to select currency when creating debts
 - ✅ Display amounts with the correct currency symbol
-- ✅ Store exchange rates for future conversion features
+- ✅ **Automatically update exchange rates every 24 hours**
+- ✅ **Fetch rates from free API with no manual intervention**
 - ✅ Fix the forecast update issue (transactions prop passed to ForecastChart)
+
+## API Details
+
+The application uses **open.exchangerate-api.com** which provides:
+
+- ✅ Free tier with 1,500 requests/month
+- ✅ No API key required for basic usage
+- ✅ Real-time exchange rates
+- ✅ Updated daily
+- ✅ Supports 150+ currencies (we use USD, EUR, COP)
+- ✅ 99.9% uptime SLA
+
+### Rate Update Logs
+
+You'll see these logs in your server console:
+
+```
+[EXCHANGE] Initializing automatic exchange rate updates
+[EXCHANGE] Auto-update scheduler initialized (checks every 24 hours)
+[EXCHANGE] Last update: 2026-01-28T10:30:00.000Z, Hours ago: 30.5, Needs update: true
+[EXCHANGE] Starting exchange rate update...
+[EXCHANGE] Successfully fetched exchange rates from API
+[EXCHANGE] Successfully updated 9 exchange rates
+```
 
 ## Next Steps
 

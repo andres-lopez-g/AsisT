@@ -2,6 +2,7 @@ import express from 'express';
 import db from '../db.js';
 import authenticate from '../middleware/auth.js';
 import * as currencyUtils from '../utils/currency.js';
+import * as exchangeRateService from '../services/exchangeRateService.js';
 
 const router = express.Router();
 
@@ -13,6 +14,31 @@ router.get('/exchange-rates', authenticate, async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Manually update exchange rates (fetches from free API)
+router.post('/exchange-rates/update', authenticate, async (req, res) => {
+    try {
+        console.log('[API] Manual exchange rate update requested by user:', req.user.id);
+        const result = await exchangeRateService.updateExchangeRates(db);
+        
+        if (result.success) {
+            res.json({
+                message: 'Exchange rates updated successfully',
+                updatedCount: result.updatedCount,
+                timestamp: result.timestamp,
+                rates: result.rates
+            });
+        } else {
+            res.status(500).json({
+                error: 'Failed to update exchange rates',
+                details: result.error
+            });
+        }
+    } catch (err) {
+        console.error('[API] Error updating exchange rates:', err);
+        res.status(500).json({ error: 'Server error while updating exchange rates' });
     }
 });
 

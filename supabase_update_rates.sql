@@ -1,8 +1,15 @@
 -- ===========================================================================
--- UPDATE EXCHANGE RATES
+-- UPDATE EXCHANGE RATES (DEPRECATED - USE AUTOMATED UPDATES INSTEAD)
 -- ===========================================================================
--- Use this script to update exchange rates in your Supabase database
--- Run this periodically to keep rates current
+-- ⚠️ DEPRECATION NOTICE:
+-- This manual script is no longer needed!
+-- The application now automatically updates exchange rates every 24 hours
+-- using a free API from open.exchangerate-api.com
+--
+-- To manually trigger an update, use the API endpoint instead:
+-- POST /api/finance/exchange-rates/update
+--
+-- This script is kept only for reference or emergency fallback.
 -- ===========================================================================
 
 -- Update all exchange rates with current values
