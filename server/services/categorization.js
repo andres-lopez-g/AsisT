@@ -139,7 +139,7 @@ async function deleteRule(db, userId, pattern) {
     );
 }
 
-module.exports = {
+export {
     suggestCategory,
     learnFromChoice,
     getUserRules,

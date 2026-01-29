@@ -3,7 +3,7 @@
  * Provides smart task prioritization and pattern detection
  */
 
-const { parseISO, differenceInDays, addDays, isPast } = require('date-fns');
+import { parseISO, differenceInDays, addDays, isPast } from 'date-fns';
 
 /**
  * Calculate priority score for a task (0-100)
@@ -243,7 +243,7 @@ function calculateVelocity(completedTasks, weeks = 4) {
     };
 }
 
-module.exports = {
+export {
     calculatePriorityScore,
     getFocusTasks,
     detectRecurringTasks,

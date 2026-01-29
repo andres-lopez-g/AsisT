@@ -1,19 +1,21 @@
+import express from 'express';
+import db from '../db.js';
+import authenticate from '../middleware/auth.js';
+
+// Import services
+import * as categorization from '../services/categorization.js';
+import * as recurring from '../services/recurring.js';
+import * as forecasting from '../services/forecasting.js';
+import * as debtOptimizer from '../services/debtOptimizer.js';
+import * as taskIntelligence from '../services/taskIntelligence.js';
+import * as analytics from '../services/analytics.js';
+
+const router = express.Router();
+
 /**
  * Smart Features API Routes
  * Exposes intelligent features: categorization, recurring, forecasting, debt optimization, task intelligence, analytics
  */
-
-const express = require('express');
-const router = express.Router();
-const db = require('../db');
-
-// Import services
-const categorization = require('../services/categorization');
-const recurring = require('../services/recurring');
-const forecasting = require('../services/forecasting');
-const debtOptimizer = require('../services/debtOptimizer');
-const taskIntelligence = require('../services/taskIntelligence');
-const analytics = require('../services/analytics');
 
 // ============================================
 // CATEGORIZATION ENDPOINTS
@@ -23,7 +25,7 @@ const analytics = require('../services/analytics');
  * POST /api/smart/categorize
  * Get category suggestion for a transaction
  */
-router.post('/categorize', async (req, res) => {
+router.post('/categorize', authenticate, async (req, res) => {
     try {
         const { title } = req.body;
         const userId = req.user.id;
@@ -40,7 +42,7 @@ router.post('/categorize', async (req, res) => {
  * POST /api/smart/categorize/learn
  * Learn from user's categorization choice
  */
-router.post('/categorize/learn', async (req, res) => {
+router.post('/categorize/learn', authenticate, async (req, res) => {
     try {
         const { title, category } = req.body;
         const userId = req.user.id;
@@ -57,7 +59,7 @@ router.post('/categorize/learn', async (req, res) => {
  * GET /api/smart/categorize/rules
  * Get all learned categorization rules
  */
-router.get('/categorize/rules', async (req, res) => {
+router.get('/categorize/rules', authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
         const rules = await categorization.getUserRules(db, userId);
@@ -76,7 +78,7 @@ router.get('/categorize/rules', async (req, res) => {
  * POST /api/smart/recurring/detect
  * Detect recurring transactions
  */
-router.post('/recurring/detect', async (req, res) => {
+router.post('/recurring/detect', authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
 
@@ -94,7 +96,7 @@ router.post('/recurring/detect', async (req, res) => {
  * GET /api/smart/recurring
  * Get all recurring transactions
  */
-router.get('/recurring', async (req, res) => {
+router.get('/recurring', authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
         const recurringList = await recurring.getRecurring(db, userId);
@@ -109,7 +111,7 @@ router.get('/recurring', async (req, res) => {
  * PUT /api/smart/recurring/:id/toggle
  * Toggle recurring transaction active status
  */
-router.put('/recurring/:id/toggle', async (req, res) => {
+router.put('/recurring/:id/toggle', authenticate, async (req, res) => {
     try {
         const { id } = req.params;
         const { isActive } = req.body;
@@ -127,7 +129,7 @@ router.put('/recurring/:id/toggle', async (req, res) => {
  * DELETE /api/smart/recurring/:id
  * Delete recurring transaction
  */
-router.delete('/recurring/:id', async (req, res) => {
+router.delete('/recurring/:id', authenticate, async (req, res) => {
     try {
         const { id } = req.params;
         const userId = req.user.id;
@@ -148,7 +150,7 @@ router.delete('/recurring/:id', async (req, res) => {
  * GET /api/smart/forecast
  * Get balance forecast
  */
-router.get('/forecast', async (req, res) => {
+router.get('/forecast', authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
         const { days = 90 } = req.query;
@@ -176,7 +178,7 @@ router.get('/forecast', async (req, res) => {
  * PUT /api/smart/forecast/settings
  * Update forecast settings
  */
-router.put('/forecast/settings', async (req, res) => {
+router.put('/forecast/settings', authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
         const settings = req.body;
@@ -197,7 +199,7 @@ router.put('/forecast/settings', async (req, res) => {
  * POST /api/smart/debt-strategy
  * Compare debt payoff strategies
  */
-router.post('/debt-strategy', async (req, res) => {
+router.post('/debt-strategy', authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
         const { extraPayment = 0 } = req.body;
@@ -226,7 +228,7 @@ router.post('/debt-strategy', async (req, res) => {
  * POST /api/smart/debt-strategy/suggest-payment
  * Suggest extra payment amount
  */
-router.post('/debt-strategy/suggest-payment', async (req, res) => {
+router.post('/debt-strategy/suggest-payment', authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
 
@@ -266,7 +268,7 @@ router.post('/debt-strategy/suggest-payment', async (req, res) => {
  * GET /api/smart/focus-tasks
  * Get top priority tasks for Focus Mode
  */
-router.get('/focus-tasks', async (req, res) => {
+router.get('/focus-tasks', authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
         const { limit = 3 } = req.query;
@@ -288,7 +290,7 @@ router.get('/focus-tasks', async (req, res) => {
  * GET /api/smart/task-patterns
  * Detect recurring task patterns
  */
-router.get('/task-patterns', async (req, res) => {
+router.get('/task-patterns', authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
 
@@ -309,7 +311,7 @@ router.get('/task-patterns', async (req, res) => {
  * GET /api/smart/task-analytics
  * Get task analytics (overcommitment, velocity)
  */
-router.get('/task-analytics', async (req, res) => {
+router.get('/task-analytics', authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
 
@@ -338,7 +340,7 @@ router.get('/task-analytics', async (req, res) => {
  * GET /api/smart/insights
  * Get spending insights and trends
  */
-router.get('/insights', async (req, res) => {
+router.get('/insights', authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
         const { months = 3 } = req.query;
@@ -358,7 +360,7 @@ router.get('/insights', async (req, res) => {
  * GET /api/smart/health-score
  * Get financial health score
  */
-router.get('/health-score', async (req, res) => {
+router.get('/health-score', authenticate, async (req, res) => {
     try {
         const userId = req.user.id;
 
@@ -381,4 +383,4 @@ router.get('/health-score', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

@@ -344,7 +344,7 @@ function generateSuggestions(breakdown) {
     return suggestions;
 }
 
-module.exports = {
+export {
     analyzeCategoryTrends,
     detectAnomalies,
     detectDuplicates,

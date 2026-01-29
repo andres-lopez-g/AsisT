@@ -191,7 +191,7 @@ function calculateScenarios(debts, extraPaymentOptions = [0, 50, 100, 200]) {
     });
 }
 
-module.exports = {
+export {
     calculateAvalanche,
     calculateSnowball,
     compareStrategies,

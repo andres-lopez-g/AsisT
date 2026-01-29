@@ -3,7 +3,7 @@
  * Detects patterns in transactions to identify recurring income/expenses
  */
 
-const { parseISO, addDays, addWeeks, addMonths, differenceInDays } = require('date-fns');
+import { parseISO, addDays, addWeeks, addMonths, differenceInDays } from 'date-fns';
 
 /**
  * Detect recurring transactions for a user
@@ -223,7 +223,7 @@ async function deleteRecurring(db, userId, recurringId) {
     );
 }
 
-module.exports = {
+export {
     detectRecurring,
     saveRecurring,
     getRecurring,

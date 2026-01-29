@@ -3,7 +3,7 @@
  * Predicts future balance using recurring transactions and spending patterns
  */
 
-const { addDays, addWeeks, addMonths, parseISO, format } = require('date-fns');
+import { addDays, addWeeks, addMonths, parseISO, format } from 'date-fns';
 
 /**
  * Generate balance forecast for 30/60/90 days
@@ -270,7 +270,7 @@ async function updateForecastSettings(db, userId, settings) {
     );
 }
 
-module.exports = {
+export {
     generateForecast,
     getForecastSettings,
     updateForecastSettings
