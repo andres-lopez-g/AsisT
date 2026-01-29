@@ -10,6 +10,8 @@ import {
     ArrowRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import FocusMode from '../../components/FocusMode';
+import FinancialHealthScore from '../../components/FinancialHealthScore';
 
 const HomeView = () => {
     const { user, authFetch } = useAuth();
@@ -141,41 +143,13 @@ const HomeView = () => {
                     </div>
                 </div>
 
-                {/* Sidebar Module: Logistics */}
+                {/* Sidebar Module: Smart Features */}
                 <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                        <h4 className="mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Upcoming Tasks</h4>
-                        <Link to="/planner" className="mono text-[9px] font-bold text-accent underline uppercase tracking-tighter">View All</Link>
-                    </div>
+                    {/* Financial Health Score */}
+                    <FinancialHealthScore />
 
-                    <div className="space-y-px bg-border/40 border border-border/40">
-                        {nextTasks.length > 0 ? (
-                            nextTasks.map(task => (
-                                <div key={task.id} className="bg-background p-4 hover:bg-muted/20 transition-colors cursor-pointer group flex flex-col gap-3">
-                                    <div className="flex justify-between items-start">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-1.5 h-1.5 rounded-full ${task.status === 'in-progress' ? 'bg-accent animate-pulse' : 'bg-secondary/40'}`} />
-                                            <p className="text-xs font-bold text-primary group-hover:translate-x-0.5 transition-transform">{task.title}</p>
-                                        </div>
-                                        <span className={`tech-tag ${task.priority === 'high' ? 'border-red-500 text-red-600 bg-red-50' :
-                                                task.priority === 'medium' ? 'border-orange-500 text-orange-600 bg-orange-50' :
-                                                    'border-accent text-accent bg-blue-50'
-                                            }`}>
-                                            {task.priority}
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between items-center pl-4 mt-1 border-l border-border/60">
-                                        <span className="mono text-[9px] text-secondary uppercase tracking-wider">{task.date}</span>
-                                        <ArrowRight size={12} className="text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <div className="bg-background p-12 text-center">
-                                <p className="mono text-[10px] text-secondary italic uppercase tracking-widest">No tasks yet</p>
-                            </div>
-                        )}
-                    </div>
+                    {/* Focus Mode - Top Priority Tasks */}
+                    <FocusMode onTaskClick={(task) => window.location.href = '/planner'} />
                 </div>
             </div>
         </div>

@@ -15,6 +15,8 @@ import {
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import CategoryManager from './CategoryManager';
+import ForecastChart from '../../components/ForecastChart';
+import SpendingInsights from './SpendingInsights';
 
 const StatCard = ({ label, amount, icon: Icon }) => (
     <div className="bg-background border border-border/60 p-6 flex flex-col justify-between h-full hover:border-accent/40 transition-colors group">
@@ -676,6 +678,12 @@ const FinanceDashboard = () => {
                     </div>
                 </div>
             )}
+
+            {/* Smart Features Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+                <ForecastChart />
+                <SpendingInsights />
+            </div>
         </div>
     );
 };

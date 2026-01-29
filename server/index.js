@@ -8,6 +8,7 @@ import financeRoutes from './routes/finance.js';
 import plannerRoutes from './routes/planner.js';
 import debtRoutes from './routes/debts.js';
 import categoryRoutes from './routes/categories.js';
+import smartFeaturesRoutes from './routes/smartFeatures.js';
 import errorHandler from './middleware/errorHandler.js';
 
 dotenv.config();
@@ -57,6 +58,7 @@ app.use('/api/finance', financeRoutes);
 app.use('/api/planner', plannerRoutes);
 app.use('/api/debts', debtRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/smart', smartFeaturesRoutes);
 
 app.use(errorHandler);
 

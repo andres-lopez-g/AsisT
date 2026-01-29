@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Calculator, CreditCard, Calendar, TrendingUp, Info, Save, ChevronRight, Check, AlertCircle, ArrowRight, AppWindow } from 'lucide-react';
+import DebtStrategyComparison from './DebtStrategyComparison';
 
 const PaymentAnalyst = () => {
     const { authFetch } = useAuth();
@@ -274,6 +275,11 @@ const PaymentAnalyst = () => {
                         </div>
                     )}
                 </div>
+            </div>
+
+            {/* Debt Strategy Optimizer */}
+            <div className="mt-12">
+                <DebtStrategyComparison />
             </div>
         </div>
     );
