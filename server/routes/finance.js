@@ -1,8 +1,46 @@
 import express from 'express';
 import db from '../db.js';
 import authenticate from '../middleware/auth.js';
+import * as currencyUtils from '../utils/currency.js';
+import * as exchangeRateService from '../services/exchangeRateService.js';
 
 const router = express.Router();
+
+// Get all exchange rates
+router.get('/exchange-rates', authenticate, async (req, res) => {
+    try {
+        const rates = await currencyUtils.getAllExchangeRates(db);
+        res.json(rates);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Manually update exchange rates (fetches from free API)
+router.post('/exchange-rates/update', authenticate, async (req, res) => {
+    try {
+        console.log('[API] Manual exchange rate update requested by user:', req.user.id);
+        const result = await exchangeRateService.updateExchangeRates(db);
+        
+        if (result.success) {
+            res.json({
+                message: 'Exchange rates updated successfully',
+                updatedCount: result.updatedCount,
+                timestamp: result.timestamp,
+                rates: result.rates
+            });
+        } else {
+            res.status(500).json({
+                error: 'Failed to update exchange rates',
+                details: result.error
+            });
+        }
+    } catch (err) {
+        console.error('[API] Error updating exchange rates:', err);
+        res.status(500).json({ error: 'Server error while updating exchange rates' });
+    }
+});
 
 // Get all transactions for user
 router.get('/', authenticate, async (req, res) => {
@@ -20,12 +58,12 @@ router.get('/', authenticate, async (req, res) => {
 
 // Add transaction
 router.post('/', authenticate, async (req, res) => {
-    const { title, amount, type, category, date } = req.body;
+    const { title, amount, type, category, date, currency = 'USD' } = req.body;
 
     try {
         const result = await db.query(
-            'INSERT INTO transactions (user_id, title, amount, type, category, date) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-            [req.user.id, title, amount, type, category, date]
+            'INSERT INTO transactions (user_id, title, amount, type, category, date, currency) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            [req.user.id, title, amount, type, category, date, currency]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
@@ -37,12 +75,12 @@ router.post('/', authenticate, async (req, res) => {
 // Update transaction
 router.patch('/:id', authenticate, async (req, res) => {
     const { id } = req.params;
-    const { title, amount, type, category, date } = req.body;
+    const { title, amount, type, category, date, currency = 'USD' } = req.body;
 
     try {
         const result = await db.query(
-            'UPDATE transactions SET title = $1, amount = $2, type = $3, category = $4, date = $5 WHERE id = $6 AND user_id = $7 RETURNING *',
-            [title, amount, type, category, date, id, req.user.id]
+            'UPDATE transactions SET title = $1, amount = $2, type = $3, category = $4, date = $5, currency = $6 WHERE id = $7 AND user_id = $8 RETURNING *',
+            [title, amount, type, category, date, currency, id, req.user.id]
         );
 
         if (result.rows.length === 0) {
