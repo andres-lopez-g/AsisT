@@ -217,17 +217,25 @@ If you encounter issues after enabling RLS:
    - Solution: Follow Step 2 above to update your application code
    - Quick test: Check if using service role connection string works (confirms it's an RLS issue)
 
-2. **"unrecognized configuration parameter" Error**:
+2. **User Registration Fails**:
+   - The policies don't include INSERT for users table to avoid circular dependency
+   - Solution: User registration should use the service role connection or bypass RLS
+   - Options:
+     - Use a separate database connection with service role for registration
+     - Disable RLS temporarily during registration: `SET LOCAL row_security = off`
+     - Create a PostgreSQL function that runs with `SECURITY DEFINER` for registration
+
+3. **"unrecognized configuration parameter" Error**:
    - This happens if the session variable isn't set
    - Make sure you're using the updated `db.js` that sets the variable
    - Verify `options.userId` is being passed to all queries
 
-3. **Users Can See Other Users' Data**:
+4. **Users Can See Other Users' Data**:
    - Check that `req.user.id` is the correct user ID from JWT
    - Verify the session variable is being set correctly
    - Check RLS policies are created: `SELECT * FROM pg_policies WHERE schemaname = 'public';`
 
-4. **Type Mismatch Errors**:
+5. **Type Mismatch Errors**:
    - The policies assume `user_id` is an INTEGER
    - If your user_id is UUID or TEXT, modify the policies to match:
      ```sql

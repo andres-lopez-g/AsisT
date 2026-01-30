@@ -21,7 +21,13 @@ const poolConfig = connectionString
     };
 
 // SSL is required for Supabase/Vercel
-// We use rejectUnauthorized: false to allow self-signed certs common in cloud providers
+// WARNING: rejectUnauthorized: false disables SSL certificate verification
+// This makes the connection vulnerable to man-in-the-middle attacks
+// This is used here to support cloud providers with self-signed certificates
+// For maximum security, consider:
+// 1. Using proper CA certificates from your cloud provider
+// 2. Setting rejectUnauthorized: true in production with valid certs
+// 3. Using connection strings that include proper SSL configuration
 if (process.env.DB_SSL === 'true' || isProduction) {
     poolConfig.ssl = {
         rejectUnauthorized: false
@@ -37,8 +43,9 @@ if (!poolConfig.connectionString && !poolConfig.host) {
 }
 
 pool.on('error', (err) => {
-    console.error('Unexpected error on idle database client', err);
-    process.exit(-1);
+    console.error('Unexpected error on idle database client:', err);
+    // Don't exit the process - let the pool handle recovery
+    // The failed client will be removed from the pool automatically
 });
 
 /**
@@ -52,13 +59,27 @@ pool.on('error', (err) => {
 const query = async (text, params, options = {}) => {
     const client = await pool.connect();
     try {
+        // Start a transaction to ensure SET LOCAL persists for the query
+        await client.query('BEGIN');
+        
         // If userId is provided, set it as a session variable for RLS
         if (options.userId) {
             await client.query('SET LOCAL app.user_id = $1', [options.userId]);
         }
         
         const result = await client.query(text, params);
+        
+        // Commit the transaction
+        await client.query('COMMIT');
         return result;
+    } catch (error) {
+        // Rollback on error
+        try {
+            await client.query('ROLLBACK');
+        } catch (rollbackError) {
+            console.error('Error during rollback:', rollbackError);
+        }
+        throw error;
     } finally {
         client.release();
     }

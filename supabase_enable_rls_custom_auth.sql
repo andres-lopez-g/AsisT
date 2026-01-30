@@ -30,7 +30,11 @@ ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
 -- Enable RLS on categorization_rules table (if exists)
 DO $$ 
 BEGIN
-    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'categorization_rules') THEN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_name = 'categorization_rules' 
+        AND table_schema = 'public'
+    ) THEN
         ALTER TABLE categorization_rules ENABLE ROW LEVEL SECURITY;
     END IF;
 END $$;
@@ -38,7 +42,11 @@ END $$;
 -- Enable RLS on recurring_transactions table (if exists)
 DO $$ 
 BEGIN
-    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'recurring_transactions') THEN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_name = 'recurring_transactions' 
+        AND table_schema = 'public'
+    ) THEN
         ALTER TABLE recurring_transactions ENABLE ROW LEVEL SECURITY;
     END IF;
 END $$;
@@ -46,7 +54,11 @@ END $$;
 -- Enable RLS on forecast_settings table (if exists)
 DO $$ 
 BEGIN
-    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'forecast_settings') THEN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_name = 'forecast_settings' 
+        AND table_schema = 'public'
+    ) THEN
         ALTER TABLE forecast_settings ENABLE ROW LEVEL SECURITY;
     END IF;
 END $$;
@@ -54,7 +66,11 @@ END $$;
 -- Enable RLS on exchange_rates table (if exists)
 DO $$ 
 BEGIN
-    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'exchange_rates') THEN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_name = 'exchange_rates' 
+        AND table_schema = 'public'
+    ) THEN
         ALTER TABLE exchange_rates ENABLE ROW LEVEL SECURITY;
     END IF;
 END $$;
@@ -62,7 +78,11 @@ END $$;
 -- Enable RLS on documents table (if exists)
 DO $$ 
 BEGIN
-    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'documents') THEN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_name = 'documents' 
+        AND table_schema = 'public'
+    ) THEN
         ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
     END IF;
 END $$;
@@ -74,23 +94,17 @@ END $$;
 -- Users can view their own record
 CREATE POLICY "Users can view own record"
 ON users FOR SELECT
-USING (
-  current_setting('app.user_id', true)::integer = id
-);
+USING (current_setting('app.user_id', true)::integer = id);
 
 -- Users can update their own record
 CREATE POLICY "Users can update own record"
 ON users FOR UPDATE
-USING (
-  current_setting('app.user_id', true)::integer = id
-);
+USING (current_setting('app.user_id', true)::integer = id);
 
--- Users can insert their own record (for registration)
-CREATE POLICY "Users can insert own record"
-ON users FOR INSERT
-WITH CHECK (
-  current_setting('app.user_id', true)::integer = id
-);
+-- Note: User registration (INSERT) should be handled by the service role
+-- or through a dedicated registration endpoint that doesn't use RLS
+-- If you need to allow user self-registration, use a separate policy or
+-- handle registration through a database function that bypasses RLS
 
 -- ===========================================================================
 -- STEP 3: CREATE RLS POLICIES FOR TRANSACTIONS TABLE
@@ -274,7 +288,11 @@ USING (
 
 DO $$ 
 BEGIN
-    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'categorization_rules') THEN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_name = 'categorization_rules' 
+        AND table_schema = 'public'
+    ) THEN
         -- Users can view their own categorization rules
         EXECUTE 'CREATE POLICY "Users can view own categorization rules"
         ON categorization_rules FOR SELECT
@@ -303,7 +321,11 @@ END $$;
 
 DO $$ 
 BEGIN
-    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'recurring_transactions') THEN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_name = 'recurring_transactions' 
+        AND table_schema = 'public'
+    ) THEN
         -- Users can view their own recurring transactions
         EXECUTE 'CREATE POLICY "Users can view own recurring transactions"
         ON recurring_transactions FOR SELECT
@@ -332,7 +354,11 @@ END $$;
 
 DO $$ 
 BEGIN
-    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'forecast_settings') THEN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_name = 'forecast_settings' 
+        AND table_schema = 'public'
+    ) THEN
         -- Users can view their own forecast settings
         EXECUTE 'CREATE POLICY "Users can view own forecast settings"
         ON forecast_settings FOR SELECT
@@ -362,11 +388,19 @@ END $$;
 
 DO $$ 
 BEGIN
-    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'exchange_rates') THEN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_name = 'exchange_rates' 
+        AND table_schema = 'public'
+    ) THEN
         -- All authenticated users can view exchange rates
+        -- Validates that user_id is set and is a positive integer
         EXECUTE 'CREATE POLICY "Authenticated users can view exchange rates"
         ON exchange_rates FOR SELECT
-        USING (current_setting(''app.user_id'', true) IS NOT NULL)';
+        USING (
+            current_setting(''app.user_id'', true) IS NOT NULL 
+            AND current_setting(''app.user_id'', true)::integer > 0
+        )';
     END IF;
 END $$;
 
@@ -376,11 +410,17 @@ END $$;
 
 DO $$ 
 BEGIN
-    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'documents') THEN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_name = 'documents' 
+        AND table_schema = 'public'
+    ) THEN
         -- Check if documents table has user_id column
         IF EXISTS (
             SELECT 1 FROM information_schema.columns 
-            WHERE table_name = 'documents' AND column_name = 'user_id'
+            WHERE table_name = 'documents' 
+            AND column_name = 'user_id'
+            AND table_schema = 'public'
         ) THEN
             -- Users can view their own documents
             EXECUTE 'CREATE POLICY "Users can view own documents"
