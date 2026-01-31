@@ -1,5 +1,6 @@
 import pg from 'pg';
 import dotenv from 'dotenv';
+import { cleanConnectionString } from './utils/dbConfig.js';
 
 dotenv.config();
 
@@ -7,14 +8,10 @@ const isProduction = process.env.NODE_ENV === 'production' || !!process.env.VERC
 let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 
 // Remove sslmode parameter from connection string if present
-if (connectionString) {
-    connectionString = connectionString.replace(/\?sslmode=[^&]*&/, '?');
-    connectionString = connectionString.replace(/&sslmode=[^&]*&/, '&');
-    connectionString = connectionString.replace(/\?sslmode=[^&]*$/, '');
-    connectionString = connectionString.replace(/&sslmode=[^&]*$/, '');
-}
+connectionString = cleanConnectionString(connectionString);
 
-// Always enable SSL for cloud databases, disable for local development
+// Always enable SSL for cloud databases (when a connection string is provided), 
+// or when explicitly enabled via DB_SSL or in production
 const sslEnabled = connectionString || process.env.DB_SSL === 'true' || isProduction;
 
 const pool = new pg.Pool({
