@@ -3,9 +3,22 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const isProduction = process.env.NODE_ENV === 'production' || !!process.env.VERCEL;
+let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+
+// Remove sslmode parameter from connection string if present
+if (connectionString) {
+    connectionString = connectionString.replace(/[?&]sslmode=[^&]*/g, '');
+    connectionString = connectionString.replace(/\?&/, '?');
+    connectionString = connectionString.replace(/\?$/, '');
+}
+
+// Always enable SSL for cloud databases, disable for local development
+const sslEnabled = connectionString || process.env.DB_SSL === 'true' || isProduction;
+
 const pool = new pg.Pool({
-    connectionString: process.env.DATABASE_URL || `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
-    ssl: (process.env.DB_SSL === 'true' || process.env.NODE_ENV === 'production') ? { rejectUnauthorized: false } : false
+    connectionString: connectionString || `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+    ssl: sslEnabled ? { rejectUnauthorized: false } : false
 });
 
 async function migrate() {

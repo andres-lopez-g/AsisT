@@ -12,7 +12,15 @@ const __dirname = path.dirname(__filename);
 const { Client } = pg;
 
 async function setup() {
-    const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    
+    // Remove sslmode parameter from connection string if present
+    if (connectionString) {
+        connectionString = connectionString.replace(/[?&]sslmode=[^&]*/g, '');
+        connectionString = connectionString.replace(/\?&/, '?');
+        connectionString = connectionString.replace(/\?$/, '');
+    }
+    
     const isCloud = !!connectionString;
     const dbName = process.env.DB_NAME || 'fusion_observatory';
 

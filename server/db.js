@@ -8,11 +8,21 @@ const { Pool } = pg;
 const isProduction = process.env.NODE_ENV === 'production' || !!process.env.VERCEL;
 
 // Support both individual variables and a full connection string (common in Vercel/Neon/Supabase)
-const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+
+// Remove sslmode parameter from connection string if present
+// We'll handle SSL configuration separately to ensure it works with self-signed certs
+if (connectionString) {
+    // Parse and remove sslmode from connection string
+    connectionString = connectionString.replace(/[?&]sslmode=[^&]*/g, '');
+    connectionString = connectionString.replace(/\?&/, '?'); // Clean up potential ?& combination
+    connectionString = connectionString.replace(/\?$/, ''); // Clean up trailing ?
+}
 
 const poolConfig = connectionString
     ? { 
         connectionString,
+        // Explicitly configure SSL to accept self-signed certificates
         ssl: {
             rejectUnauthorized: false
         }
