@@ -5,7 +5,7 @@ dotenv.config();
 
 const { Pool } = pg;
 
-const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
+const isProduction = process.env.NODE_ENV === 'production' || !!process.env.VERCEL;
 
 // Support both individual variables and a full connection string (common in Vercel/Neon/Supabase)
 const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
@@ -20,7 +20,7 @@ const poolConfig = connectionString
         database: process.env.DB_NAME,
     };
 
-// SSL is required for Supabase/Vercel
+// SSL is required for Supabase/Vercel and most cloud database providers
 // WARNING: rejectUnauthorized: false disables SSL certificate verification
 // This makes the connection vulnerable to man-in-the-middle attacks
 // This is used here to support cloud providers with self-signed certificates
@@ -28,7 +28,9 @@ const poolConfig = connectionString
 // 1. Using proper CA certificates from your cloud provider
 // 2. Setting rejectUnauthorized: true in production with valid certs
 // 3. Using connection strings that include proper SSL configuration
-if (process.env.DB_SSL === 'true' || isProduction) {
+// Always enable SSL for connection strings (typically used for remote databases)
+// or when explicitly enabled via DB_SSL or in production environments
+if (connectionString || process.env.DB_SSL === 'true' || isProduction) {
     poolConfig.ssl = {
         rejectUnauthorized: false
     };
