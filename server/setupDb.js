@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { cleanConnectionString } from './utils/dbConfig.js';
 
 dotenv.config();
 
@@ -12,7 +13,11 @@ const __dirname = path.dirname(__filename);
 const { Client } = pg;
 
 async function setup() {
-    const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    
+    // Remove sslmode parameter from connection string if present
+    connectionString = cleanConnectionString(connectionString);
+    
     const isCloud = !!connectionString;
     const dbName = process.env.DB_NAME || 'fusion_observatory';
 
