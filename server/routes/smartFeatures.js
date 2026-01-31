@@ -383,4 +383,167 @@ router.get('/health-score', authenticate, async (req, res) => {
     }
 });
 
+// ============================================
+// SMART INVESTMENTS ENDPOINTS
+// ============================================
+
+/**
+ * GET /api/smart/investments
+ * Get top 10 most traded stocks and crypto
+ * Uses 24-hour cache to avoid rate limits
+ */
+router.get('/investments', authenticate, async (req, res) => {
+    try {
+        const CACHE_DURATION_HOURS = 24;
+        const now = new Date();
+        
+        // Check for cached data less than 24h old
+        const cacheResult = await db.query(
+            `SELECT type, payload, fetched_at 
+             FROM market_snapshots 
+             WHERE type IN ('stock', 'crypto')
+             AND fetched_at > NOW() - INTERVAL '${CACHE_DURATION_HOURS} hours'
+             ORDER BY fetched_at DESC`
+        );
+        
+        let stockData = null;
+        let cryptoData = null;
+        
+        // Check if we have fresh cached data
+        const cachedStock = cacheResult.rows.find(row => row.type === 'stock');
+        const cachedCrypto = cacheResult.rows.find(row => row.type === 'crypto');
+        
+        // Fetch stocks if cache is stale or missing
+        if (!cachedStock) {
+            try {
+                const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
+                if (!apiKey) {
+                    console.warn('[Smart Investments] Alpha Vantage API key not configured');
+                } else {
+                    const stockResponse = await fetch(
+                        `https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=${apiKey}`
+                    );
+                    
+                    if (stockResponse.ok) {
+                        const stockJson = await stockResponse.json();
+                        
+                        // Check for API error response
+                        if (stockJson.Note || stockJson['Error Message']) {
+                            console.warn('[Smart Investments] Alpha Vantage API limit reached or error:', 
+                                stockJson.Note || stockJson['Error Message']);
+                        } else if (stockJson.most_actively_traded) {
+                            const top10Stocks = stockJson.most_actively_traded.slice(0, 10).map(stock => ({
+                                ticker: stock.ticker,
+                                price: parseFloat(stock.price),
+                                change_amount: parseFloat(stock.change_amount),
+                                change_percentage: stock.change_percentage,
+                                volume: parseInt(stock.volume)
+                            }));
+                            
+                            stockData = top10Stocks;
+                            
+                            // Store in cache
+                            await db.query(
+                                `INSERT INTO market_snapshots (type, payload) 
+                                 VALUES ($1, $2)`,
+                                ['stock', JSON.stringify(top10Stocks)]
+                            );
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('[Smart Investments] Error fetching stocks:', error);
+                // Fall back to cache if available
+                if (cachedStock) {
+                    stockData = cachedStock.payload;
+                }
+            }
+        } else {
+            stockData = cachedStock.payload;
+        }
+        
+        // Fetch crypto if cache is stale or missing
+        if (!cachedCrypto) {
+            try {
+                const cryptoResponse = await fetch(
+                    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=volume_desc&per_page=10&page=1&sparkline=false'
+                );
+                
+                if (cryptoResponse.ok) {
+                    const cryptoJson = await cryptoResponse.json();
+                    
+                    if (Array.isArray(cryptoJson)) {
+                        const top10Crypto = cryptoJson.map(coin => ({
+                            id: coin.id,
+                            symbol: coin.symbol.toUpperCase(),
+                            name: coin.name,
+                            current_price: coin.current_price,
+                            price_change_percentage_24h: coin.price_change_percentage_24h,
+                            market_cap: coin.market_cap,
+                            total_volume: coin.total_volume,
+                            image: coin.image
+                        }));
+                        
+                        cryptoData = top10Crypto;
+                        
+                        // Store in cache
+                        await db.query(
+                            `INSERT INTO market_snapshots (type, payload) 
+                             VALUES ($1, $2)`,
+                            ['crypto', JSON.stringify(top10Crypto)]
+                        );
+                    }
+                }
+            } catch (error) {
+                console.error('[Smart Investments] Error fetching crypto:', error);
+                // Fall back to cache if available
+                if (cachedCrypto) {
+                    cryptoData = cachedCrypto.payload;
+                }
+            }
+        } else {
+            cryptoData = cachedCrypto.payload;
+        }
+        
+        // If we still don't have data, try to get the most recent cache regardless of age
+        if (!stockData) {
+            const oldStockCache = await db.query(
+                `SELECT payload FROM market_snapshots 
+                 WHERE type = 'stock' 
+                 ORDER BY fetched_at DESC LIMIT 1`
+            );
+            if (oldStockCache.rows.length > 0) {
+                stockData = oldStockCache.rows[0].payload;
+            }
+        }
+        
+        if (!cryptoData) {
+            const oldCryptoCache = await db.query(
+                `SELECT payload FROM market_snapshots 
+                 WHERE type = 'crypto' 
+                 ORDER BY fetched_at DESC LIMIT 1`
+            );
+            if (oldCryptoCache.rows.length > 0) {
+                cryptoData = oldCryptoCache.rows[0].payload;
+            }
+        }
+        
+        res.json({
+            stocks: stockData || [],
+            crypto: cryptoData || [],
+            cached: {
+                stocks: !!cachedStock,
+                crypto: !!cachedCrypto
+            }
+        });
+    } catch (error) {
+        console.error('[Smart Investments] Error:', error);
+        res.status(500).json({ 
+            error: 'Failed to fetch investment data',
+            stocks: [],
+            crypto: []
+        });
+    }
+});
+
 export default router;

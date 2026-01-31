@@ -17,6 +17,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import CategoryManager from './CategoryManager';
 import ForecastChart from '../../components/ForecastChart';
 import SpendingInsights from './SpendingInsights';
+import SmartInvestments from './SmartInvestments';
 import { formatCurrency } from '../../utils/currency';
 
 const StatCard = ({ label, amount, icon: Icon }) => (
@@ -696,9 +697,10 @@ const FinanceDashboard = () => {
             )}
 
             {/* Smart Features Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
                 <ForecastChart transactions={transactions} />
                 <SpendingInsights />
+                <SmartInvestments />
             </div>
         </div>
     );
