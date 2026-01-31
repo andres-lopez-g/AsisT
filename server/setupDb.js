@@ -64,6 +64,35 @@ async function setup() {
         await targetClient.query(sql);
         console.log('Schema applied successfully.');
 
+        // Run additional migrations
+        console.log('Running additional migrations...');
+        
+        // Migration 1: Smart Features
+        const smartFeaturesMigrationPath = path.join(__dirname, 'migrations', 'migration_smart_features.sql');
+        if (fs.existsSync(smartFeaturesMigrationPath)) {
+            const smartFeaturesSql = fs.readFileSync(smartFeaturesMigrationPath, 'utf8');
+            await targetClient.query(smartFeaturesSql);
+            console.log('Smart features migration applied.');
+        }
+
+        // Migration 2: Currency Support
+        const currencyMigrationPath = path.join(__dirname, 'migrations', 'migration_currency_support.sql');
+        if (fs.existsSync(currencyMigrationPath)) {
+            const currencySql = fs.readFileSync(currencyMigrationPath, 'utf8');
+            await targetClient.query(currencySql);
+            console.log('Currency support migration applied.');
+        }
+
+        // Migration 3: Market Snapshots
+        const marketSnapshotsMigrationPath = path.join(__dirname, 'migrations', 'migration_market_snapshots.sql');
+        if (fs.existsSync(marketSnapshotsMigrationPath)) {
+            const marketSnapshotsSql = fs.readFileSync(marketSnapshotsMigrationPath, 'utf8');
+            await targetClient.query(marketSnapshotsSql);
+            console.log('Market snapshots migration applied.');
+        }
+
+        console.log('All migrations completed successfully.');
+
         await targetClient.end();
         console.log('Database setup completed successfully.');
     } catch (err) {
