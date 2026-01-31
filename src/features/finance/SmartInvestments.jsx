@@ -13,28 +13,28 @@ const SmartInvestments = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetchInvestments();
-    }, []);
-
-    const fetchInvestments = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            const response = await authFetch('/api/smart/investments');
-            
-            if (response.ok) {
-                const data = await response.json();
-                setInvestmentData(data);
-            } else {
+        const fetchInvestments = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                const response = await authFetch('/api/smart/investments');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    setInvestmentData(data);
+                } else {
+                    setError('Failed to load investment data');
+                }
+            } catch (err) {
+                console.error('Error fetching investments:', err);
                 setError('Failed to load investment data');
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            console.error('Error fetching investments:', error);
-            setError('Failed to load investment data');
-        } finally {
-            setLoading(false);
-        }
-    };
+        };
+
+        fetchInvestments();
+    }, [authFetch]);
 
     if (loading) {
         return (

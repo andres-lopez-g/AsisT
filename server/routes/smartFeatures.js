@@ -395,14 +395,16 @@ router.get('/health-score', authenticate, async (req, res) => {
 router.get('/investments', authenticate, async (req, res) => {
     try {
         const CACHE_DURATION_HOURS = 24;
+        const CACHE_CUTOFF = new Date(Date.now() - CACHE_DURATION_HOURS * 60 * 60 * 1000);
         
         // Check for cached data less than 24h old
         const cacheResult = await db.query(
             `SELECT type, payload, fetched_at 
              FROM market_snapshots 
              WHERE type IN ('stock', 'crypto')
-             AND fetched_at > NOW() - INTERVAL '${CACHE_DURATION_HOURS} hours'
-             ORDER BY fetched_at DESC`
+             AND fetched_at > $1
+             ORDER BY fetched_at DESC`,
+            [CACHE_CUTOFF]
         );
         
         let stockData = null;
@@ -452,9 +454,14 @@ router.get('/investments', authenticate, async (req, res) => {
                 }
             } catch (error) {
                 console.error('[Smart Investments] Error fetching stocks:', error);
-                // Fall back to cache if available
-                if (cachedStock) {
-                    stockData = cachedStock.payload;
+                // Fall back to any available cache (even if stale)
+                const oldStockCache = await db.query(
+                    `SELECT payload FROM market_snapshots 
+                     WHERE type = 'stock' 
+                     ORDER BY fetched_at DESC LIMIT 1`
+                );
+                if (oldStockCache.rows.length > 0) {
+                    stockData = oldStockCache.rows[0].payload;
                 }
             }
         } else {
@@ -495,9 +502,14 @@ router.get('/investments', authenticate, async (req, res) => {
                 }
             } catch (error) {
                 console.error('[Smart Investments] Error fetching crypto:', error);
-                // Fall back to cache if available
-                if (cachedCrypto) {
-                    cryptoData = cachedCrypto.payload;
+                // Fall back to any available cache (even if stale)
+                const oldCryptoCache = await db.query(
+                    `SELECT payload FROM market_snapshots 
+                     WHERE type = 'crypto' 
+                     ORDER BY fetched_at DESC LIMIT 1`
+                );
+                if (oldCryptoCache.rows.length > 0) {
+                    cryptoData = oldCryptoCache.rows[0].payload;
                 }
             }
         } else {
