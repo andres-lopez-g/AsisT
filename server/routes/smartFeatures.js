@@ -395,7 +395,6 @@ router.get('/health-score', authenticate, async (req, res) => {
 router.get('/investments', authenticate, async (req, res) => {
     try {
         const CACHE_DURATION_HOURS = 24;
-        const now = new Date();
         
         // Check for cached data less than 24h old
         const cacheResult = await db.query(
