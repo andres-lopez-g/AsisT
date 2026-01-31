@@ -8,9 +8,10 @@ let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 
 // Remove sslmode parameter from connection string if present
 if (connectionString) {
-    connectionString = connectionString.replace(/[?&]sslmode=[^&]*/g, '');
-    connectionString = connectionString.replace(/\?&/, '?');
-    connectionString = connectionString.replace(/\?$/, '');
+    connectionString = connectionString.replace(/\?sslmode=[^&]*&/, '?');
+    connectionString = connectionString.replace(/&sslmode=[^&]*&/, '&');
+    connectionString = connectionString.replace(/\?sslmode=[^&]*$/, '');
+    connectionString = connectionString.replace(/&sslmode=[^&]*$/, '');
 }
 
 // Always enable SSL for cloud databases, disable for local development

@@ -16,9 +16,10 @@ async function setup() {
     
     // Remove sslmode parameter from connection string if present
     if (connectionString) {
-        connectionString = connectionString.replace(/[?&]sslmode=[^&]*/g, '');
-        connectionString = connectionString.replace(/\?&/, '?');
-        connectionString = connectionString.replace(/\?$/, '');
+        connectionString = connectionString.replace(/\?sslmode=[^&]*&/, '?');
+        connectionString = connectionString.replace(/&sslmode=[^&]*&/, '&');
+        connectionString = connectionString.replace(/\?sslmode=[^&]*$/, '');
+        connectionString = connectionString.replace(/&sslmode=[^&]*$/, '');
     }
     
     const isCloud = !!connectionString;

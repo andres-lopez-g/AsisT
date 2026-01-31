@@ -13,9 +13,10 @@ let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 // Remove sslmode parameter from connection string if present
 // We'll handle SSL configuration separately to ensure it works with self-signed certs
 if (connectionString) {
-    connectionString = connectionString.replace(/[?&]sslmode=[^&]*/g, '');
-    connectionString = connectionString.replace(/\?&/, '?');
-    connectionString = connectionString.replace(/\?$/, '');
+    connectionString = connectionString.replace(/\?sslmode=[^&]*&/, '?');
+    connectionString = connectionString.replace(/&sslmode=[^&]*&/, '&');
+    connectionString = connectionString.replace(/\?sslmode=[^&]*$/, '');
+    connectionString = connectionString.replace(/&sslmode=[^&]*$/, '');
 }
 
 const poolConfig = connectionString
