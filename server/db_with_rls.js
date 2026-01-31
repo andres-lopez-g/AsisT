@@ -11,7 +11,12 @@ const isProduction = process.env.NODE_ENV === 'production' || !!process.env.VERC
 const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 
 const poolConfig = connectionString
-    ? { connectionString }
+    ? { 
+        connectionString,
+        ssl: {
+            rejectUnauthorized: false
+        }
+    }
     : {
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
@@ -28,9 +33,8 @@ const poolConfig = connectionString
 // 1. Using proper CA certificates from your cloud provider
 // 2. Setting rejectUnauthorized: true in production with valid certs
 // 3. Using connection strings that include proper SSL configuration
-// Always enable SSL for connection strings (typically used for remote databases)
-// or when explicitly enabled via DB_SSL or in production environments
-if (connectionString || process.env.DB_SSL === 'true' || isProduction) {
+// For individual connection parameters, enable SSL when explicitly set or in production
+if (!connectionString && (process.env.DB_SSL === 'true' || isProduction)) {
     poolConfig.ssl = {
         rejectUnauthorized: false
     };
