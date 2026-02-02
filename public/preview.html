@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Investments - Graphics Preview</title>
+    <style>
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            color: #e5e5e5;
+            padding: 40px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 20px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            letter-spacing: -0.02em;
+        }
+        
+        h2 {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888;
+            margin: 30px 0 15px;
+            font-weight: 700;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .left-side {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .rank {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: #666;
+        }
+        
+        .info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .ticker {
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        
+        .price {
+            font-weight: 700;
+            font-size: 12px;
+            color: #3b82f6;
+        }
+        
+        .right-side {
+            text-align: right;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            backdrop-filter: blur(4px);
+        }
+        
+        .badge.positive-high {
+            background: rgba(74, 222, 128, 0.2);
+            border-color: rgba(74, 222, 128, 0.4);
+            color: #4ade80;
+        }
+        
+        .badge.positive-medium {
+            background: rgba(74, 222, 128, 0.15);
+            border-color: rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
+        
+        .badge.positive-low {
+            background: rgba(74, 222, 128, 0.1);
+            border-color: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+        
+        .badge.negative-high {
+            background: rgba(248, 113, 113, 0.2);
+            border-color: rgba(248, 113, 113, 0.4);
+            color: #f87171;
+        }
+        
+        .badge.negative-medium {
+            background: rgba(248, 113, 113, 0.15);
+            border-color: rgba(248, 113, 113, 0.3);
+            color: #f87171;
+        }
+        
+        .badge.negative-low {
+            background: rgba(248, 113, 113, 0.1);
+            border-color: rgba(248, 113, 113, 0.2);
+            color: #f87171;
+        }
+        
+        .volume {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .chart-area {
+            margin-top: 8px;
+            height: 32px;
+            background: linear-gradient(to bottom, rgba(74, 222, 128, 0.15), transparent);
+            border-top: 2px solid #4ade80;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-area.negative {
+            background: linear-gradient(to bottom, rgba(248, 113, 113, 0.15), transparent);
+            border-top-color: #f87171;
+        }
+        
+        .chart-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            opacity: 0.3;
+        }
+        
+        .arrow {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Smart Investments - New Graphics</h1>
+        
+        <h2>📊 Top Stocks</h2>
+        
+        <!-- High Positive -->
+        <div class="card">
+            <div class="card-content">
+                <div class="left-side">
+                    <span class="rank">#1</span>
+                    <div class="info">
+                        <span class="ticker">AAPL</span>
+                        <span class="price">$150.25</span>
+                    </div>
+                </div>
+                <div class="right-side">
+                    <div class="badge positive-high">
+                        <span class="arrow">↗</span>
+                        <span>+7.85%</span>
+                    </div>
+                    <div class="volume">Vol: 89.2M</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Medium Positive -->
+        <div class="card">
+            <div class="card-content">
+                <div class="left-side">
+                    <span class="rank">#2</span>
+                    <div class="info">
+                        <span class="ticker">MSFT</span>
+                        <span class="price">$320.50</span>
+                    </div>
+                </div>
+                <div class="right-side">
+                    <div class="badge positive-medium">
+                        <span class="arrow">↗</span>
+                        <span>+3.42%</span>
+                    </div>
+                    <div class="volume">Vol: 42.1M</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Low Positive -->
+        <div class="card">
+            <div class="card-content">
+                <div class="left-side">
+                    <span class="rank">#3</span>
+                    <div class="info">
+                        <span class="ticker">GOOGL</span>
+                        <span class="price">$128.75</span>
+                    </div>
+                </div>
+                <div class="right-side">
+                    <div class="badge positive-low">
+                        <span class="arrow">↗</span>
+                        <span>+0.89%</span>
+                    </div>
+                    <div class="volume">Vol: 28.3M</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Negative -->
+        <div class="card">
+            <div class="card-content">
+                <div class="left-side">
+                    <span class="rank">#4</span>
+                    <div class="info">
+                        <span class="ticker">TSLA</span>
+                        <span class="price">$245.80</span>
+                    </div>
+                </div>
+                <div class="right-side">
+                    <div class="badge negative-medium">
+                        <span class="arrow">↘</span>
+                        <span>-2.88%</span>
+                    </div>
+                    <div class="volume">Vol: 156.7M</div>
+                </div>
+            </div>
+        </div>
+        
+        <h2>🪙 Top Crypto</h2>
+        
+        <!-- Crypto with chart -->
+        <div class="card">
+            <div class="card-content">
+                <div class="left-side">
+                    <span class="rank">#1</span>
+                    <div class="info">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="ticker">BTC</span>
+                            <span style="font-size: 9px; color: #888;">Bitcoin</span>
+                        </div>
+                        <span class="price">$45,000</span>
+                    </div>
+                </div>
+                <div class="right-side">
+                    <div class="badge positive-medium">
+                        <span class="arrow">↗</span>
+                        <span>+2.50%</span>
+                    </div>
+                    <div class="volume">Vol: $25.4B</div>
+                </div>
+            </div>
+            <div class="chart-area">
+                <svg width="100%" height="32" viewBox="0 0 100 32" preserveAspectRatio="none">
+                    <path d="M0,20 Q10,18 20,16 T40,12 T60,8 T80,10 T100,6" 
+                          stroke="#4ade80" 
+                          stroke-width="1.5" 
+                          fill="none" 
+                          opacity="1"/>
+                    <path d="M0,20 Q10,18 20,16 T40,12 T60,8 T80,10 T100,6 L100,32 L0,32 Z" 
+                          fill="url(#gradient)" 
+                          opacity="0.6"/>
+                </svg>
+                <defs>
+                    <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" style="stop-color:#4ade80;stop-opacity:0.3" />
+                        <stop offset="100%" style="stop-color:#4ade80;stop-opacity:0" />
+                    </linearGradient>
+                </defs>
+            </div>
+        </div>
+        
+        <!-- Crypto negative with chart -->
+        <div class="card">
+            <div class="card-content">
+                <div class="left-side">
+                    <span class="rank">#2</span>
+                    <div class="info">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="ticker">ETH</span>
+                            <span style="font-size: 9px; color: #888;">Ethereum</span>
+                        </div>
+                        <span class="price">$2,450</span>
+                    </div>
+                </div>
+                <div class="right-side">
+                    <div class="badge negative-low">
+                        <span class="arrow">↘</span>
+                        <span>-1.15%</span>
+                    </div>
+                    <div class="volume">Vol: $12.8B</div>
+                </div>
+            </div>
+            <div class="chart-area negative">
+                <svg width="100%" height="32" viewBox="0 0 100 32" preserveAspectRatio="none">
+                    <path d="M0,12 Q10,10 20,14 T40,18 T60,22 T80,20 T100,24" 
+                          stroke="#f87171" 
+                          stroke-width="1.5" 
+                          fill="none" 
+                          opacity="1"/>
+                    <path d="M0,12 Q10,10 20,14 T40,18 T60,22 T80,20 T100,24 L100,32 L0,32 Z" 
+                          fill="url(#gradient-neg)" 
+                          opacity="0.6"/>
+                </svg>
+                <defs>
+                    <linearGradient id="gradient-neg" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" style="stop-color:#f87171;stop-opacity:0.3" />
+                        <stop offset="100%" style="stop-color:#f87171;stop-opacity:0" />
+                    </linearGradient>
+                </defs>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Data refreshed every 24 hours
+        </div>
+    </div>
+</body>
+</html>
