@@ -14,7 +14,6 @@ const MiniAreaChart = ({ data, isPositive }) => {
     
     const chartData = data.map((value, index) => ({ value, index }));
     const color = isPositive ? '#4ade80' : '#f87171';
-    const fillColor = isPositive ? 'rgba(74, 222, 128, 0.1)' : 'rgba(248, 113, 113, 0.1)';
     
     return (
         <div style={{ width: '100%', height: '32px' }}>
