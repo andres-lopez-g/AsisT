@@ -25,7 +25,17 @@ export const AuthProvider = ({ children }) => {
                 body: JSON.stringify({ email, password }),
             });
 
-            const data = await response.json();
+            // Try to parse as JSON, but handle non-JSON responses
+            let data;
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                data = await response.json();
+            } else {
+                // If response is not JSON, treat it as a generic error
+                const text = await response.text();
+                console.error('[AUTH] Non-JSON response:', text);
+                throw new Error('Server error. Please try again later.');
+            }
 
             if (!response.ok) {
                 throw new Error(data.error || 'Login failed');
@@ -36,7 +46,7 @@ export const AuthProvider = ({ children }) => {
             setUser(data.user);
             return data.user;
         } catch (error) {
-            console.error(error);
+            console.error('[AUTH] Login error:', error);
             throw error;
         }
     };
@@ -49,14 +59,24 @@ export const AuthProvider = ({ children }) => {
                 body: JSON.stringify({ name, email, password }),
             });
 
-            const data = await response.json();
+            // Try to parse as JSON, but handle non-JSON responses
+            let data;
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                data = await response.json();
+            } else {
+                // If response is not JSON, treat it as a generic error
+                const text = await response.text();
+                console.error('[AUTH] Non-JSON response:', text);
+                throw new Error('Server error. Please try again later.');
+            }
 
             if (!response.ok) {
                 throw new Error(data.error || 'Registration failed');
             }
             return true;
         } catch (error) {
-            console.error(error);
+            console.error('[AUTH] Registration error:', error);
             throw error;
         }
     };
@@ -66,6 +86,38 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
     };
+
+    // Inactivity Logout logic
+    useEffect(() => {
+        let inactivityTimer;
+        const INACTIVITY_LIMIT = 15 * 60 * 1000; // 15 minutes
+
+        const resetTimer = () => {
+            if (inactivityTimer) clearTimeout(inactivityTimer);
+            if (user) {
+                inactivityTimer = setTimeout(() => {
+                    console.log('Logging out due to inactivity');
+                    logout();
+                }, INACTIVITY_LIMIT);
+            }
+        };
+
+        const activityEvents = ['mousemove', 'keydown', 'mousedown', 'touchstart', 'scroll'];
+
+        if (user) {
+            resetTimer();
+            activityEvents.forEach(event => {
+                window.addEventListener(event, resetTimer);
+            });
+        }
+
+        return () => {
+            if (inactivityTimer) clearTimeout(inactivityTimer);
+            activityEvents.forEach(event => {
+                window.removeEventListener(event, resetTimer);
+            });
+        };
+    }, [user]);
 
     // Helper for authenticated requests that handles 401/403
     const authFetch = async (url, options = {}) => {
@@ -82,7 +134,15 @@ export const AuthProvider = ({ children }) => {
             throw new Error('Session expired. Please log in again.');
         }
 
-        return response;
+        // Check if response is JSON before parsing
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            return response;
+        } else {
+            // If response is not JSON, log and return response as-is
+            console.warn('[AUTH] Non-JSON response from:', url);
+            return response;
+        }
     };
 
     return (

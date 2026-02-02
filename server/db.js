@@ -1,22 +1,28 @@
 import pg from 'pg';
 import dotenv from 'dotenv';
+import { cleanConnectionString } from './utils/dbConfig.js';
 
 dotenv.config();
 
-// Fix for SELF_SIGNED_CERT_IN_CHAIN on Vercel/Supabase
-if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-}
-
 const { Pool } = pg;
 
-const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
+const isProduction = process.env.NODE_ENV === 'production' || !!process.env.VERCEL;
 
 // Support both individual variables and a full connection string (common in Vercel/Neon/Supabase)
-const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+
+// Remove sslmode parameter from connection string if present
+// We'll handle SSL configuration separately to ensure it works with self-signed certs
+connectionString = cleanConnectionString(connectionString);
 
 const poolConfig = connectionString
-    ? { connectionString }
+    ? { 
+        connectionString,
+        // Explicitly configure SSL to accept self-signed certificates
+        ssl: {
+            rejectUnauthorized: false
+        }
+    }
     : {
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
@@ -25,11 +31,14 @@ const poolConfig = connectionString
         database: process.env.DB_NAME,
     };
 
-// SSL is required for Supabase/Vercel
+// SSL is required for Supabase/Vercel and most cloud database providers
 // We use rejectUnauthorized: false to allow self-signed certs common in cloud providers
-poolConfig.ssl = {
-    rejectUnauthorized: false
-};
+// For individual connection parameters, enable SSL when explicitly set or in production
+if (!connectionString && (process.env.DB_SSL === 'true' || isProduction)) {
+    poolConfig.ssl = {
+        rejectUnauthorized: false
+    };
+}
 
 const pool = new Pool(poolConfig);
 

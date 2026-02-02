@@ -6,7 +6,12 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import financeRoutes from './routes/finance.js';
 import plannerRoutes from './routes/planner.js';
+import debtRoutes from './routes/debts.js';
+import categoryRoutes from './routes/categories.js';
+import smartFeaturesRoutes from './routes/smartFeatures.js';
 import errorHandler from './middleware/errorHandler.js';
+import db from './db.js';
+import * as exchangeRateService from './services/exchangeRateService.js';
 
 dotenv.config();
 
@@ -53,14 +58,40 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/finance', financeRoutes);
 app.use('/api/planner', plannerRoutes);
+app.use('/api/debts', debtRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/smart', smartFeaturesRoutes);
 
+// Error handler middleware (must be last)
 app.use(errorHandler);
+
+// Catch-all for unmatched routes - return JSON instead of HTML
+app.use((req, res) => {
+    res.status(404).json({ error: 'Route not found' });
+});
 
 // Only listen if not in a serverless environment
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
+        
+        // Initialize automatic exchange rate updates
+        exchangeRateService.initializeAutoUpdates(db);
     });
 }
+
+// Global error handlers to prevent crashes and ensure JSON responses
+process.on('uncaughtException', (err) => {
+    console.error('[FATAL] Uncaught Exception:', err);
+    // Don't exit in production to keep the server running
+    if (process.env.NODE_ENV !== 'production') {
+        process.exit(1);
+    }
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('[FATAL] Unhandled Rejection at:', promise, 'reason:', reason);
+    // Don't exit in production to keep the server running
+});
 
 export default app;

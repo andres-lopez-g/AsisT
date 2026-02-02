@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { cleanConnectionString } from './utils/dbConfig.js';
 
 dotenv.config();
 
@@ -12,7 +13,11 @@ const __dirname = path.dirname(__filename);
 const { Client } = pg;
 
 async function setup() {
-    const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    
+    // Remove sslmode parameter from connection string if present
+    connectionString = cleanConnectionString(connectionString);
+    
     const isCloud = !!connectionString;
     const dbName = process.env.DB_NAME || 'fusion_observatory';
 
@@ -63,6 +68,35 @@ async function setup() {
         // We use a simplified query execution for the full SQL file
         await targetClient.query(sql);
         console.log('Schema applied successfully.');
+
+        // Run additional migrations
+        console.log('Running additional migrations...');
+        
+        // Migration 1: Smart Features
+        const smartFeaturesMigrationPath = path.join(__dirname, 'migrations', 'migration_smart_features.sql');
+        if (fs.existsSync(smartFeaturesMigrationPath)) {
+            const smartFeaturesSql = fs.readFileSync(smartFeaturesMigrationPath, 'utf8');
+            await targetClient.query(smartFeaturesSql);
+            console.log('Smart features migration applied.');
+        }
+
+        // Migration 2: Currency Support
+        const currencyMigrationPath = path.join(__dirname, 'migrations', 'migration_currency_support.sql');
+        if (fs.existsSync(currencyMigrationPath)) {
+            const currencySql = fs.readFileSync(currencyMigrationPath, 'utf8');
+            await targetClient.query(currencySql);
+            console.log('Currency support migration applied.');
+        }
+
+        // Migration 3: Market Snapshots
+        const marketSnapshotsMigrationPath = path.join(__dirname, 'migrations', 'migration_market_snapshots.sql');
+        if (fs.existsSync(marketSnapshotsMigrationPath)) {
+            const marketSnapshotsSql = fs.readFileSync(marketSnapshotsMigrationPath, 'utf8');
+            await targetClient.query(marketSnapshotsSql);
+            console.log('Market snapshots migration applied.');
+        }
+
+        console.log('All migrations completed successfully.');
 
         await targetClient.end();
         console.log('Database setup completed successfully.');

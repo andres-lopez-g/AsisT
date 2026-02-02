@@ -35,25 +35,7 @@ AsisT is a minimalist yet powerful personal management platform designed to help
 
 ## 📦 Getting Started
 
-### Prerequisites
-- Node.js installed.
-- A PostgreSQL database (Local or Cloud).
-
-### Installation
-1. Clone the repository.
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file based on `.env.example`.
-4. Run the database setup:
-   ```bash
-   npm run db:setup
-   ```
-5. Start development:
-   ```bash
-   npm start
-   ```
+See [SETUP.md](./SETUP.md) for detailed installation and configuration instructions.
 
 ## 🌐 Deployment
 
