@@ -136,7 +136,7 @@ const SmartInvestments = () => {
                     <div className="space-y-2">
                         {stocks.map((stock, index) => {
                             const isPositive = parseFloat(stock.change_amount) >= 0;
-                            const changePercent = stock.change_percentage?.replace('%', '').replace('+', '') || '0';
+                            const changePercent = stock.change_percentage?.replaceAll('%', '').replaceAll('+', '') || '0';
                             
                             return (
                                 <div key={index} className="bg-muted/30 border border-border p-2 hover:bg-muted/50 transition-colors">
