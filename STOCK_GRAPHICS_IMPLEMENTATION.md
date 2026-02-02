@@ -49,7 +49,7 @@ We've successfully implemented stock graphics while staying within free tier lim
 1. **CoinGecko Sparklines**: The API already returns sparkline data when requested - no additional endpoint needed
 2. **Stock Trend Bars**: Uses existing price change data - no new API calls
 3. **24-Hour Caching**: Both datasets cached together, no additional cache entries
-4. **Efficient Rendering**: Recharts library already included, minimal bundle size increase (+~20KB)
+4. **Efficient Rendering**: Recharts library already included, minimal bundle size increase (+~3KB)
 
 ## 🎨 Visual Enhancements
 

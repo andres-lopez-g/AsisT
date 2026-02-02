@@ -8,6 +8,10 @@ import { useAuth } from '../../context/AuthContext';
  * Uses cached market data refreshed every 24 hours
  */
 
+// Constants for trend bar visualization
+const TREND_BAR_SCALE_FACTOR = 10; // 1% change = 10px width
+const TREND_BAR_MAX_WIDTH = 100;   // Maximum bar width in pixels
+
 // Mini sparkline chart component for crypto
 const MiniSparkline = ({ data, isPositive }) => {
     if (!data || !Array.isArray(data) || data.length === 0) return null;
@@ -35,7 +39,7 @@ const MiniSparkline = ({ data, isPositive }) => {
 const TrendBar = ({ changePercent }) => {
     const value = parseFloat(changePercent) || 0;
     const isPositive = value >= 0;
-    const barWidth = Math.min(Math.abs(value) * 10, 100); // Scale: 1% = 10px, max 100px
+    const barWidth = Math.min(Math.abs(value) * TREND_BAR_SCALE_FACTOR, TREND_BAR_MAX_WIDTH);
     
     return (
         <div className="w-full h-1 bg-muted/50 relative overflow-hidden">
