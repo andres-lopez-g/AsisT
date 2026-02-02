@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, DollarSign, Activity } from 'lucide-react';
-import { LineChart, Line, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../../context/AuthContext';
 
 /**
@@ -8,47 +8,70 @@ import { useAuth } from '../../context/AuthContext';
  * Uses cached market data refreshed every 24 hours
  */
 
-// Constants for trend bar visualization
-const TREND_BAR_SCALE_FACTOR = 10; // 1% change = 10px width
-const TREND_BAR_MAX_WIDTH = 100;   // Maximum bar width in pixels
-
-// Mini sparkline chart component for crypto
-const MiniSparkline = ({ data, isPositive }) => {
+// Mini area chart component for crypto sparklines
+const MiniAreaChart = ({ data, isPositive }) => {
     if (!data || !Array.isArray(data) || data.length === 0) return null;
     
     const chartData = data.map((value, index) => ({ value, index }));
     const color = isPositive ? '#4ade80' : '#f87171';
+    const fillColor = isPositive ? 'rgba(74, 222, 128, 0.1)' : 'rgba(248, 113, 113, 0.1)';
     
     return (
-        <ResponsiveContainer width="100%" height={20}>
-            <LineChart data={chartData}>
-                <Line 
-                    type="monotone" 
-                    dataKey="value" 
-                    stroke={color} 
-                    strokeWidth={1.5}
-                    dot={false}
-                    animationDuration={300}
-                />
-            </LineChart>
-        </ResponsiveContainer>
+        <div style={{ width: '100%', height: '32px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData} margin={{ top: 2, right: 0, left: 0, bottom: 0 }}>
+                    <defs>
+                        <linearGradient id={`gradient-${isPositive ? 'positive' : 'negative'}`} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor={color} stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor={color} stopOpacity={0}/>
+                        </linearGradient>
+                    </defs>
+                    <Area 
+                        type="monotone" 
+                        dataKey="value" 
+                        stroke={color} 
+                        strokeWidth={1.5}
+                        fill={`url(#gradient-${isPositive ? 'positive' : 'negative'})`}
+                        animationDuration={500}
+                    />
+                </AreaChart>
+            </ResponsiveContainer>
+        </div>
     );
 };
 
-// Trend bar component for stocks
-const TrendBar = ({ changePercent }) => {
-    const value = parseFloat(changePercent) || 0;
-    const isPositive = value >= 0;
-    const barWidth = Math.min(Math.abs(value) * TREND_BAR_SCALE_FACTOR, TREND_BAR_MAX_WIDTH);
+// Performance badge showing price change magnitude
+const PerformanceBadge = ({ changePercent, isPositive }) => {
+    const value = Math.abs(parseFloat(changePercent) || 0);
+    
+    // Determine intensity based on magnitude
+    let intensity = 'low';
+    if (value >= 5) intensity = 'high';
+    else if (value >= 2) intensity = 'medium';
+    
+    const bgColors = {
+        positive: {
+            high: 'bg-green-500/20 border-green-400/40',
+            medium: 'bg-green-500/15 border-green-400/30',
+            low: 'bg-green-500/10 border-green-400/20'
+        },
+        negative: {
+            high: 'bg-red-500/20 border-red-400/40',
+            medium: 'bg-red-500/15 border-red-400/30',
+            low: 'bg-red-500/10 border-red-400/20'
+        }
+    };
+    
+    const colorClass = bgColors[isPositive ? 'positive' : 'negative'][intensity];
     
     return (
-        <div className="w-full h-1 bg-muted/50 relative overflow-hidden">
-            <div 
-                className={`h-full absolute top-0 transition-all duration-300 ${
-                    isPositive ? 'bg-green-400 left-0' : 'bg-red-400 right-0'
-                }`}
-                style={{ width: `${barWidth}%` }}
-            />
+        <div className={`px-2 py-1 rounded border ${colorClass} backdrop-blur-sm`}>
+            <div className="flex items-center gap-1">
+                {isPositive ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+                <span className="mono text-[10px] font-bold">
+                    {isPositive ? '+' : '-'}{value.toFixed(2)}%
+                </span>
+            </div>
         </div>
     );
 };
@@ -139,30 +162,26 @@ const SmartInvestments = () => {
                             const changePercent = stock.change_percentage?.replaceAll('%', '').replaceAll('+', '') || '0';
                             
                             return (
-                                <div key={index} className="bg-muted/30 border border-border p-2 hover:bg-muted/50 transition-colors">
-                                    <div className="flex items-center justify-between mb-1">
-                                        <div className="flex items-center gap-2">
-                                            <span className="mono text-[9px] text-secondary/60 w-5">
+                                <div key={index} className="bg-muted/30 border border-border p-3 hover:bg-muted/50 transition-colors">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2 flex-1">
+                                            <span className="mono text-[9px] text-secondary/60">
                                                 #{index + 1}
                                             </span>
-                                            <span className="font-bold text-xs uppercase">{stock.ticker}</span>
+                                            <div className="flex flex-col">
+                                                <span className="font-bold text-sm uppercase">{stock.ticker}</span>
+                                                <span className="font-bold text-xs text-primary">${stock.price?.toFixed(2)}</span>
+                                            </div>
                                         </div>
-                                        <div className={`
-                                            flex items-center gap-1 mono text-[10px] font-bold
-                                            ${isPositive ? 'text-green-400' : 'text-red-400'}
-                                        `}>
-                                            {isPositive ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
-                                            {changePercent}%
+                                        <div className="flex items-center gap-2">
+                                            <div className="text-right">
+                                                <PerformanceBadge changePercent={changePercent} isPositive={isPositive} />
+                                                <div className="mono text-[9px] text-secondary/60 mt-1">
+                                                    Vol: {(stock.volume / 1000000).toFixed(1)}M
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-between text-[10px] mb-1">
-                                        <span className="font-bold">${stock.price?.toFixed(2)}</span>
-                                        <span className="mono text-secondary/60">
-                                            Vol: {(stock.volume / 1000000).toFixed(1)}M
-                                        </span>
-                                    </div>
-                                    {/* Trend bar visualization */}
-                                    <TrendBar changePercent={changePercent} />
                                 </div>
                             );
                         })}
@@ -187,35 +206,36 @@ const SmartInvestments = () => {
                             const sparklineData = coin.sparkline_in_7d?.price || [];
                             
                             return (
-                                <div key={index} className="bg-muted/30 border border-border p-2 hover:bg-muted/50 transition-colors">
-                                    <div className="flex items-center justify-between mb-1">
-                                        <div className="flex items-center gap-2">
-                                            <span className="mono text-[9px] text-secondary/60 w-5">
+                                <div key={index} className="bg-muted/30 border border-border p-3 hover:bg-muted/50 transition-colors">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-center gap-2 flex-1">
+                                            <span className="mono text-[9px] text-secondary/60">
                                                 #{index + 1}
                                             </span>
-                                            <span className="font-bold text-xs uppercase">{coin.symbol}</span>
-                                            <span className="text-[9px] text-secondary/80 truncate max-w-[100px]">
-                                                {coin.name}
-                                            </span>
+                                            <div className="flex flex-col">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="font-bold text-sm uppercase">{coin.symbol}</span>
+                                                    <span className="text-[9px] text-secondary/80 truncate max-w-[80px]">
+                                                        {coin.name}
+                                                    </span>
+                                                </div>
+                                                <span className="font-bold text-xs text-primary">${coin.current_price?.toLocaleString()}</span>
+                                            </div>
                                         </div>
-                                        <div className={`
-                                            flex items-center gap-1 mono text-[10px] font-bold
-                                            ${isPositive ? 'text-green-400' : 'text-red-400'}
-                                        `}>
-                                            {isPositive ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
-                                            {Math.abs(coin.price_change_percentage_24h).toFixed(2)}%
+                                        <div className="text-right">
+                                            <PerformanceBadge 
+                                                changePercent={Math.abs(coin.price_change_percentage_24h).toFixed(2)} 
+                                                isPositive={isPositive} 
+                                            />
+                                            <div className="mono text-[9px] text-secondary/60 mt-1">
+                                                Vol: ${(coin.total_volume / 1000000000).toFixed(2)}B
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-between text-[10px] mb-1">
-                                        <span className="font-bold">${coin.current_price?.toLocaleString()}</span>
-                                        <span className="mono text-secondary/60">
-                                            Vol: ${(coin.total_volume / 1000000000).toFixed(2)}B
-                                        </span>
-                                    </div>
-                                    {/* 7-day sparkline chart */}
+                                    {/* 7-day area chart */}
                                     {sparklineData.length > 0 && (
-                                        <div className="mt-1">
-                                            <MiniSparkline data={sparklineData} isPositive={isPositive} />
+                                        <div className="mt-2">
+                                            <MiniAreaChart data={sparklineData} isPositive={isPositive} />
                                         </div>
                                     )}
                                 </div>
