@@ -1,11 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, DollarSign, Activity } from 'lucide-react';
+import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../../context/AuthContext';
 
 /**
  * SmartInvestments - Display top 10 most traded stocks and crypto
  * Uses cached market data refreshed every 24 hours
  */
+
+// Mini sparkline chart component for crypto
+const MiniSparkline = ({ data, isPositive }) => {
+    if (!data || !Array.isArray(data) || data.length === 0) return null;
+    
+    const chartData = data.map((value, index) => ({ value, index }));
+    const color = isPositive ? '#4ade80' : '#f87171';
+    
+    return (
+        <ResponsiveContainer width="100%" height={20}>
+            <LineChart data={chartData}>
+                <Line 
+                    type="monotone" 
+                    dataKey="value" 
+                    stroke={color} 
+                    strokeWidth={1.5}
+                    dot={false}
+                    animationDuration={300}
+                />
+            </LineChart>
+        </ResponsiveContainer>
+    );
+};
+
+// Trend bar component for stocks
+const TrendBar = ({ changePercent }) => {
+    const value = parseFloat(changePercent) || 0;
+    const isPositive = value >= 0;
+    const barWidth = Math.min(Math.abs(value) * 10, 100); // Scale: 1% = 10px, max 100px
+    
+    return (
+        <div className="w-full h-1 bg-muted/50 relative overflow-hidden">
+            <div 
+                className={`h-full absolute top-0 transition-all duration-300 ${
+                    isPositive ? 'bg-green-400 left-0' : 'bg-red-400 right-0'
+                }`}
+                style={{ width: `${barWidth}%` }}
+            />
+        </div>
+    );
+};
+
 const SmartInvestments = () => {
     const { authFetch } = useAuth();
     const [investmentData, setInvestmentData] = useState(null);
@@ -89,7 +132,7 @@ const SmartInvestments = () => {
                     <div className="space-y-2">
                         {stocks.map((stock, index) => {
                             const isPositive = parseFloat(stock.change_amount) >= 0;
-                            const changePercent = stock.change_percentage?.replace('%', '') || '0';
+                            const changePercent = stock.change_percentage?.replace('%', '').replace('+', '') || '0';
                             
                             return (
                                 <div key={index} className="bg-muted/30 border border-border p-2 hover:bg-muted/50 transition-colors">
@@ -108,12 +151,14 @@ const SmartInvestments = () => {
                                             {changePercent}%
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-between text-[10px]">
+                                    <div className="flex items-center justify-between text-[10px] mb-1">
                                         <span className="font-bold">${stock.price?.toFixed(2)}</span>
                                         <span className="mono text-secondary/60">
                                             Vol: {(stock.volume / 1000000).toFixed(1)}M
                                         </span>
                                     </div>
+                                    {/* Trend bar visualization */}
+                                    <TrendBar changePercent={changePercent} />
                                 </div>
                             );
                         })}
@@ -135,6 +180,7 @@ const SmartInvestments = () => {
                     <div className="space-y-2">
                         {crypto.map((coin, index) => {
                             const isPositive = coin.price_change_percentage_24h >= 0;
+                            const sparklineData = coin.sparkline_in_7d?.price || [];
                             
                             return (
                                 <div key={index} className="bg-muted/30 border border-border p-2 hover:bg-muted/50 transition-colors">
@@ -156,12 +202,18 @@ const SmartInvestments = () => {
                                             {Math.abs(coin.price_change_percentage_24h).toFixed(2)}%
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-between text-[10px]">
+                                    <div className="flex items-center justify-between text-[10px] mb-1">
                                         <span className="font-bold">${coin.current_price?.toLocaleString()}</span>
                                         <span className="mono text-secondary/60">
                                             Vol: ${(coin.total_volume / 1000000000).toFixed(2)}B
                                         </span>
                                     </div>
+                                    {/* 7-day sparkline chart */}
+                                    {sparklineData.length > 0 && (
+                                        <div className="mt-1">
+                                            <MiniSparkline data={sparklineData} isPositive={isPositive} />
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })}

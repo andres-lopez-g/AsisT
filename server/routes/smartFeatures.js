@@ -472,7 +472,7 @@ router.get('/investments', authenticate, async (req, res) => {
         if (!cachedCrypto) {
             try {
                 const cryptoResponse = await fetch(
-                    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=volume_desc&per_page=10&page=1&sparkline=false'
+                    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=volume_desc&per_page=10&page=1&sparkline=true&sparkline_in_days=7'
                 );
                 
                 if (cryptoResponse.ok) {
@@ -487,7 +487,8 @@ router.get('/investments', authenticate, async (req, res) => {
                             price_change_percentage_24h: coin.price_change_percentage_24h,
                             market_cap: coin.market_cap,
                             total_volume: coin.total_volume,
-                            image: coin.image
+                            image: coin.image,
+                            sparkline_in_7d: coin.sparkline_in_7d
                         }));
                         
                         cryptoData = top10Crypto;
