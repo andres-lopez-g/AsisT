@@ -1,6 +1,6 @@
 import React, { useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X, Loader2, TrendingUp, Languages } from 'lucide-react';
+import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X, Loader2, TrendingUp, Languages, Activity } from 'lucide-react';
 
 // Auth
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -12,6 +12,7 @@ const HomeView = lazy(() => import('./features/home/HomeView'));
 const FinanceDashboard = lazy(() => import('./features/finance/FinanceDashboard'));
 const PaymentAnalyst = lazy(() => import('./features/finance/PaymentAnalyst'));
 const PlannerBoard = lazy(() => import('./features/planner/PlannerBoard'));
+const InvestmentsPage = lazy(() => import('./features/investments/InvestmentsPage'));
 const LandingPage = lazy(() => import('./features/landing/LandingPage'));
 
 const LoadingFallback = () => (
@@ -91,6 +92,7 @@ const ProtectedLayout = () => {
           <nav className="space-y-1 -mx-6">
             <SidebarLink to="/home" icon={LayoutDashboard} label="Dashboard" onClick={() => setSidebarOpen(false)} />
             <SidebarLink to="/finance" icon={CreditCard} label="Capital" onClick={() => setSidebarOpen(false)} />
+            <SidebarLink to="/investments" icon={Activity} label="Investments" onClick={() => setSidebarOpen(false)} />
             <SidebarLink to="/payment-analyst" icon={TrendingUp} label="Analysis" onClick={() => setSidebarOpen(false)} />
             <SidebarLink to="/planner" icon={Calendar} label="Objectives" onClick={() => setSidebarOpen(false)} />
           </nav>
@@ -165,6 +167,7 @@ const App = () => {
                 {/* Actually, if user goes to /home, they see HomeView. We keep that. */}
                 <Route path="/home" element={<HomeView />} />
                 <Route path="/finance" element={<FinanceDashboard />} />
+                <Route path="/investments" element={<InvestmentsPage />} />
                 <Route path="/payment-analyst" element={<PaymentAnalyst />} />
                 <Route path="/planner" element={<PlannerBoard />} />
               </Route>
