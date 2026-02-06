@@ -75,6 +75,8 @@ CREATE TABLE bot_conversations (
 ```env
 # Google Gemini API for AI recommendations
 GEMINI_API_KEY=your_gemini_api_key_here
+# Available models: gemini-3-flash-preview (recommended), gemini-3-pro-preview, gemini-2.5-flash
+GEMINI_MODEL=gemini-3-flash-preview
 ```
 
 #### Dependencies
@@ -113,7 +115,7 @@ The bot has access to:
 - **General Chat:** Uses real-time user data for relevant responses
 
 ### Free Tier Optimized
-- Uses Gemini Pro (free model)
+- Uses Gemini 3 Flash Preview (free model, recommended as of 2026)
 - 60 requests/minute limit (adequate for personal use)
 - Efficient database queries
 - Message history caching
