@@ -1,6 +1,6 @@
 import React, { useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X, Loader2, TrendingUp, Languages, Activity } from 'lucide-react';
+import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X, Loader2, TrendingUp, Languages, Activity, Bot } from 'lucide-react';
 
 // Auth
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -13,6 +13,7 @@ const FinanceDashboard = lazy(() => import('./features/finance/FinanceDashboard'
 const PaymentAnalyst = lazy(() => import('./features/finance/PaymentAnalyst'));
 const PlannerBoard = lazy(() => import('./features/planner/PlannerBoard'));
 const InvestmentsPage = lazy(() => import('./features/investments/InvestmentsPage'));
+const GeminiBot = lazy(() => import('./features/gemini/GeminiBot'));
 const LandingPage = lazy(() => import('./features/landing/LandingPage'));
 
 const LoadingFallback = () => (
@@ -95,6 +96,7 @@ const ProtectedLayout = () => {
             <SidebarLink to="/investments" icon={Activity} label="Investments" onClick={() => setSidebarOpen(false)} />
             <SidebarLink to="/payment-analyst" icon={TrendingUp} label="Analysis" onClick={() => setSidebarOpen(false)} />
             <SidebarLink to="/planner" icon={Calendar} label="Objectives" onClick={() => setSidebarOpen(false)} />
+            <SidebarLink to="/bot" icon={Bot} label="AI Assistant" onClick={() => setSidebarOpen(false)} />
           </nav>
         </div>
 
@@ -170,6 +172,7 @@ const App = () => {
                 <Route path="/investments" element={<InvestmentsPage />} />
                 <Route path="/payment-analyst" element={<PaymentAnalyst />} />
                 <Route path="/planner" element={<PlannerBoard />} />
+                <Route path="/bot" element={<GeminiBot />} />
               </Route>
             </Routes>
           </ErrorBoundary>

@@ -9,6 +9,7 @@ import plannerRoutes from './routes/planner.js';
 import debtRoutes from './routes/debts.js';
 import categoryRoutes from './routes/categories.js';
 import smartFeaturesRoutes from './routes/smartFeatures.js';
+import geminiBotRoutes from './routes/geminiBot.js';
 import errorHandler from './middleware/errorHandler.js';
 import db from './db.js';
 import * as exchangeRateService from './services/exchangeRateService.js';
@@ -61,6 +62,7 @@ app.use('/api/planner', plannerRoutes);
 app.use('/api/debts', debtRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/smart', smartFeaturesRoutes);
+app.use('/api/gemini', geminiBotRoutes);
 
 // Error handler middleware (must be last)
 app.use(errorHandler);
