@@ -21,7 +21,8 @@ function initializeGemini() {
     
     try {
         genAI = new GoogleGenerativeAI(apiKey);
-        model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+        const modelName = process.env.GEMINI_MODEL || 'gemini-pro';
+        model = genAI.getGenerativeModel({ model: modelName });
         console.log('[Gemini Service] Initialized successfully');
         return true;
     } catch (error) {
