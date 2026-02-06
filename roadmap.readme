@@ -1,0 +1,513 @@
+# 🗺️ Roadmap del Proyecto AsisT
+
+## 📋 Tabla de Contenidos
+1. [Visión del Proyecto](#visión-del-proyecto)
+2. [Estado Actual](#estado-actual)
+3. [Roadmap de Desarrollo](#roadmap-de-desarrollo)
+4. [Implementaciones Futuras](#implementaciones-futuras)
+5. [Mejoras Técnicas](#mejoras-técnicas)
+6. [Ecosistema y Expansión](#ecosistema-y-expansión)
+
+---
+
+## 🎯 Visión del Proyecto
+
+**AsisT** es un asistente personal inteligente que unifica la gestión financiera y la productividad en una plataforma minimalista, rápida y hermosa. Nuestro objetivo es convertirnos en el hub central de gestión personal para usuarios que buscan control total de sus finanzas y tareas.
+
+### Propuesta de Valor
+- **Todo en Uno**: Finanzas, tareas, inversiones y análisis con IA en un solo lugar
+- **Inteligencia Real**: Recomendaciones personalizadas basadas en datos reales del usuario
+- **Gratuito y Open Source**: Sin costos ocultos, desplegable en tier gratuito
+- **Hermoso y Rápido**: UI moderna con React 19 y animaciones fluidas
+
+---
+
+## 📊 Estado Actual
+
+### ✅ Funcionalidades Implementadas (v1.0)
+
+#### 1. **Sistema de Autenticación**
+- ✅ Registro y login con JWT
+- ✅ Hash de contraseñas con bcrypt
+- ✅ Rate limiting para prevenir ataques
+- ✅ Row Level Security (RLS) en Supabase
+
+#### 2. **Gestión Financiera**
+- ✅ Seguimiento de ingresos y gastos
+- ✅ Categorización de transacciones
+- ✅ Soporte multi-moneda con tasas de cambio automáticas
+- ✅ Gráficos interactivos (área charts, 7 días)
+- ✅ Gestión de deudas con amortización
+- ✅ Análisis de pagos recurrentes
+
+#### 3. **Sistema de Tareas (Kanban)**
+- ✅ Board con 3 estados: To Do, In Progress, Done
+- ✅ Sistema de prioridades (Alta, Media, Baja)
+- ✅ Categorización personalizada
+- ✅ Filtros y búsqueda
+
+#### 4. **Dashboard Principal**
+- ✅ Vista unificada de balance y tareas
+- ✅ Widgets de resumen (balance, próximas tareas)
+- ✅ Navegación rápida
+
+#### 5. **Smart Features (Funciones Inteligentes)**
+- ✅ **AI Assistant (Gemini)**: Chat con IA para recomendaciones financieras y productividad
+- ✅ **Forecasting**: Predicción de balance futuro basado en patrones
+- ✅ **Smart Investments**: Top 10 acciones y criptomonedas más negociadas
+- ✅ **Spending Insights**: Análisis de patrones de gasto
+- ✅ **Debt Optimizer**: Estrategias de pago de deudas
+- ✅ **Task Intelligence**: Análisis de carga de trabajo y sugerencias
+
+#### 6. **Infraestructura**
+- ✅ Backend: Node.js + Express con arquitectura serverless
+- ✅ Frontend: React 19 + Vite + Tailwind CSS
+- ✅ Database: PostgreSQL con migraciones automatizadas
+- ✅ Deployment: Configurado para Vercel (1-click deploy)
+- ✅ APIs externas: Gemini AI, Alpha Vantage, CoinGecko
+
+---
+
+## 🚀 Roadmap de Desarrollo
+
+### **Fase 2: Mejora de la Experiencia (Q1-Q2 2026)** 🔄
+
+#### 2.1 Mejoras en UI/UX
+- [ ] **Dark Mode Completo**: Implementar tema oscuro persistente
+- [ ] **Animaciones Mejoradas**: Transiciones más suaves con Framer Motion
+- [ ] **Dashboard Personalizable**: Widgets arrastrables y configurables
+- [ ] **Responsive Avanzado**: Optimización total para tablets y móviles
+- [ ] **PWA (Progressive Web App)**: Instalación como app nativa
+- [ ] **Modo Offline**: Sincronización cuando vuelve la conexión
+- [ ] **Shortcuts de Teclado**: Navegación rápida con teclas
+
+#### 2.2 Mejoras en Finanzas
+- [ ] **Metas de Ahorro**: Sistema de objetivos financieros con progreso
+- [ ] **Presupuestos Mensuales**: Límites por categoría con alertas
+- [ ] **Exportar a PDF/CSV**: Reportes financieros descargables
+- [ ] **Importar Transacciones**: Upload de archivos bancarios (CSV)
+- [ ] **Categorización Automática con IA**: Gemini sugiere categorías
+- [ ] **Modo "Cash Flow"**: Vista de entradas/salidas mensuales
+- [ ] **Comparación Mensual**: Gráficos comparativos mes a mes
+
+#### 2.3 Mejoras en Tareas
+- [ ] **Subtareas**: Dividir tareas grandes en pasos
+- [ ] **Etiquetas/Tags**: Sistema flexible de etiquetado
+- [ ] **Vista de Calendario**: Visualizar tareas en calendario
+- [ ] **Recordatorios**: Notificaciones por email o push
+- [ ] **Plantillas de Tareas**: Crear templates reutilizables
+- [ ] **Vista Gantt**: Timeline de proyectos
+- [ ] **Estimación de Tiempo**: Tracking de tiempo invertido
+
+---
+
+### **Fase 3: Inteligencia Artificial Avanzada (Q2-Q3 2026)** 🧠
+
+#### 3.1 Gemini Bot Enhancements
+- [ ] **Conversación Multi-turn**: Contexto de conversación extendido
+- [ ] **Sugerencias Proactivas**: Notificaciones automáticas de IA
+- [ ] **Análisis de Sentimiento**: Detectar estrés financiero
+- [ ] **Entrada por Voz**: Speech-to-text con Web Speech API
+- [ ] **Respuestas con Gráficos**: IA genera visualizaciones dinámicas
+- [ ] **Multi-idioma**: Detección automática del idioma del usuario
+- [ ] **Personalidad Configurable**: Tono de conversación ajustable
+
+#### 3.2 Predicciones y Análisis
+- [ ] **Machine Learning Local**: Modelos de predicción con TensorFlow.js
+- [ ] **Detección de Anomalías**: Alertar gastos inusuales
+- [ ] **Predicción de Solvencia**: Probabilidad de cumplir con deudas
+- [ ] **Recomendaciones de Inversión**: Basado en perfil de riesgo
+- [ ] **Optimización de Gastos**: IA sugiere donde recortar
+- [ ] **Análisis de Tendencias**: Patterns multi-mes con visualizaciones
+
+#### 3.3 Automatización
+- [ ] **Reglas Automáticas**: "Si pago X, categorizar como Y"
+- [ ] **Transacciones Recurrentes Auto**: Detección y creación automática
+- [ ] **Sincronización Bancaria**: Conexión con bancos (Plaid/similar)
+- [ ] **Smart Reminders**: Recordatorios contextuales de IA
+- [ ] **Auto-categorización**: Gemini categoriza al crear transacción
+
+---
+
+### **Fase 4: Colaboración y Social (Q3-Q4 2026)** 👥
+
+#### 4.1 Funciones Multi-usuario
+- [ ] **Cuentas Compartidas**: Gestión financiera de parejas/familias
+- [ ] **Roles y Permisos**: Admin, Editor, Viewer
+- [ ] **Historial de Cambios**: Quién modificó qué
+- [ ] **Comentarios**: Notas en transacciones/tareas compartidas
+- [ ] **Notificaciones**: Alertas de actividad de otros usuarios
+
+#### 4.2 Equipos y Proyectos
+- [ ] **Workspaces**: Separar personal, familiar, trabajo
+- [ ] **Proyectos Compartidos**: Tareas colaborativas
+- [ ] **Presupuestos de Equipo**: Gestión financiera grupal
+- [ ] **Chat Integrado**: Comunicación dentro de la plataforma
+- [ ] **Perfiles Públicos**: Compartir achievements (opcional)
+
+#### 4.3 Integraciones Sociales
+- [ ] **Compartir en Redes**: Exportar gráficos a Twitter/LinkedIn
+- [ ] **Comparación Anónima**: Ver cómo te comparas con otros (privacidad)
+- [ ] **Challenges**: Desafíos de ahorro/productividad
+- [ ] **Leaderboards**: Rankings de cumplimiento de metas
+
+---
+
+### **Fase 5: Expansión de Funcionalidades (Q4 2026 - Q1 2027)** 🌟
+
+#### 5.1 Módulos Nuevos
+- [ ] **Portfolio de Inversiones**: Tracking real de acciones/crypto propias
+- [ ] **Calculadora de Retiro**: Planificación a largo plazo
+- [ ] **Gestión de Suscripciones**: Rastrear Netflix, Spotify, etc.
+- [ ] **Rastreador de Salud**: Integración con Apple Health/Google Fit
+- [ ] **Tiempo de Pantalla**: Análisis de productividad digital
+- [ ] **Habit Tracker**: Seguimiento de hábitos diarios
+- [ ] **Diario Digital**: Journaling con análisis de ánimo
+
+#### 5.2 Análisis de Inversiones
+- [ ] **Real-time Stock Tracking**: Precios en vivo
+- [ ] **Análisis Fundamental**: P/E ratio, earnings, etc.
+- [ ] **Alertas de Precio**: Notificaciones de cambios significativos
+- [ ] **Portfolio Diversification**: Análisis de riesgo
+- [ ] **Simulador de Trading**: Paper trading educativo
+- [ ] **Dividend Tracker**: Seguimiento de dividendos
+
+#### 5.3 Educación Financiera
+- [ ] **Cursos Integrados**: Mini-lecciones de finanzas personales
+- [ ] **Glosario Financiero**: Términos explicados por IA
+- [ ] **Calculadoras**: Intereses, préstamos, inversiones
+- [ ] **Simulaciones**: "¿Qué pasaría si...?" scenarios
+- [ ] **Certificaciones**: Badges por completar objetivos
+
+---
+
+## 💡 Implementaciones Futuras (Largo Plazo)
+
+### **1. Arquitectura y Escalabilidad**
+
+#### 1.1 Backend Avanzado
+- [ ] **GraphQL API**: Alternativa a REST para consultas eficientes
+- [ ] **WebSockets**: Real-time updates sin polling
+- [ ] **Microservicios**: Separar analytics, AI, transactions
+- [ ] **Redis Cache**: Caching distribuido para performance
+- [ ] **Message Queue**: RabbitMQ/BullMQ para tareas asíncronas
+- [ ] **API Rate Limiting Avanzado**: Per-user, per-endpoint
+- [ ] **API Versioning**: Soporte de múltiples versiones
+
+#### 1.2 Base de Datos
+- [ ] **Sharding**: Distribución horizontal para millones de usuarios
+- [ ] **Read Replicas**: Réplicas de lectura para alta disponibilidad
+- [ ] **Time-series Database**: InfluxDB para datos temporales
+- [ ] **Full-text Search**: Elasticsearch para búsqueda avanzada
+- [ ] **Data Warehouse**: BigQuery/Snowflake para analytics
+- [ ] **Automated Backups**: Respaldos automáticos diarios
+
+#### 1.3 DevOps y Observabilidad
+- [ ] **CI/CD Pipeline**: GitHub Actions completo
+- [ ] **Automated Testing**: Jest, Playwright, Cypress
+- [ ] **Monitoring**: Grafana + Prometheus
+- [ ] **Error Tracking**: Sentry integration
+- [ ] **Performance Monitoring**: New Relic/DataDog
+- [ ] **Log Aggregation**: ELK Stack (Elasticsearch, Logstash, Kibana)
+- [ ] **Infrastructure as Code**: Terraform/Pulumi
+
+### **2. Seguridad y Cumplimiento**
+
+#### 2.1 Seguridad Avanzada
+- [ ] **2FA (Two-Factor Auth)**: Autenticación de dos factores
+- [ ] **Biometric Login**: Face ID, Touch ID
+- [ ] **Session Management**: Multi-device sessions
+- [ ] **OAuth Integration**: Login con Google, Apple, GitHub
+- [ ] **Audit Logs**: Registro completo de acciones sensibles
+- [ ] **Encryption at Rest**: Datos encriptados en DB
+- [ ] **End-to-End Encryption**: Para datos ultra-sensibles
+- [ ] **Security Headers**: HSTS, CSP, X-Frame-Options
+- [ ] **Penetration Testing**: Auditorías de seguridad regulares
+
+#### 2.2 Privacidad y Compliance
+- [ ] **GDPR Compliance**: Cumplimiento total con GDPR
+- [ ] **Data Export**: Exportar todos los datos personales
+- [ ] **Right to Delete**: Eliminación completa de cuenta
+- [ ] **Privacy Policy**: Política clara y transparente
+- [ ] **Cookie Consent**: Banner de cookies GDPR-compliant
+- [ ] **Anonymization**: Opción de datos anónimos para analytics
+- [ ] **SOC 2 Certification**: Certificación de seguridad
+
+### **3. Mobile y Multi-plataforma**
+
+#### 3.1 Aplicaciones Móviles
+- [ ] **React Native App**: App nativa iOS/Android
+- [ ] **Flutter Alternative**: Evaluación de Flutter
+- [ ] **Widgets iOS/Android**: Widgets de home screen
+- [ ] **Notificaciones Push**: Firebase Cloud Messaging
+- [ ] **Offline First**: Funcionamiento sin conexión
+- [ ] **Biometric Auth**: Face ID, Touch ID nativo
+- [ ] **Deep Linking**: Abrir secciones específicas desde notifs
+
+#### 3.2 Desktop
+- [ ] **Electron App**: Aplicación de escritorio
+- [ ] **Tauri Alternative**: Alternativa ligera a Electron
+- [ ] **Menu Bar App**: Acceso rápido desde system tray
+- [ ] **Global Shortcuts**: Atajos de teclado globales
+- [ ] **Widgets de Escritorio**: Widgets flotantes (Win/Mac)
+
+#### 3.3 Wearables
+- [ ] **Apple Watch App**: Quick expense logging
+- [ ] **Wear OS**: Compatibilidad con Android Wear
+- [ ] **Complications**: Datos en carátula del reloj
+- [ ] **Voice Commands**: "Agregar gasto de $50"
+
+### **4. Integraciones y Ecosistema**
+
+#### 4.1 Integraciones Financieras
+- [ ] **Plaid**: Sincronización automática con bancos
+- [ ] **Stripe**: Procesamiento de pagos (premium features)
+- [ ] **PayPal**: Importar transacciones de PayPal
+- [ ] **Wise/Revolut**: Multi-currency accounts
+- [ ] **Accounting Software**: QuickBooks, Xero integration
+- [ ] **Tax Software**: Exportar para declaración de impuestos
+
+#### 4.2 Integraciones de Productividad
+- [ ] **Google Calendar**: Sincronización bidireccional
+- [ ] **Outlook**: Integración con Microsoft ecosystem
+- [ ] **Todoist**: Importar tareas existentes
+- [ ] **Notion**: Exportar/importar datos
+- [ ] **Slack**: Notificaciones y comandos
+- [ ] **Zapier**: Automatizaciones personalizadas
+- [ ] **IFTTT**: Triggers y acciones
+
+#### 4.3 Integraciones de Comunicación
+- [ ] **Email**: Resúmenes diarios/semanales
+- [ ] **WhatsApp Business**: Notificaciones vía WhatsApp
+- [ ] **Telegram Bot**: Control completo desde Telegram
+- [ ] **Discord**: Integración para comunidades
+- [ ] **SMS Alerts**: Notificaciones críticas por SMS
+
+#### 4.4 APIs y Webhooks
+- [ ] **Public API**: API REST documentada
+- [ ] **Webhooks**: Notificaciones de eventos
+- [ ] **SDK JavaScript**: Librería para desarrolladores
+- [ ] **Plugins System**: Marketplace de extensiones
+- [ ] **Developer Portal**: Documentación y API keys
+
+### **5. Monetización (Premium Tier)**
+
+#### 5.1 Funciones Premium
+- [ ] **Unlimited Transactions**: Sin límite de transacciones
+- [ ] **Advanced Analytics**: Reportes personalizados
+- [ ] **Priority Support**: Soporte prioritario 24/7
+- [ ] **White Label**: Personalización de marca
+- [ ] **API Access**: Acceso completo a API
+- [ ] **Data Retention**: Historial ilimitado (free: 1 año)
+- [ ] **Multiple Workspaces**: Ilimitados (free: 1)
+- [ ] **Custom Integrations**: Integraciones personalizadas
+- [ ] **AI Credits Extra**: Más solicitudes a Gemini
+- [ ] **Export Advanced**: PDF, Excel, reportes avanzados
+
+#### 5.2 Modelo de Negocio
+- [ ] **Freemium**: Tier gratuito generoso + Premium
+- [ ] **Pricing Tiers**: Personal ($5), Pro ($15), Business ($50)
+- [ ] **Lifetime Deal**: Pago único para early adopters
+- [ ] **Affiliate Program**: Comisiones por referidos
+- [ ] **B2B SaaS**: Licencias empresariales
+- [ ] **Consulting**: Servicios de consultoría financiera
+
+### **6. Comunidad y Contenido**
+
+#### 6.1 Comunidad
+- [ ] **Forum/Subreddit**: Comunidad de usuarios
+- [ ] **Discord Server**: Chat en tiempo real
+- [ ] **User Stories**: Casos de éxito
+- [ ] **Feature Requests**: Voting system para features
+- [ ] **Beta Testing**: Programa de beta testers
+- [ ] **Ambassador Program**: Usuarios embajadores
+
+#### 6.2 Contenido y Marketing
+- [ ] **Blog**: Artículos sobre finanzas y productividad
+- [ ] **Newsletter**: Boletín semanal
+- [ ] **YouTube Channel**: Tutoriales y tips
+- [ ] **Podcast**: Entrevistas con expertos
+- [ ] **Case Studies**: Historias de transformación
+- [ ] **Webinars**: Sesiones educativas en vivo
+
+### **7. Innovación con IA**
+
+#### 7.1 Multimodal AI
+- [ ] **Image Recognition**: Escanear recibos con cámara
+- [ ] **Voice Assistant**: "Alexa, agrega un gasto"
+- [ ] **Document Analysis**: Extraer datos de PDFs
+- [ ] **Chart Generation**: IA genera gráficos personalizados
+- [ ] **Email Parsing**: Extraer transacciones de emails
+
+#### 7.2 AI Agents
+- [ ] **Financial Advisor Agent**: Asesor financiero 24/7
+- [ ] **Debt Negotiator**: Simular negociación de deudas
+- [ ] **Investment Analyst**: Análisis profundo de inversiones
+- [ ] **Productivity Coach**: Coach personal de productividad
+- [ ] **Tax Consultant**: Asistencia con impuestos
+
+#### 7.3 Future AI Models
+- [ ] **Fine-tuned Models**: Modelos propios entrenados con datos
+- [ ] **Multi-Agent Systems**: Múltiples IAs especializadas
+- [ ] **Agentic RAG**: Retrieval con contexto dinámico
+- [ ] **Personalized LLMs**: IA adaptada a cada usuario
+
+---
+
+## 🔧 Mejoras Técnicas
+
+### **Performance**
+- [ ] **Code Splitting**: Lazy loading agresivo
+- [ ] **Service Workers**: Caching inteligente
+- [ ] **Image Optimization**: WebP, lazy load, placeholders
+- [ ] **Bundle Size**: Reducir a <500KB inicial
+- [ ] **Tree Shaking**: Eliminar código no usado
+- [ ] **Preload/Prefetch**: Anticipar navegación
+- [ ] **Virtual Scrolling**: Listas largas optimizadas
+
+### **Testing**
+- [ ] **Unit Tests**: Jest con >80% coverage
+- [ ] **Integration Tests**: Testing Library
+- [ ] **E2E Tests**: Playwright/Cypress
+- [ ] **Visual Regression**: Percy/Chromatic
+- [ ] **Performance Tests**: Lighthouse CI
+- [ ] **Load Testing**: K6/Artillery
+
+### **Code Quality**
+- [ ] **TypeScript**: Migración completa a TS
+- [ ] **Linting**: ESLint + Prettier strict
+- [ ] **Git Hooks**: Husky con pre-commit
+- [ ] **Conventional Commits**: Mensajes estandarizados
+- [ ] **Documentation**: JSDoc completo
+- [ ] **Storybook**: Component library
+
+### **Accessibility**
+- [ ] **WCAG 2.1 AAA**: Cumplimiento total
+- [ ] **Screen Reader**: Optimizado para lectores
+- [ ] **Keyboard Navigation**: 100% navegable por teclado
+- [ ] **Color Contrast**: Ratios conformes
+- [ ] **ARIA Labels**: Semántica completa
+- [ ] **Focus Management**: Focus visible y lógico
+
+---
+
+## 🌍 Ecosistema y Expansión
+
+### **Internacionalización**
+- [ ] **i18n completo**: Inglés, Español, Portugués, Francés
+- [ ] **RTL Support**: Soporte para árabe, hebreo
+- [ ] **Localized Content**: Contenido adaptado por región
+- [ ] **Multi-currency**: Soporte de 150+ monedas
+- [ ] **Regional Formats**: Fechas, números según región
+
+### **Open Source**
+- [ ] **Plugin Architecture**: Sistema de plugins
+- [ ] **Theming**: Temas personalizables
+- [ ] **Contributing Guide**: Guía para contribuidores
+- [ ] **Code of Conduct**: Código de conducta
+- [ ] **Hacktoberfest**: Participación anual
+- [ ] **Grants/Sponsorships**: Funding para desarrollo
+
+### **Partnerships**
+- [ ] **Financial Institutions**: Partnerships con bancos
+- [ ] **Universities**: Programas educativos
+- [ ] **Fintech Companies**: Colaboraciones estratégicas
+- [ ] **Consulting Firms**: Implementaciones enterprise
+
+---
+
+## 📈 Métricas de Éxito
+
+### **KPIs Técnicos**
+- Performance: <2s First Contentful Paint
+- Availability: 99.9% uptime
+- Test Coverage: >80%
+- Security: 0 critical vulnerabilities
+- Lighthouse Score: >90 en todas las métricas
+
+### **KPIs de Producto**
+- Active Users: Crecimiento 20% mensual
+- Retention: >40% a 30 días
+- NPS Score: >50
+- Feature Adoption: >60% de usuarios activos
+- Support Tickets: <5% de usuarios mensuales
+
+### **KPIs de Negocio** (Futuro)
+- MRR Growth: 15% mensual
+- Churn Rate: <5% mensual
+- CAC Payback: <6 meses
+- LTV:CAC Ratio: >3:1
+- Gross Margin: >70%
+
+---
+
+## 🎯 Priorización
+
+### **Criterios de Priorización**
+1. **Impacto en el Usuario**: ¿Mejora significativamente la experiencia?
+2. **Viabilidad Técnica**: ¿Es posible con recursos actuales?
+3. **Alineación Estratégica**: ¿Avanza hacia la visión?
+4. **Demanda**: ¿Los usuarios lo están pidiendo?
+5. **Competitividad**: ¿Nos diferencia de la competencia?
+
+### **Framework: RICE Score**
+- **Reach**: Usuarios impactados
+- **Impact**: Magnitud del impacto (0.25-3)
+- **Confidence**: Certeza del éxito (50-100%)
+- **Effort**: Tiempo de desarrollo (persona-semanas)
+
+Score = (Reach × Impact × Confidence) / Effort
+
+---
+
+## 🚦 Próximos Pasos Inmediatos (Next Sprint)
+
+### **Semana 1-2**
+1. Implementar Dark Mode completo
+2. Mejorar responsive design en móvil
+3. Agregar metas de ahorro básicas
+
+### **Semana 3-4**
+4. Sistema de presupuestos mensuales
+5. Exportar transacciones a CSV/PDF
+6. Mejoras en UI del chat de Gemini
+
+### **Mes 2**
+7. PWA con modo offline
+8. Notificaciones push básicas
+9. Subtareas en el planner
+
+---
+
+## 📞 Contacto y Contribuciones
+
+- **GitHub**: [andres-lopez-g/AsisT](https://github.com/andres-lopez-g/AsisT)
+- **Issues**: Para reportar bugs o solicitar features
+- **Pull Requests**: Bienvenidos! Ver CONTRIBUTING.md
+- **Discussions**: Para ideas y preguntas generales
+
+---
+
+## 📝 Notas de Versión
+
+### **Versión Actual: v1.0.0** (Febrero 2026)
+- Sistema completo de finanzas y tareas
+- AI Assistant con Gemini
+- Smart investments tracking
+- Forecasting y analytics
+- Deployment en Vercel
+
+### **Próxima Release: v1.1.0** (Marzo 2026)
+- Dark mode
+- Metas de ahorro
+- Presupuestos mensuales
+- Mejoras en mobile
+
+---
+
+**Última actualización**: Febrero 6, 2026  
+**Documento vivo**: Este roadmap se actualizará trimestralmente
+
+---
+
+*AsisT - Built with ❤️ for better productivity and financial wellness*
