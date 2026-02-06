@@ -256,14 +256,21 @@ async function getTaskSummary(userId) {
         const totalTasks = parseInt(data.total_tasks || 0);
         const pendingTasks = parseInt(data.pending_tasks || 0);
         const inProgressTasks = parseInt(data.in_progress_tasks || 0);
+        const completedTasks = parseInt(data.completed_tasks || 0);
+        const highPriorityTasks = parseInt(data.high_priority_tasks || 0);
+        
+        // Calculate overcommitment: if active tasks (pending + in-progress) are more than 70% of all non-completed tasks
+        const activeTasks = pendingTasks + inProgressTasks;
+        const nonCompletedTasks = totalTasks - completedTasks;
+        const overcommitment = nonCompletedTasks > 0 && activeTasks > nonCompletedTasks * 0.7;
         
         return {
             totalTasks,
-            pendingTasks: parseInt(data.pending_tasks || 0),
-            inProgressTasks: parseInt(data.in_progress_tasks || 0),
-            completedTasks: parseInt(data.completed_tasks || 0),
-            highPriorityTasks: parseInt(data.high_priority_tasks || 0),
-            overcommitment: (pendingTasks + inProgressTasks) > totalTasks * 0.7
+            pendingTasks,
+            inProgressTasks,
+            completedTasks,
+            highPriorityTasks,
+            overcommitment
         };
     } catch (error) {
         console.error('[Gemini Bot] Error getting task summary:', error);
