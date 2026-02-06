@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Calendar, CreditCard, TrendingUp, ArrowRight, ShieldCheck, Activity, Globe } from 'lucide-react';
+import { LayoutDashboard, Calendar, CreditCard, TrendingUp, ArrowRight, ShieldCheck, Activity, Globe, Brain, Target, LineChart, Sparkles } from 'lucide-react';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 import ParticlesBackground from '../auth/ParticlesBackground';
 import { useAuth } from '../../context/AuthContext';
@@ -80,7 +80,7 @@ const LandingPage = () => {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
                         </span>
-                        <span className="mono text-[9px] font-bold text-accent uppercase tracking-widest">Version 2.0 Now Available</span>
+                        <span className="mono text-[9px] font-bold text-accent uppercase tracking-widest">New: AI-Powered Smart Features</span>
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-[1.1]">
@@ -89,8 +89,8 @@ const LandingPage = () => {
                     </h1>
 
                     <p className="text-lg md:text-xl text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
-                        Your complete personal assistant for modern life.
-                        Track your finances, manage your tasks, and analyze your progress in one simple interface.
+                        Your intelligent personal assistant powered by AI.
+                        Track finances, monitor market trends, get smart insights, and manage tasks—all in one beautifully designed interface.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -108,11 +108,11 @@ const LandingPage = () => {
             <section id="features" className="py-20 px-6 bg-muted/30 border-y border-border/40 relative z-10">
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-16">
-                        <span className="mono text-[10px] font-bold text-accent uppercase tracking-widest block mb-2">Main Features</span>
+                        <span className="mono text-[10px] font-bold text-accent uppercase tracking-widest block mb-2">Core Features</span>
                         <h2 className="text-3xl font-black tracking-tight uppercase">What You Can Do</h2>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                         <FeatureCard
                             icon={LayoutDashboard}
                             title="Dashboard"
@@ -138,6 +138,42 @@ const LandingPage = () => {
                             description="Organize your tasks efficiently. Use our Kanban board to manage your daily tasks and long-term goals."
                         />
                     </div>
+
+                    {/* Smart Features Section */}
+                    <div className="mt-16 mb-12">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Sparkles size={14} className="text-accent" />
+                            <span className="mono text-[10px] font-bold text-accent uppercase tracking-widest">AI-Powered Intelligence</span>
+                        </div>
+                        <h2 className="text-3xl font-black tracking-tight uppercase">Smart Features</h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <FeatureCard
+                            icon={Activity}
+                            title="Market Insights"
+                            code="SMART_01"
+                            description="Track top 10 stocks and cryptocurrencies in real-time. Stay informed about market trends with 24-hour updates."
+                        />
+                        <FeatureCard
+                            icon={Brain}
+                            title="AI Categorization"
+                            code="SMART_02"
+                            description="Automatically categorize your transactions with machine learning. Save time with intelligent spending analysis."
+                        />
+                        <FeatureCard
+                            icon={LineChart}
+                            title="Financial Forecast"
+                            code="SMART_03"
+                            description="Get 90-day financial projections based on your spending patterns. Plan ahead with data-driven insights."
+                        />
+                        <FeatureCard
+                            icon={Target}
+                            title="Debt Optimizer"
+                            code="SMART_04"
+                            description="Compare debt payoff strategies. Avalanche vs Snowball methods—find the best approach for your situation."
+                        />
+                    </div>
                 </div>
             </section>
 
@@ -150,7 +186,11 @@ const LandingPage = () => {
                     </div>
                     <div className="flex items-center gap-2">
                         <Activity size={20} />
-                        <span className="mono text-xs font-bold uppercase tracking-widest">99.9% Uptime</span>
+                        <span className="mono text-xs font-bold uppercase tracking-widest">Real-Time Updates</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Brain size={20} />
+                        <span className="mono text-xs font-bold uppercase tracking-widest">AI-Powered Insights</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <Globe size={20} />
@@ -167,7 +207,7 @@ const LandingPage = () => {
                         Ready to Get Started?
                     </h2>
                     <p className="text-secondary text-lg mb-10 max-w-xl mx-auto">
-                        Join thousands of users who are organizing their finances and tasks with AsisT.
+                        Join users who are taking control of their finances with AI-powered insights and real-time market intelligence.
                     </p>
                     <div className="inline-block p-1 border border-primary/20 bg-background/50 backdrop-blur-sm rounded-sm">
                         <Link to="/register" className="block px-12 py-5 bg-primary text-white font-bold uppercase tracking-[0.2em] hover:bg-accent transition-all hover:shadow-[0_0_30px_rgba(0,0,0,0.2)]">
@@ -185,7 +225,7 @@ const LandingPage = () => {
                         <span className="mono text-[10px] font-bold uppercase tracking-widest">AsisT | Personal Assistant</span>
                     </div>
                     <div className="mono text-[10px] text-secondary uppercase tracking-widest">
-                        Version 2.5.0 // © 2026
+                        Version 3.0.0 // © 2026
                     </div>
                 </div>
             </footer>
