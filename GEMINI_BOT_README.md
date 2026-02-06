@@ -39,6 +39,7 @@ This implementation adds an AI-powered assistant bot to AsisT using Google's Gem
    Add to your `.env` file or Vercel environment variables:
    ```env
    GEMINI_API_KEY=your_gemini_api_key_here
+   GEMINI_MODEL=gemini-pro
    ```
 
 3. **Run Database Migration**
