@@ -39,8 +39,16 @@ This implementation adds an AI-powered assistant bot to AsisT using Google's Gem
    Add to your `.env` file or Vercel environment variables:
    ```env
    GEMINI_API_KEY=your_gemini_api_key_here
-   GEMINI_MODEL=gemini-pro
+   GEMINI_MODEL=gemini-3-flash-preview
    ```
+   
+   **Available Models (as of February 2026):**
+   - `gemini-3-flash-preview` - Recommended for production (fast, cost-effective)
+   - `gemini-3-pro-preview` - Advanced reasoning and multimodal capabilities
+   - `gemini-2.5-flash` - Available until June 17, 2026
+   - `gemini-2.5-pro` - Available until June 17, 2026
+   
+   Note: `gemini-pro` has been deprecated and is no longer available.
 
 3. **Run Database Migration**
    The bot requires a `bot_conversations` table to store chat history.
@@ -174,7 +182,7 @@ This implementation is optimized for free tier usage:
 
 ### Gemini API (Google)
 - **Free Tier**: 60 requests per minute
-- **Model**: gemini-pro (free)
+- **Model**: gemini-3-flash-preview (recommended, free)
 - **Cost**: $0
 
 ### Vercel
