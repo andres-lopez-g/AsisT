@@ -1,0 +1,1364 @@
+# 🗺️ ROADMAP - AsisT: Smart Personal Assistant
+
+**Versión del Documento**: 1.0  
+**Fecha**: Febrero 2026  
+**Estado del Proyecto**: Producción Activa
+
+---
+
+## 📋 Índice
+
+1. [Visión General del Proyecto](#visión-general-del-proyecto)
+2. [Estado Actual](#estado-actual)
+3. [Fases Completadas](#fases-completadas)
+4. [Arquitectura Técnica](#arquitectura-técnica)
+5. [Roadmap de Implementaciones Futuras](#roadmap-de-implementaciones-futuras)
+6. [Implementaciones Propuestas por Área](#implementaciones-propuestas-por-área)
+7. [Prioridades y Timeline Sugerido](#prioridades-y-timeline-sugerido)
+8. [Consideraciones Técnicas](#consideraciones-técnicas)
+9. [Métricas de Éxito](#métricas-de-éxito)
+
+---
+
+## 🎯 Visión General del Proyecto
+
+**AsisT** es una plataforma minimalista pero poderosa de gestión personal diseñada para ayudar a los usuarios a organizar sus finanzas y productividad en un solo lugar. Se enfoca en velocidad, estética y experiencia de usuario.
+
+### Propósito Principal
+Proporcionar una solución integral para:
+- **Gestión Financiera**: Control completo de ingresos, gastos, inversiones y deudas
+- **Productividad**: Sistema Kanban para gestión de tareas
+- **Análisis Inteligente**: Insights impulsados por IA
+- **Asistencia AI**: Recomendaciones personalizadas usando Google Gemini
+
+### Filosofía de Diseño
+- **Minimalista**: Interfaz limpia y sin distracciones
+- **Rápido**: Optimizado para rendimiento máximo
+- **Seguro**: Autenticación JWT, rate limiting, RLS
+- **Escalable**: Arquitectura preparada para crecimiento
+- **Free-Tier First**: Optimizado para usar servicios gratuitos
+
+---
+
+## 📊 Estado Actual
+
+### Versión Actual: **v3.0.0**
+
+### Características Implementadas
+
+#### ✅ Core Features (100% Completo)
+
+**1. Sistema de Autenticación**
+- Login/Registro con JWT
+- Hash de contraseñas con bcrypt
+- Rate limiting (100 req/15min)
+- Protección contra fuerza bruta
+- Sesiones seguras
+
+**2. Dashboard Unificado**
+- Vista home personalizada
+- Resumen de balance financiero
+- Widget de próximas tareas
+- Indicadores de salud financiera
+- Navegación intuitiva
+
+**3. Gestor de Finanzas**
+- Tracking de transacciones (ingresos/gastos)
+- Sistema de categorías personalizable
+- Soporte multi-moneda (COP, USD, EUR, etc.)
+- Gráficos interactivos (área, barras, dona)
+- Estadísticas en tiempo real
+- Historial de últimos 7/30 días
+- Filtros por fecha y categoría
+
+**4. Planificador de Tareas (Kanban)**
+- Estados: To Do, In Progress, Done
+- Sistema de prioridades (High, Medium, Low)
+- Drag & drop de tareas
+- Edición inline
+- Diseño responsive
+
+**5. Seguridad Robusta**
+- Helmet.js para headers seguros
+- CORS configurado
+- Variables de entorno protegidas
+- SSL para conexiones DB
+- Consultas parametrizadas (protección SQL injection)
+- Row Level Security (RLS) en Supabase
+
+#### ✅ Smart Features (100% Completo)
+
+**6. Análisis de Gastos Inteligente**
+- Categorización automática por patrones
+- Detección de gastos inusuales
+- Insights de ahorro
+- Tendencias de gasto
+
+**7. Pronóstico Financiero**
+- Proyección a 90 días
+- Basado en patrones históricos
+- Visualización con gráficos
+- Alertas de balance bajo
+
+**8. Inversiones Inteligentes**
+- Top 10 acciones (Alpha Vantage)
+- Top 10 criptomonedas (CoinGecko)
+- Gráficos sparkline de 7 días
+- Indicadores de tendencia
+- Caché de 24 horas (free tier optimizado)
+- Volumen de trading en tiempo real
+
+**9. Optimizador de Deudas**
+- Comparación método Avalanche vs Snowball
+- Cálculo de intereses totales
+- Timeline de pagos
+- Ahorro potencial
+- Recomendaciones personalizadas
+
+**10. Asistente IA (Gemini)**
+- Chat interactivo
+- Recomendaciones financieras personalizadas
+- Tips de productividad
+- Análisis de patrones de gasto
+- Historial de conversaciones
+- Contexto basado en datos del usuario
+
+#### ✅ Features Adicionales
+
+**11. Soporte Multi-Idioma**
+- Español (es)
+- Inglés (en)
+- Portugués (pt)
+- Francés (fr)
+- Sistema de traducción i18n preparado
+
+**12. Modo Focus**
+- Minimiza distracciones
+- Enfoque en tareas prioritarias
+- Timer Pomodoro integrado
+
+**13. Gráficos Avanzados**
+- Recharts para visualizaciones
+- Área, línea, barra, dona
+- Interactivos y responsive
+- Animaciones con Framer Motion
+
+**14. Gestor de Pagos**
+- Análisis de métodos de pago
+- Tracking de pagos recurrentes
+- Predicción de próximos pagos
+
+---
+
+## 🏗️ Fases Completadas
+
+### Fase 1: Fundación (Completada) ✅
+**Timeline**: Q4 2025
+
+- [x] Setup inicial del proyecto
+- [x] Estructura de carpetas
+- [x] Configuración Vite + React 19
+- [x] Tailwind CSS + Lucide Icons
+- [x] Backend Express.js
+- [x] Conexión PostgreSQL (Supabase)
+- [x] Sistema de autenticación JWT
+- [x] Rutas protegidas
+
+### Fase 2: Features Core (Completada) ✅
+**Timeline**: Q4 2025 - Q1 2026
+
+- [x] Dashboard home
+- [x] Gestión de finanzas
+- [x] Sistema de categorías
+- [x] Gráficos financieros
+- [x] Kanban de tareas
+- [x] Sistema de prioridades
+- [x] Diseño responsive
+- [x] Landing page
+
+### Fase 3: Smart Features & IA (Completada) ✅
+**Timeline**: Q1 2026
+
+- [x] Integración Gemini API
+- [x] Categorización automática IA
+- [x] Pronóstico financiero
+- [x] Smart investments (stocks + crypto)
+- [x] Gráficos sparkline
+- [x] Optimizador de deudas
+- [x] Análisis de pagos
+- [x] Insights de gastos
+- [x] Multi-idioma
+- [x] Modo focus
+- [x] Security audit completo
+
+---
+
+## 🔧 Arquitectura Técnica
+
+### Stack Tecnológico
+
+#### Frontend
+```javascript
+{
+  "framework": "React 19",
+  "bundler": "Vite 7.2.4",
+  "styling": "Tailwind CSS 3.4",
+  "icons": "Lucide React",
+  "charts": "Recharts 3.7",
+  "animations": "Framer Motion 12.29",
+  "routing": "React Router DOM 7.13",
+  "3D": "@react-three/fiber + drei"
+}
+```
+
+#### Backend
+```javascript
+{
+  "runtime": "Node.js",
+  "framework": "Express 5.2",
+  "auth": "JWT + bcryptjs",
+  "security": "helmet, express-rate-limit",
+  "AI": "@google/generative-ai (Gemini)",
+  "database": "pg (PostgreSQL client)"
+}
+```
+
+#### Database
+```sql
+-- PostgreSQL (Supabase/Vercel Postgres)
+Tables:
+  - users (autenticación)
+  - transactions (finanzas)
+  - categories (categorías)
+  - tasks (productividad)
+  - debts (deudas)
+  - bot_conversations (IA chat)
+  - market_snapshots (inversiones cache)
+  - user_preferences (configuración)
+```
+
+#### Deployment
+- **Frontend**: Vercel (static site)
+- **Backend**: Vercel Serverless Functions
+- **Database**: Supabase (PostgreSQL managed)
+- **AI**: Google Gemini API (free tier)
+- **Market Data**: Alpha Vantage + CoinGecko APIs
+
+### Estructura del Proyecto
+```
+AsisT/
+├── src/                          # Frontend React
+│   ├── features/                 # Módulos por feature
+│   │   ├── auth/                # Autenticación
+│   │   ├── finance/             # Finanzas
+│   │   ├── planner/             # Tareas
+│   │   ├── gemini/              # IA Assistant
+│   │   ├── investments/         # Inversiones
+│   │   ├── home/                # Dashboard
+│   │   └── landing/             # Landing page
+│   ├── components/              # Componentes compartidos
+│   ├── context/                 # React Context
+│   └── utils/                   # Utilidades
+│
+├── server/                       # Backend Node.js
+│   ├── routes/                  # Endpoints API
+│   ├── middleware/              # Auth, rate limiting
+│   ├── services/                # Lógica de negocio
+│   ├── migrations/              # SQL migrations
+│   └── db.js                    # Conexión database
+│
+└── public/                       # Assets estáticos
+```
+
+---
+
+## 🚀 Roadmap de Implementaciones Futuras
+
+### FASE 4: Experiencia de Usuario Avanzada 🎨
+**Timeline Sugerido**: Q2 2026  
+**Prioridad**: ALTA
+
+#### 4.1 Dashboard Personalizable
+**Impacto**: Alto | **Esfuerzo**: Medio
+
+- [ ] **Widgets Arrastrables**
+  - Sistema drag & drop para reorganizar widgets
+  - Biblioteca: react-grid-layout
+  - Guardar preferencias en DB
+  - Diferentes layouts: compacto, expandido, minimalista
+  
+- [ ] **Temas Personalizables**
+  - Dark mode / Light mode / Auto
+  - Esquemas de color personalizados
+  - Modo alto contraste (accesibilidad)
+  - Guardar preferencias por usuario
+  
+- [ ] **Widgets Customizables**
+  - Selector de widgets visibles/ocultos
+  - Tamaño ajustable de widgets
+  - Filtros configurables por widget
+  - Exportar/importar configuración
+
+**Tecnologías Sugeridas**:
+```javascript
+{
+  "drag-drop": "react-grid-layout",
+  "theme": "CSS variables + localStorage",
+  "state": "React Context + Zustand"
+}
+```
+
+#### 4.2 Notificaciones Push
+**Impacto**: Alto | **Esfuerzo**: Medio
+
+- [ ] **Alertas Financieras**
+  - Balance bajo (umbral configurable)
+  - Gasto inusual detectado
+  - Día de pago recurrente
+  - Meta de ahorro alcanzada
+  
+- [ ] **Recordatorios de Tareas**
+  - Tareas vencidas
+  - Próximas fechas límite
+  - Recordatorios personalizados
+  
+- [ ] **Insights Proactivos**
+  - "Has gastado 20% más este mes"
+  - "Puedes ahorrar $X en categoría Y"
+  - "Nuevo máximo de inversiones"
+
+**Tecnologías Sugeridas**:
+```javascript
+{
+  "browser": "Web Push API + Service Worker",
+  "email": "nodemailer + SendGrid (free tier)",
+  "sms": "Twilio (opcional, paid)"
+}
+```
+
+#### 4.3 Onboarding Interactivo
+**Impacto**: Medio | **Esfuerzo**: Bajo
+
+- [ ] **Tour Guiado**
+  - Primera vez: tutorial de 5 pasos
+  - Biblioteca: react-joyride o intro.js
+  - Explicación de cada feature
+  - Casos de uso y ejemplos
+  
+- [ ] **Setup Wizard**
+  - Configuración inicial guiada
+  - Importar datos (CSV/JSON)
+  - Configurar categorías iniciales
+  - Establecer metas financieras
+  
+- [ ] **Video Tutoriales**
+  - Embeds de YouTube
+  - Base de conocimiento
+  - FAQs interactivas
+
+---
+
+### FASE 5: Features Financieros Avanzados 💰
+**Timeline Sugerido**: Q2-Q3 2026  
+**Prioridad**: ALTA
+
+#### 5.1 Gestión de Presupuestos
+**Impacto**: Muy Alto | **Esfuerzo**: Alto
+
+- [ ] **Presupuestos por Categoría**
+  - Definir límites mensuales por categoría
+  - Alertas cuando se acerca al límite (75%, 90%, 100%)
+  - Visualización de progreso (barra/círculo)
+  - Comparación: presupuestado vs real
+  
+- [ ] **Presupuesto Global**
+  - Límite total mensual
+  - Distribución automática sugerida por IA
+  - Ajuste dinámico basado en patrones
+  
+- [ ] **Metas de Ahorro**
+  - Definir metas (ej: "Vacaciones: $5000")
+  - Fecha objetivo
+  - Contribuciones automáticas sugeridas
+  - Progreso visual
+  - Celebración al alcanzar meta
+
+**Schema DB Sugerido**:
+```sql
+CREATE TABLE budgets (
+  id UUID PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  category_id INTEGER REFERENCES categories(id),
+  amount DECIMAL(15,2),
+  period VARCHAR(20), -- 'monthly', 'quarterly', 'yearly'
+  start_date DATE,
+  alerts_enabled BOOLEAN,
+  created_at TIMESTAMP
+);
+
+CREATE TABLE savings_goals (
+  id UUID PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  name VARCHAR(200),
+  target_amount DECIMAL(15,2),
+  current_amount DECIMAL(15,2),
+  target_date DATE,
+  icon VARCHAR(50),
+  created_at TIMESTAMP
+);
+```
+
+#### 5.2 Reportes y Exportaciones
+**Impacto**: Alto | **Esfuerzo**: Medio
+
+- [ ] **Reportes Mensuales/Anuales**
+  - PDF generado con gráficos
+  - Resumen ejecutivo
+  - Comparación períodos anteriores
+  - Tendencias y proyecciones
+  
+- [ ] **Exportación de Datos**
+  - CSV (transacciones, tareas)
+  - Excel con gráficos
+  - JSON para backup
+  - Importación desde otras apps (Mint, YNAB, etc.)
+  
+- [ ] **Tax Report Helper**
+  - Categorías deducibles marcadas
+  - Suma de deducciones por año fiscal
+  - Exportación formato contable
+
+**Tecnologías Sugeridas**:
+```javascript
+{
+  "pdf": "jsPDF + html2canvas",
+  "excel": "xlsx / exceljs",
+  "charts-pdf": "chart.js + chartjs-node-canvas"
+}
+```
+
+#### 5.3 Cuentas Múltiples
+**Impacto**: Alto | **Esfuerzo**: Alto
+
+- [ ] **Multi-Cuenta**
+  - Efectivo, tarjetas, cuentas bancarias
+  - Balance independiente por cuenta
+  - Transferencias entre cuentas
+  - Consolidado general
+  
+- [ ] **Reconciliación**
+  - Marcar transacciones como "conciliadas"
+  - Comparar con estados de cuenta
+  - Detectar discrepancias
+  
+- [ ] **Import Automático**
+  - Conectar con bancos (Plaid API - paid)
+  - Importar CSV de bancos
+  - Categorización automática IA
+
+**Schema DB Sugerido**:
+```sql
+CREATE TABLE accounts (
+  id UUID PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  name VARCHAR(100),
+  type VARCHAR(20), -- 'cash', 'checking', 'savings', 'credit'
+  currency VARCHAR(3),
+  balance DECIMAL(15,2),
+  icon VARCHAR(50),
+  color VARCHAR(7),
+  created_at TIMESTAMP
+);
+
+ALTER TABLE transactions ADD COLUMN account_id UUID REFERENCES accounts(id);
+```
+
+#### 5.4 Análisis Predictivo Avanzado
+**Impacto**: Alto | **Esfuerzo**: Alto
+
+- [ ] **Machine Learning Mejorado**
+  - Modelo de regresión para predicciones más precisas
+  - Detección de anomalías (gastos atípicos)
+  - Clustering de patrones de gasto
+  - Recomendaciones de ahorro personalizadas
+  
+- [ ] **Simuladores Financieros**
+  - "¿Qué pasa si reduzco X gasto?"
+  - Calculadora de jubilación
+  - Planificador de compras grandes
+  - Simulador de escenarios (optimista, realista, pesimista)
+  
+- [ ] **Scoring Financiero**
+  - Puntaje de salud financiera (0-100)
+  - Factores: ahorro, deuda, gastos, ingresos
+  - Tips para mejorar score
+  - Comparación con promedio (anónimo)
+
+---
+
+### FASE 6: Colaboración y Social 👥
+**Timeline Sugerido**: Q3 2026  
+**Prioridad**: MEDIA
+
+#### 6.1 Gestión Familiar/Compartida
+**Impacto**: Alto | **Esfuerzo**: Alto
+
+- [ ] **Familias/Grupos**
+  - Crear "household" (hogar)
+  - Invitar miembros por email
+  - Roles: admin, editor, viewer
+  - Permisos granulares
+  
+- [ ] **Finanzas Compartidas**
+  - Balance consolidado del hogar
+  - Gastos compartidos vs personales
+  - División de gastos (50/50, porcentual, custom)
+  - Tracking "quién debe a quién"
+  
+- [ ] **Tareas Compartidas**
+  - Kanban compartido
+  - Asignación de tareas a miembros
+  - Notificaciones de actualización
+  - Chat por tarea
+
+**Schema DB Sugerido**:
+```sql
+CREATE TABLE households (
+  id UUID PRIMARY KEY,
+  name VARCHAR(100),
+  created_by INTEGER REFERENCES users(id),
+  created_at TIMESTAMP
+);
+
+CREATE TABLE household_members (
+  household_id UUID REFERENCES households(id),
+  user_id INTEGER REFERENCES users(id),
+  role VARCHAR(20), -- 'admin', 'editor', 'viewer'
+  joined_at TIMESTAMP,
+  PRIMARY KEY (household_id, user_id)
+);
+```
+
+#### 6.2 Comunidad y Comparaciones
+**Impacto**: Medio | **Esfuerzo**: Medio
+
+- [ ] **Benchmarking Anónimo**
+  - "Gastas X% más/menos que usuarios similares"
+  - Comparación por categoría
+  - Anonimizado y agregado
+  - Opt-in/opt-out
+  
+- [ ] **Challenges Comunitarios**
+  - "Reto: Ahorra $100 este mes"
+  - Leaderboards amistosos
+  - Badges y logros
+  - Gamificación de ahorro
+  
+- [ ] **Tips de la Comunidad**
+  - Usuarios comparten tips de ahorro
+  - Votación de mejores tips
+  - Categorizado por tema
+  - Moderación
+
+---
+
+### FASE 7: Integraciones y Ecosistema 🔌
+**Timeline Sugerido**: Q4 2026  
+**Prioridad**: MEDIA
+
+#### 7.1 Integraciones Externas
+**Impacto**: Alto | **Esfuerzo**: Alto
+
+- [ ] **APIs de Terceros**
+  - **Bancos**: Plaid, Yodlee (paid, pero valiosas)
+  - **Inversiones**: Conexión con brokers (Alpaca API)
+  - **Criptomonedas**: Binance, Coinbase APIs
+  - **Calendario**: Google Calendar, Outlook
+  - **Email**: Gmail (facturas automáticas)
+  
+- [ ] **Webhooks**
+  - Sistema de webhooks salientes
+  - Triggers: nueva transacción, meta alcanzada, etc.
+  - Integrar con Zapier/IFTTT
+  
+- [ ] **OAuth Providers**
+  - Login con Google
+  - Login con GitHub
+  - Login con Apple
+
+**Tecnologías Sugeridas**:
+```javascript
+{
+  "oauth": "passport.js",
+  "banking": "plaid-node",
+  "crypto": "ccxt (unified exchange API)",
+  "calendar": "googleapis",
+  "webhooks": "express + axios"
+}
+```
+
+#### 7.2 Aplicación Móvil
+**Impacto**: Muy Alto | **Esfuerzo**: Muy Alto
+
+- [ ] **PWA Mejorada**
+  - Optimizar app existente como PWA
+  - Instalable en móvil
+  - Funciona offline
+  - Notificaciones push
+  
+- [ ] **React Native App** (Opcional)
+  - App nativa iOS/Android
+  - Mismo backend
+  - Experiencia optimizada móvil
+  - Cámara para escanear recibos (OCR)
+  
+- [ ] **Features Móvil-Específicas**
+  - Captura de recibos con cámara
+  - Geolocalización de gastos
+  - Widgets de home screen
+  - Siri/Google Assistant shortcuts
+
+**Tecnologías Sugeridas**:
+```javascript
+{
+  "pwa": "Workbox + manifest.json",
+  "native": "React Native + Expo",
+  "ocr": "Tesseract.js / Google Vision API",
+  "maps": "Google Maps API"
+}
+```
+
+#### 7.3 Asistente de Voz
+**Impacto**: Medio | **Esfuerzo**: Alto
+
+- [ ] **Comandos de Voz**
+  - "Agregar gasto de $50 en comida"
+  - "¿Cuál es mi balance?"
+  - "Crear tarea: comprar leche"
+  - Web Speech API (navegador)
+  
+- [ ] **Integración Smart Speakers**
+  - Alexa Skill
+  - Google Assistant Action
+  - Siri Shortcuts (iOS)
+  
+- [ ] **Respuestas por Voz**
+  - Text-to-Speech para respuestas
+  - Conversación natural con Gemini
+
+---
+
+### FASE 8: Enterprise y Profesional 🏢
+**Timeline Sugerido**: 2027  
+**Prioridad**: BAJA (para validar primero adopción usuario personal)
+
+#### 8.1 Plan Premium/Pro
+**Impacto**: Alto (monetización) | **Esfuerzo**: Alto
+
+- [ ] **Modelo Freemium**
+  - Plan Free (actual)
+  - Plan Pro ($4.99/mes)
+  - Plan Family ($9.99/mes)
+  - Plan Business ($19.99/mes)
+  
+- [ ] **Features Premium**
+  - Reportes ilimitados
+  - Exportación Excel avanzada
+  - Soporte prioritario
+  - Conexión con bancos ilimitada
+  - Almacenamiento adjuntos (recibos)
+  - Usuarios ilimitados (Family/Business)
+  - Análisis avanzados con más datos históricos
+  - Sin límites de transacciones/mes
+  
+- [ ] **Sistema de Pagos**
+  - Stripe integration
+  - Suscripciones recurrentes
+  - Manejo de upgrades/downgrades
+  - Facturación automática
+
+**Schema DB Sugerido**:
+```sql
+CREATE TABLE subscriptions (
+  id UUID PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  plan VARCHAR(20), -- 'free', 'pro', 'family', 'business'
+  status VARCHAR(20), -- 'active', 'cancelled', 'expired'
+  stripe_subscription_id VARCHAR(100),
+  current_period_start DATE,
+  current_period_end DATE,
+  created_at TIMESTAMP
+);
+```
+
+#### 8.2 Features Business
+**Impacto**: Medio | **Esfuerzo**: Muy Alto
+
+- [ ] **Gestión de Empleados**
+  - Tracking de gastos de equipo
+  - Reportes de gastos por empleado
+  - Aprobación de gastos
+  - Reembolsos
+  
+- [ ] **Contabilidad Integrada**
+  - Chart of accounts
+  - Double-entry bookkeeping
+  - Balance sheet, P&L
+  - Tax calculations
+  
+- [ ] **Facturación**
+  - Crear y enviar facturas
+  - Tracking de pagos recibidos
+  - Recordatorios automáticos
+  - Integración con Stripe/PayPal
+
+---
+
+### FASE 9: Optimización y Escalabilidad ⚡
+**Timeline Sugerido**: Continuo  
+**Prioridad**: ALTA
+
+#### 9.1 Performance
+**Impacto**: Alto | **Esfuerzo**: Medio
+
+- [ ] **Optimizaciones Frontend**
+  - Code splitting agresivo
+  - Lazy loading de imágenes
+  - Virtualización de listas largas (react-window)
+  - Caching con React Query o SWR
+  - Service Workers avanzados
+  
+- [ ] **Optimizaciones Backend**
+  - Caching con Redis (free tier: Upstash)
+  - Database indexing optimization
+  - Query optimization (EXPLAIN ANALYZE)
+  - Connection pooling ajustado
+  - CDN para assets estáticos
+  
+- [ ] **Monitoring**
+  - Sentry para error tracking
+  - Google Analytics / Plausible
+  - Lighthouse CI en cada deploy
+  - Backend performance metrics
+
+**Tecnologías Sugeridas**:
+```javascript
+{
+  "caching": "Redis (Upstash) / Vercel KV",
+  "query": "React Query / SWR",
+  "virtualization": "react-window / react-virtuoso",
+  "monitoring": "Sentry + Vercel Analytics",
+  "cdn": "Cloudflare (free)"
+}
+```
+
+#### 9.2 Tests y CI/CD
+**Impacto**: Alto | **Esfuerzo**: Alto
+
+- [ ] **Testing Suite**
+  - Unit tests: Vitest
+  - Integration tests: Testing Library
+  - E2E tests: Playwright / Cypress
+  - API tests: Supertest
+  - >80% code coverage
+  
+- [ ] **CI/CD Pipeline**
+  - GitHub Actions workflows
+  - Auto-deploy a staging en cada PR
+  - Auto-deploy a prod en merge a main
+  - Tests automáticos en cada commit
+  - Linting y formateo con pre-commit hooks
+  
+- [ ] **Quality Gates**
+  - Coverage threshold check
+  - Bundle size limit
+  - Performance budgets
+  - Security scanning (Snyk, Dependabot)
+
+**GitHub Actions Workflow**:
+```yaml
+name: CI/CD
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: vercel/actions/deploy@v2
+```
+
+#### 9.3 Internacionalización Completa
+**Impacto**: Alto (adopción global) | **Esfuerzo**: Medio
+
+- [ ] **i18n Completo**
+  - Sistema de traducción robusto
+  - React-i18next
+  - Archivos de traducción por idioma
+  - Detección automática de idioma navegador
+  - Selector de idioma persistente
+  
+- [ ] **Idiomas Adicionales**
+  - Alemán (de)
+  - Italiano (it)
+  - Japonés (ja)
+  - Mandarín (zh)
+  - Hindi (hi)
+  
+- [ ] **Localización**
+  - Formatos de fecha localizados (date-fns)
+  - Formatos de moneda
+  - Separadores de miles/decimales
+  - Traducción de mensajes del backend
+  
+- [ ] **Currency Exchange Automation**
+  - Auto-update diario de tasas
+  - API: exchangerate-api.com (free tier)
+  - Conversión automática en reportes
+
+---
+
+### FASE 10: Seguridad y Compliance 🔒
+**Timeline Sugerido**: Continuo  
+**Prioridad**: CRÍTICA
+
+#### 10.1 Hardening de Seguridad
+**Impacto**: Crítico | **Esfuerzo**: Medio
+
+- [ ] **Auditorías Regulares**
+  - Pentesting trimestral
+  - OWASP Top 10 review
+  - Dependency vulnerability scanning
+  - CodeQL análisis estático
+  
+- [ ] **Encriptación**
+  - Encriptación de datos sensibles en DB
+  - Encriptación en tránsito (HTTPS forzado)
+  - Encriptación at-rest en Supabase
+  
+- [ ] **2FA (Two-Factor Authentication)**
+  - Autenticación de dos factores
+  - TOTP (Google Authenticator, Authy)
+  - Códigos de backup
+  - SMS opcional (Twilio)
+  
+- [ ] **Session Management**
+  - Session expiration configurables
+  - Device tracking
+  - "Log out de todos los dispositivos"
+  - Actividad de sesión visible
+
+**Schema DB Sugerido**:
+```sql
+CREATE TABLE two_factor_auth (
+  user_id INTEGER PRIMARY KEY REFERENCES users(id),
+  secret VARCHAR(100),
+  enabled BOOLEAN DEFAULT false,
+  backup_codes TEXT[],
+  created_at TIMESTAMP
+);
+
+CREATE TABLE sessions (
+  id UUID PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  token_hash VARCHAR(256),
+  device_info JSONB,
+  ip_address INET,
+  last_activity TIMESTAMP,
+  expires_at TIMESTAMP,
+  created_at TIMESTAMP
+);
+```
+
+#### 10.2 Compliance
+**Impacto**: Crítico (para expansión internacional) | **Esfuerzo**: Alto
+
+- [ ] **GDPR (Europa)**
+  - Política de privacidad clara
+  - Consentimiento explícito
+  - Derecho al olvido (delete account + data)
+  - Exportación de datos personales
+  - Cookie consent banner
+  
+- [ ] **CCPA (California)**
+  - "Do not sell my data" option
+  - Transparencia en uso de datos
+  - Opt-out de tracking
+  
+- [ ] **PCI-DSS (si hay pagos)**
+  - Nunca almacenar datos de tarjetas
+  - Usar Stripe/PayPal (cumplen PCI)
+  - Tokenización de pagos
+  
+- [ ] **Data Residency**
+  - Opción de elegir región de datos (EU, US, etc.)
+  - Separar datos por región si es necesario
+
+**Features GDPR**:
+```javascript
+// Endpoints necesarios
+GET  /api/user/data-export      // Exportar todos los datos del usuario
+POST /api/user/consent          // Registrar consentimiento
+DELETE /api/user/delete-account // Borrar cuenta y datos
+GET  /api/user/privacy-settings // Settings de privacidad
+```
+
+---
+
+## 📋 Implementaciones Propuestas por Área
+
+### 🎨 UX/UI Enhancements
+
+| Feature | Impacto | Esfuerzo | Prioridad | Timeline |
+|---------|---------|----------|-----------|----------|
+| Dashboard personalizable | Alto | Medio | Alta | Q2 2026 |
+| Dark/Light theme | Alto | Bajo | Alta | Q2 2026 |
+| Notificaciones push | Alto | Medio | Alta | Q2 2026 |
+| Onboarding interactivo | Medio | Bajo | Media | Q2 2026 |
+| Widgets customizables | Medio | Medio | Media | Q2 2026 |
+
+### 💰 Finance Features
+
+| Feature | Impacto | Esfuerzo | Prioridad | Timeline |
+|---------|---------|----------|-----------|----------|
+| Gestión de presupuestos | Muy Alto | Alto | Alta | Q2 2026 |
+| Metas de ahorro | Alto | Medio | Alta | Q2-Q3 2026 |
+| Cuentas múltiples | Alto | Alto | Alta | Q3 2026 |
+| Reportes PDF | Alto | Medio | Media | Q2 2026 |
+| Import/Export CSV | Alto | Bajo | Alta | Q2 2026 |
+| Análisis predictivo ML | Alto | Alto | Media | Q3 2026 |
+| Scoring financiero | Medio | Alto | Media | Q3 2026 |
+
+### 👥 Collaboration
+
+| Feature | Impacto | Esfuerzo | Prioridad | Timeline |
+|---------|---------|----------|-----------|----------|
+| Gestión familiar | Alto | Alto | Media | Q3 2026 |
+| Finanzas compartidas | Alto | Alto | Media | Q3 2026 |
+| Tareas compartidas | Medio | Medio | Baja | Q4 2026 |
+| Benchmarking anónimo | Medio | Medio | Baja | Q4 2026 |
+
+### 🔌 Integrations
+
+| Feature | Impacto | Esfuerzo | Prioridad | Timeline |
+|---------|---------|----------|-----------|----------|
+| OAuth (Google, GitHub) | Alto | Medio | Alta | Q3 2026 |
+| PWA mejorada | Muy Alto | Medio | Alta | Q2 2026 |
+| Bank connections (Plaid) | Muy Alto | Muy Alto | Media | Q4 2026 |
+| React Native app | Muy Alto | Muy Alto | Baja | 2027 |
+| Asistente de voz | Medio | Alto | Baja | 2027 |
+
+### 🏢 Enterprise
+
+| Feature | Impacto | Esfuerzo | Prioridad | Timeline |
+|---------|---------|----------|-----------|----------|
+| Plan Premium | Alto | Alto | Media | Q4 2026 |
+| Stripe integration | Alto | Medio | Media | Q4 2026 |
+| Features Business | Medio | Muy Alto | Baja | 2027 |
+
+### ⚡ Performance & Scale
+
+| Feature | Impacto | Esfuerzo | Prioridad | Timeline |
+|---------|---------|----------|-----------|----------|
+| Redis caching | Alto | Medio | Alta | Q3 2026 |
+| Testing suite (80%+) | Alto | Alto | Alta | Continuo |
+| CI/CD completo | Alto | Alto | Alta | Q2 2026 |
+| i18n completo | Alto | Medio | Media | Q3 2026 |
+| Monitoring avanzado | Alto | Medio | Alta | Q2 2026 |
+
+### 🔒 Security
+
+| Feature | Impacto | Esfuerzo | Prioridad | Timeline |
+|---------|---------|----------|-----------|----------|
+| 2FA | Crítico | Medio | Alta | Q2 2026 |
+| Session management | Alto | Medio | Alta | Q2 2026 |
+| GDPR compliance | Crítico | Alto | Alta | Q3 2026 |
+| Auditorías de seguridad | Crítico | Bajo | Alta | Continuo |
+
+---
+
+## ⏱️ Prioridades y Timeline Sugerido
+
+### Q2 2026 (Abril - Junio) - PRIORIDAD ALTA
+
+**Objetivo**: Mejorar experiencia de usuario y retención
+
+1. ✨ **Dashboard Personalizable** (3 semanas)
+   - Widgets drag & drop
+   - Temas dark/light
+   - Configuración persistente
+
+2. 🔔 **Sistema de Notificaciones** (2 semanas)
+   - Web Push API
+   - Email notifications
+   - Alertas inteligentes
+
+3. 💰 **Gestión de Presupuestos** (4 semanas)
+   - Presupuestos por categoría
+   - Alertas de límite
+   - Metas de ahorro
+
+4. 📊 **Reportes y Exportaciones** (2 semanas)
+   - PDF reports
+   - CSV import/export
+   - Excel con gráficos
+
+5. 🔐 **2FA y Seguridad** (2 semanas)
+   - Two-factor authentication
+   - Session management mejorado
+   - Audit logs
+
+6. 🚀 **CI/CD y Monitoring** (1 semana)
+   - GitHub Actions
+   - Sentry integration
+   - Vercel Analytics
+
+**Total Q2**: ~14 semanas de trabajo
+
+### Q3 2026 (Julio - Septiembre) - PRIORIDAD MEDIA-ALTA
+
+**Objetivo**: Features avanzados y escalabilidad
+
+1. 🏦 **Cuentas Múltiples** (4 semanas)
+   - Multi-account support
+   - Transferencias internas
+   - Reconciliación
+
+2. 🤖 **ML Predictivo Avanzado** (3 semanas)
+   - Modelos mejorados
+   - Anomaly detection
+   - Scoring financiero
+
+3. 👨‍👩‍👧‍👦 **Gestión Familiar** (5 semanas)
+   - Households
+   - Permisos y roles
+   - Finanzas compartidas
+
+4. 🔗 **OAuth y SSO** (2 semanas)
+   - Login con Google
+   - Login con GitHub
+   - Onboarding simplificado
+
+5. ⚡ **Redis Caching** (1 semana)
+   - Upstash Redis
+   - Cache strategies
+   - Performance boost
+
+6. 🌍 **i18n Completo** (2 semanas)
+   - React-i18next
+   - 3-5 idiomas adicionales
+   - Localización completa
+
+**Total Q3**: ~17 semanas de trabajo
+
+### Q4 2026 (Octubre - Diciembre) - PRIORIDAD MEDIA
+
+**Objetivo**: Monetización y enterprise features
+
+1. 💳 **Plan Premium** (4 semanas)
+   - Stripe integration
+   - Planes de pricing
+   - Features premium
+   - Upgrade/downgrade flow
+
+2. 🏦 **Bank Integrations** (6 semanas)
+   - Plaid integration (si presupuesto permite)
+   - Import automático
+   - Sync de transacciones
+
+3. 📱 **PWA Mejorada** (3 semanas)
+   - Offline-first
+   - Service workers avanzados
+   - Installable app
+   - Push notifications nativas
+
+4. 🔒 **GDPR Compliance** (2 semanas)
+   - Data export
+   - Right to be forgotten
+   - Privacy policy
+   - Cookie consent
+
+5. 📈 **Analytics Avanzadas** (2 semanas)
+   - Dashboard de métricas
+   - Retention cohorts
+   - Funnel analysis
+
+**Total Q4**: ~17 semanas de trabajo
+
+### 2027 y Más Allá - PRIORIDAD BAJA
+
+**Objetivo**: Expansión y features avanzados
+
+1. 📱 **React Native App** (12-16 semanas)
+2. 🎤 **Asistente de Voz** (8 semanas)
+3. 🏢 **Features Business** (16-20 semanas)
+4. 🤝 **Comunidad y Social** (8 semanas)
+5. 🧪 **Features Experimentales** (continuo)
+
+---
+
+## 🔧 Consideraciones Técnicas
+
+### 💰 Estimación de Costos (Free Tier Limits)
+
+#### Servicios Actuales - FREE
+```yaml
+Vercel:
+  bandwidth: 100 GB/mes
+  functions: 100 GB-hours/mes
+  deployments: ilimitados
+  cost: $0
+
+Supabase:
+  database: 500 MB
+  bandwidth: 5 GB/mes
+  api_requests: ilimitadas
+  cost: $0
+
+Gemini API:
+  requests: 60/minuto
+  cost: $0
+
+Alpha Vantage:
+  requests: 25/día
+  cost: $0
+
+CoinGecko:
+  requests: 10-50/minuto
+  cost: $0
+```
+
+#### Cuando Escalar (Estimación)
+```yaml
+Usuarios > 1000:
+  - Considerar Vercel Pro ($20/mes)
+  - Vercel Pro: 1TB bandwidth, 1000 GB-hours
+  
+Database > 500MB:
+  - Supabase Pro ($25/mes): 8GB DB, 100GB bandwidth
+  
+Plaid Integration (opcional):
+  - Launch: $4/mes por usuario conectado (primeros 100 gratis)
+  
+Redis Caching:
+  - Upstash: Free tier 10,000 commands/día
+  - Pro: $10/mes para 100,000 commands/día
+```
+
+### 🏗️ Arquitectura Sugerida Futura
+
+#### Microservicios (Cuando crecer)
+```
+Current: Monolito (serverless functions)
+  ↓
+Future: Microservicios
+
+Services:
+  - auth-service (autenticación)
+  - finance-service (transacciones)
+  - ai-service (Gemini, ML)
+  - notification-service (push, email)
+  - integration-service (Plaid, APIs externas)
+  - reporting-service (PDF, exports)
+```
+
+#### Database Scaling
+```sql
+Current: PostgreSQL único
+  ↓
+Future: Multi-DB
+
+Databases:
+  - PostgreSQL (transaccional data)
+  - Redis (cache, sessions)
+  - MongoDB (analytics, logs) - opcional
+  - InfluxDB (time-series financiera) - opcional
+```
+
+#### CDN y Assets
+```
+Current: Vercel CDN
+  ↓
+Future: Multi-CDN
+
+CDN:
+  - Cloudflare (global CDN free)
+  - Imgix (optimización de imágenes)
+  - S3 + CloudFront (para attachments)
+```
+
+---
+
+## 📊 Métricas de Éxito
+
+### KPIs Primarios
+
+#### Usuario
+- **DAU/MAU** (Daily/Monthly Active Users)
+  - Target Q2: 100 DAU
+  - Target Q4: 500 DAU
+  
+- **Retention Rate**
+  - Target: >40% D7 (día 7)
+  - Target: >20% D30 (día 30)
+
+- **Time to First Value**
+  - Target: <5 minutos (desde signup a primera transacción)
+
+#### Engagement
+- **Transactions per User per Month**
+  - Target: >10 transacciones/mes
+
+- **Features Adoption**
+  - Finance Dashboard: >80%
+  - Kanban: >50%
+  - AI Assistant: >30%
+  - Smart Investments: >40%
+
+#### Técnico
+- **Page Load Time**
+  - Target: <2 segundos (LCP)
+  
+- **Error Rate**
+  - Target: <1% de requests
+
+- **Uptime**
+  - Target: >99.9%
+
+### OKRs Sugeridos
+
+#### Q2 2026
+**Objetivo**: Mejorar retención y engagement
+- KR1: Aumentar D7 retention de 25% a 40%
+- KR2: Implementar 3 features de UX alta prioridad
+- KR3: Reducir bounce rate de landing en 20%
+
+#### Q3 2026
+**Objetivo**: Crecer base de usuarios
+- KR1: Alcanzar 1,000 usuarios registrados
+- KR2: Lograr 300 DAU promedio
+- KR3: NPS score >40
+
+#### Q4 2026
+**Objetivo**: Monetización
+- KR1: Lanzar plan premium
+- KR2: Convertir 5% de usuarios a premium
+- KR3: MRR de $500
+
+---
+
+## 🎯 Conclusión y Próximos Pasos
+
+### Estado Actual: Producto Sólido ✅
+
+AsisT ya es un producto funcional, seguro y completo en sus features core:
+- ✅ Autenticación robusta
+- ✅ Gestión financiera completa
+- ✅ Productividad (Kanban)
+- ✅ IA integrada (Gemini)
+- ✅ Smart features (inversiones, pronósticos, análisis)
+- ✅ Seguridad audit passed
+- ✅ Free tier optimizado
+
+### Recomendaciones Inmediatas
+
+**Antes de Agregar Features**:
+1. 📊 **Implementar Analytics**
+   - Google Analytics o Plausible
+   - Entender cómo usan los usuarios la app
+   - Identificar features más usadas
+   - Detectar puntos de fricción
+
+2. 👥 **User Testing**
+   - 5-10 usuarios beta testers
+   - Sesiones de observación
+   - Encuestas de satisfacción
+   - Identificar pain points reales
+
+3. 🚀 **Marketing y Adquisición**
+   - Landing page optimizada (SEO)
+   - Blog con tips financieros
+   - Redes sociales
+   - Product Hunt launch
+   - Reddit, HackerNews
+
+**Luego, Implementar en Orden**:
+1. 🔔 Notificaciones (retención)
+2. 💰 Presupuestos (valor real)
+3. 📊 Reportes (profesionalización)
+4. 🎨 Personalización (engagement)
+5. 🔐 2FA (confianza y seguridad)
+
+### Filosofía de Desarrollo
+
+**Principio 80/20**:
+- 80% del valor viene del 20% de features
+- Enfocarse en features que resuelvan pain points reales
+- No agregar features "nice to have" que nadie usa
+
+**Iteración Rápida**:
+- Lanzar MVPs de features rápido
+- Medir adoption
+- Iterar basado en feedback
+- Eliminar features no usadas
+
+**Free Tier Forever**:
+- Mantener plan free generoso
+- Premium solo para power users
+- Nunca quitar features ya gratuitas
+
+---
+
+## 📚 Recursos Adicionales
+
+### Documentación Existente
+- `README.md` - Introducción general
+- `SETUP.md` - Instrucciones de instalación
+- `GEMINI_BOT_README.md` - Gemini AI integration
+- `SMART_INVESTMENTS_README.md` - Smart investments feature
+- `SECURITY_AUDIT.md` - Security review
+- `IMPLEMENTATION_SUMMARY.md` - Recent features summary
+
+### Links Útiles
+- **Vercel**: https://vercel.com/docs
+- **Supabase**: https://supabase.com/docs
+- **Gemini API**: https://ai.google.dev/docs
+- **React 19**: https://react.dev
+- **Tailwind CSS**: https://tailwindcss.com/docs
+
+### Comunidades
+- **Reddit**: r/reactjs, r/webdev, r/entrepreneur
+- **Discord**: Reactiflux, Supabase, Vercel
+- **Twitter**: #buildinpublic, #indiehackers
+
+---
+
+## 🙋‍♂️ Contribuciones y Feedback
+
+Este roadmap es un documento vivo. Se espera que evolucione basado en:
+- Feedback de usuarios
+- Métricas de uso
+- Cambios en el mercado
+- Nuevas tecnologías
+- Recursos disponibles
+
+**Cómo Contribuir**:
+1. Abrir un GitHub Issue con sugerencias
+2. Proponer nuevas features con justificación
+3. Compartir research de usuarios
+4. Votar en features propuestas
+
+---
+
+**Última Actualización**: Febrero 2026  
+**Próxima Revisión**: Abril 2026
+
+*Built with ❤️ by the AsisT Team*
