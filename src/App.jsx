@@ -1,9 +1,10 @@
 import React, { useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X, Loader2, TrendingUp, Languages, Activity, Bot } from 'lucide-react';
+import { LayoutDashboard, Calendar, Menu, LogOut, CreditCard, X, Loader2, TrendingUp, Languages, Activity, Bot, Moon, Sun } from 'lucide-react';
 
 // Auth
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 const LoginPage = lazy(() => import('./features/auth/LoginPage'));
 const RegisterPage = lazy(() => import('./features/auth/RegisterPage'));
 
@@ -55,6 +56,7 @@ import LanguageSwitcher from './components/LanguageSwitcher';
 
 const ProtectedLayout = () => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   if (!user) {
@@ -104,7 +106,17 @@ const ProtectedLayout = () => {
           <div className="space-y-6">
             <div>
               <p className="mono text-[9px] font-bold text-secondary/60 uppercase tracking-[0.2em] mb-2">Interface</p>
-              <LanguageSwitcher />
+              <div className="space-y-2">
+                <LanguageSwitcher />
+                <button
+                  onClick={toggleTheme}
+                  className="w-full flex items-center justify-between border border-border/50 px-2 py-1.5 hover:bg-muted transition-colors"
+                  title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+                >
+                  <span className="mono text-[9px] font-bold uppercase">{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
+                  {theme === 'light' ? <Moon size={12} /> : <Sun size={12} />}
+                </button>
+              </div>
             </div>
 
             <div className="flex items-center justify-between">
@@ -153,32 +165,34 @@ const ProtectedLayout = () => {
 
 const App = () => {
   return (
-    <AuthProvider>
-      <Router>
-        <Suspense fallback={<LoadingFallback />}>
-          <ErrorBoundary>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <Suspense fallback={<LoadingFallback />}>
+            <ErrorBoundary>
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
 
-              {/* Protected Routes */}
-              <Route element={<ProtectedLayout />}>
-                {/* Redirect /app or similar if needed, or just let users navigate manually from landing */}
-                {/* Actually, if user goes to /home, they see HomeView. We keep that. */}
-                <Route path="/home" element={<HomeView />} />
-                <Route path="/finance" element={<FinanceDashboard />} />
-                <Route path="/investments" element={<InvestmentsPage />} />
-                <Route path="/payment-analyst" element={<PaymentAnalyst />} />
-                <Route path="/planner" element={<PlannerBoard />} />
-                <Route path="/bot" element={<GeminiBot />} />
-              </Route>
-            </Routes>
-          </ErrorBoundary>
-        </Suspense>
-      </Router>
-    </AuthProvider>
+                {/* Protected Routes */}
+                <Route element={<ProtectedLayout />}>
+                  {/* Redirect /app or similar if needed, or just let users navigate manually from landing */}
+                  {/* Actually, if user goes to /home, they see HomeView. We keep that. */}
+                  <Route path="/home" element={<HomeView />} />
+                  <Route path="/finance" element={<FinanceDashboard />} />
+                  <Route path="/investments" element={<InvestmentsPage />} />
+                  <Route path="/payment-analyst" element={<PaymentAnalyst />} />
+                  <Route path="/planner" element={<PlannerBoard />} />
+                  <Route path="/bot" element={<GeminiBot />} />
+                </Route>
+              </Routes>
+            </ErrorBoundary>
+          </Suspense>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 };
 
