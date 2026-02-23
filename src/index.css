@@ -34,6 +34,18 @@
     --radius-md: 4px;
   }
 
+  [data-theme="dark"] {
+    /* DARK MODE THEME */
+    --background: 18 18 18;
+    --foreground: 240 240 238;
+    --primary: 240 240 238;
+    --secondary: 160 158 152;
+    --accent: 60 120 255;
+    --muted: 28 28 26;
+    --border: 50 48 45;
+    --card: 22 22 20;
+  }
+
   body {
     @apply bg-background text-foreground antialiased selection:bg-accent/10 selection:text-accent;
     font-family: 'Space Grotesk', sans-serif;

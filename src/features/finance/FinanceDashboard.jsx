@@ -11,13 +11,34 @@ import {
     X,
     CreditCard,
     Edit3,
-    Settings
+    Settings,
+    Download
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import CategoryManager from './CategoryManager';
 import ForecastChart from '../../components/ForecastChart';
 import SpendingInsights from './SpendingInsights';
 import { formatCurrency } from '../../utils/currency';
+
+const exportTransactionsToCSV = (transactions) => {
+    const headers = ['Date', 'Title', 'Type', 'Category', 'Amount', 'Currency'];
+    const rows = transactions.map(t => [
+        t.date ? new Date(t.date).toISOString().split('T')[0] : '',
+        `"${(t.title || '').replace(/"/g, '""')}"`,
+        t.type || '',
+        t.category || '',
+        parseFloat(t.amount || 0).toFixed(2),
+        t.currency || 'USD'
+    ]);
+    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `transactions_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+};
 
 const StatCard = ({ label, amount, icon: Icon }) => (
     <div className="bg-background border border-border/60 p-6 flex flex-col justify-between h-full hover:border-accent/40 transition-colors group">
@@ -401,6 +422,14 @@ const FinanceDashboard = () => {
                     <h1 className="text-5xl font-black tracking-tighter uppercase italic text-primary">Capital</h1>
                 </div>
                 <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => exportTransactionsToCSV(transactions)}
+                        className="flex items-center gap-2 mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em] border border-border px-4 py-3 hover:bg-muted transition-colors"
+                        title="Export transactions to CSV"
+                    >
+                        <Download size={14} />
+                        <span>Export CSV</span>
+                    </button>
                     <button
                         onClick={() => setIsCategoryModalOpen(true)}
                         className="flex items-center gap-2 mono text-[10px] font-bold text-secondary uppercase tracking-[0.2em] border border-border px-4 py-3 hover:bg-muted transition-colors"
