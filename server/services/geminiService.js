@@ -21,11 +21,13 @@ function initializeGemini() {
     
     try {
         genAI = new GoogleGenerativeAI(apiKey);
-        model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-        console.log('[Gemini Service] Initialized successfully');
+        const modelName = process.env.GEMINI_MODEL || 'gemini-3-flash-preview';
+        model = genAI.getGenerativeModel({ model: modelName });
+        console.log(`[Gemini Service] Initialized successfully with model: ${modelName}`);
         return true;
     } catch (error) {
         console.error('[Gemini Service] Initialization error:', error);
+        console.error('[Gemini Service] If you see a 404 error, the model may be deprecated. Try: gemini-3-flash-preview, gemini-3-pro-preview, or gemini-2.5-flash');
         return false;
     }
 }
